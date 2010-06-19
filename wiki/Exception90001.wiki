@@ -1,6 +1,9 @@
 #summary Exception documentation 90001
+#labels Exception
 
 = Exception 90001 =
-==Class __CLASSNAME__ has no pattern defined while it is configured for bootstrapping.==
+==Class _CLASSNAME_ has no pattern defined while it is configured for bootstrapping ==
 
 = Details =
+
+If a class is configured for bootstrapping, it must extend a subclass of `Ajde_Core_Object` for the bootstrapper to know how to call the bootstrap function.
