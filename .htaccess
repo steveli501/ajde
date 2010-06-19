@@ -1,0 +1,91 @@
+# Force PHP errors
+
+php_value display_errors 1
+php_value display_startup_errors 1
+
+# Turn the RewriteEngine on
+
+RewriteEngine on
+
+# Add a leading www to domain if one is missing
+
+#RewriteCond %{HTTP_HOST} !^www\.
+#RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
+
+# Do not process images, JS, PHP or CSS files
+
+RewriteRule \.(css|jpe?g|gif|png|js|pdf|ico)$ - [L]
+
+# Add a trailing slash if needed
+
+RewriteCond %{REQUEST_URI} ^/[^\.]+[^/]$
+RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1/ [R=301,L]
+
+###################################################
+# Rewrite web pages to one master page            #
+###################################################
+# /somepage/            => master.php             #
+#                            ?page=somepage       #
+# /somesection/somepage => master.php             #
+#                            ?section=somesection #
+#                            &page=somepage       #
+# /somesection/somesub/somepage/                  #
+#                       => master.php             #
+#                            ?section=somesection #
+#                            &subsection=somesub  #
+#                            &page=somepage       #
+###################################################
+# Variables are accessed in PHP using             #
+# $_GET['section'], $_GET['subsection'] and       #
+# $_GET['page']                                   #
+###################################################
+# No more processing occurs if any of these rules #
+# are successful                                  #
+###################################################
+
+RewriteRule ^([^/\.]+)/?$ /index.php?module=$1 [QSA,L]
+RewriteRule ^([^\?/\.]+)/([^\?/\.]+)/?$ /index.php?module=$1&action=$2 [QSA,L]
+RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ /index.php?module=$1&action=$2&format=$3 [QSA,L]
+RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ /index.php?module=$1&action=$2&format=$3 [QSA,L]
+
+###################################################
+# CHARSET, COMPRESSION & CACHING                  #
+###################################################
+
+SetOutputFilter DEFLATE
+SetEnvIfNoCase Request_URI  \
+    \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+SetEnvIfNoCase Request_URI  \
+    \.(?:exe|t?gz|zip|gz2|sit|rar)$ no-gzip dont-vary 
+
+AddDefaultCharset utf-8
+
+ExpiresActive On
+ExpiresDefault "access plus 7 days"
+
+ExpiresByType text/html "access plus 7 days"
+ExpiresByType application/xhtml+xml "access plus 7 days"
+
+ExpiresByType text/css "access plus 7 days"
+ExpiresByType text/javascript "access plus 7 days"
+ExpiresByType text/javascript "access plus 7 days"
+
+ExpiresByType image/gif "access plus 14 days"
+ExpiresByType image/jpg "access plus 14 days"
+ExpiresByType image/png "access plus 14 days"
+
+ExpiresByType application/x-shockwave-flash "access plus 7 days"
+
+###################
+# ERROR DOCUMENTS #
+###################
+
+ErrorDocument 400 /errordocument.php
+ErrorDocument 401 /errordocument.php
+ErrorDocument 403 /errordocument.php
+ErrorDocument 404 /errordocument.php
+
+ErrorDocument 500 /errordocument.php
+ErrorDocument 501 /errordocument.php
+ErrorDocument 502 /errordocument.php
+ErrorDocument 503 /errordocument.php

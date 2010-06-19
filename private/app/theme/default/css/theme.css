@@ -1,0 +1,7 @@
+<?php header("Content-type: text/css");
+$dir = $_GET["dir"];
+if (empty($dir)) {
+	$dir = 'default';
+} ?>
+
+/****** CSS stylesheet for default theme */
