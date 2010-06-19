@@ -1,6 +1,6 @@
 #summary Exception documentation 90001
 
 = Exception 90001 =
-
+==Class __CLASSNAME__ has no pattern defined while it is configured for bootstrapping.==
 
 = Details =
