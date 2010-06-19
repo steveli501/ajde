@@ -12,6 +12,10 @@ Example:
 {{{
 class Ajde_Exception_Handler extends Ajde_Core_Object_Static
 {
-     public static function bootstrap() {}
+    public static function bootstrap()
+    {
+        /* [...] */
+        return true;
+    }
 }
 }}}
