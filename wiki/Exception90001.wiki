@@ -1,6 +1,4 @@
-#summary Exception documentation 90001
 #labels Exception
-
 = Exception 90001 =
 ==Class _CLASSNAME_ has no pattern defined while it is configured for bootstrapping ==
 
