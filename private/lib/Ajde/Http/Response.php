@@ -2,9 +2,14 @@
 
 class Ajde_Http_Response
 {
-	public static function redirectCode404()
+	public static function redirectNotFound()
 	{
 		self::dieOnCode("404");
+	}
+
+	public static function redirectServerError()
+	{
+		self::dieOnCode("500");
 	}
 
 	public static function dieOnCode($code)
@@ -18,7 +23,7 @@ class Ajde_Http_Response
 		die();
 	}
 
-	public static function getResponseType($code)
+	protected static function getResponseType($code)
 	{
 		switch ($code)
 		{

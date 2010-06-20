@@ -2,19 +2,33 @@
 
 class Ajde_Core_Bootstrap
 {	
-	public function init()
+	public function run()
 	{
-		// Configure autoloading
-		spl_autoload_register(array("Ajde_Core_Bootstrap", "autoloader"));
+		$this->configureAutoloader();
+		$cue = Config::getInstance()->bootstrap;
+		$this->runCue($cue);
+	}
 
+	public function configureAutoloader() {
+		// Configure autoloading
+		require_once(PRIVATE_DIR.CLASS_DIR."Ajde/Core/Autoloader.php");
+		spl_autoload_register(array("Ajde_Core_Autoloader", "autoloader"));
+	}
+
+	public function runCue($cue) {
 		/*
 		 * Our bootstrapper calls the bootstrap() methods on all modules defined
 		 * in Config::get("bootstrap").
 		 */
 
-		foreach(Config::getInstance()->bootstrap as $className)
+		foreach($cue as $className)
 		{
-			if ($className)
+			// See if $className is a subclass of Ajde_Core_Object
+			if (!method_exists($className, "__getPattern")) {
+				throw new Ajde_Exception("Class $className has no pattern
+						defined while it is configured for bootstrapping", 90001);
+			}
+			// Get bootstrap function callback
 			$mode = $className::__getPattern();
 			if ($mode === Ajde_Core_Object::OBJECT_PATTERN_STANDARD)
 			{
@@ -32,65 +46,20 @@ class Ajde_Core_Bootstrap
 			}
 			elseif ($mode === null || $mode === Ajde_Core_Object::OBJECT_PATTERN_UNDEFINED)
 			{
-				throw new Ajde_Exception("Type of class $className not
-						recognized.");
+				throw new Ajde_Exception("Class $className has no pattern
+						defined while it is configured for bootstrapping", 90001);
 			}
-			try
+			// Execute bootstrap() function on $className
+			if (!method_exists($className, "bootstrap"))
 			{
-				if (!method_exists($className, "bootstrap"))
-				{
-					throw new Ajde_Exception("Bootstrap method in
-							$className doesn't exist");
-				}
-				elseif (!call_user_func($function))
-				{
-					throw new Ajde_Exception("Bootstrap method in
-							$className returned FALSE");
-				}
+				throw new Ajde_Exception("Bootstrap method in
+						$className doesn't exist", 90002);
 			}
-			catch (Exception $e)
+			elseif (!call_user_func($function))
 			{
-				/*
-				 * Error handler loaded during bootstrapping, don't use it yet
-				 * but rethrow Exception
-				 */
-				throw $e;
+				throw new Ajde_Exception("Bootstrap method in
+						$className returned FALSE", 90003);
 			}
 		}
-
-		$r = 1/0;
-//		throw new Exception("hoi");
 	}
-
-	public static function autoloader($className)
-	{
-
-	    // Add libraries and config to include path
-		set_include_path(get_include_path().
-				PATH_SEPARATOR.PRIVATE_DIR.CLASS_DIR.
-				PATH_SEPARATOR.PRIVATE_DIR.CONFIG_DIR);
-
-		$paths = array();
-
-		// Namespace_Class.php naming
-		$paths[] = $className . ".php";
-
-		// Namespace/Class.php naming
-		$paths[] = str_ireplace('_', '/', $className) . ".php";
-
-		// Namespace/Class/Class.php naming
-		$classNameArray = explode("_", $className);
-		$tail = end($classNameArray);
-		$head = implode("/", $classNameArray);
-		$paths[] = $head . "/" . $tail . ".php";
-		
-		foreach(array_unique($paths) as $path)
-		{
-			if (@include_once($path))
-			{
-				return;
-			}
-		}		
-	}
-	
 }
