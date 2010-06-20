@@ -1,6 +1,6 @@
 <?php
 
-class Ajde_Core_Route extends Ajde_Core_Object_Static
+class Ajde_Core_Route extends Ajde_Object_Static
 {
 	public static function buildRoute(Ajde_Http_Request $request) {
 		$ret = $request["module"];

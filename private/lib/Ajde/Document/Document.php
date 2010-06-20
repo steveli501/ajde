@@ -1,6 +1,6 @@
 <?php
 
-class Ajde_Document extends Ajde_Core_Object_Standard
+class Ajde_Document extends Ajde_Object_Standard
 {
 	protected $_request;
 	

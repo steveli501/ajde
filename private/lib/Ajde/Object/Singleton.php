@@ -1,6 +1,6 @@
 <?php
 
-interface Ajde_Core_Object_Singleton_Interface
+interface Ajde_Object_Singleton_Interface
 {
 	/**
 	 * Example:
@@ -16,8 +16,8 @@ interface Ajde_Core_Object_Singleton_Interface
     public static function getInstance();
 }
 
-abstract class Ajde_Core_Object_Singleton extends Ajde_Core_Object_Magic
-implements Ajde_Core_Object_Singleton_Interface
+abstract class Ajde_Object_Singleton extends Ajde_Object_Magic
+implements Ajde_Object_Singleton_Interface
 {
 	protected static $__pattern = self::OBJECT_PATTERN_SINGLETON;
 

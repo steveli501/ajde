@@ -1,6 +1,6 @@
 <?php
 
-class Ajde_Http_Request extends Ajde_Core_Object_Standard
+class Ajde_Http_Request extends Ajde_Object_Standard
 {
 	public static function fromGlobal()
 	{

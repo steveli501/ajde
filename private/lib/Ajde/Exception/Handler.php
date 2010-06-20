@@ -1,6 +1,6 @@
 <?php
 
-class Ajde_Exception_Handler extends Ajde_Core_Object_Static
+class Ajde_Exception_Handler extends Ajde_Object_Static
 {
 	public static function bootstrap()
 	{
