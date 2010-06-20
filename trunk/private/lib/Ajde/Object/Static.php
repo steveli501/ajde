@@ -1,6 +1,6 @@
 <?php
 
-abstract class Ajde_Core_Object_Static extends Ajde_Core_Object
+abstract class Ajde_Object_Static extends Ajde_Object
 {
 	protected static $__pattern = self::OBJECT_PATTERN_STATIC;
 

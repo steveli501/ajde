@@ -1,6 +1,6 @@
 <?php
 
-abstract class Ajde_Core_Object_Magic extends Ajde_Core_Object
+abstract class Ajde_Object_Magic extends Ajde_Object
 {
 	protected $_data = array();
 	

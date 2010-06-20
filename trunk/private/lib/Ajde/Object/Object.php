@@ -1,6 +1,6 @@
 <?php
 
-abstract class Ajde_Core_Object
+abstract class Ajde_Object
 {
 	const OBJECT_PATTERN_UNDEFINED		= 0;
 	const OBJECT_PATTERN_STANDARD		= 1;
