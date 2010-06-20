@@ -24,20 +24,16 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1/ [R=301,L]
 ###################################################
 # Rewrite web pages to one master page            #
 ###################################################
-# /somepage/            => master.php             #
-#                            ?page=somepage       #
-# /somesection/somepage => master.php             #
-#                            ?section=somesection #
-#                            &page=somepage       #
+# /somepage/            => index.php              #
+#                            ?module=$1           #
+# /somesection/somepage => index.php              #
+#                            ?module=$1           #
+#                            &action=$2           #
 # /somesection/somesub/somepage/                  #
-#                       => master.php             #
-#                            ?section=somesection #
-#                            &subsection=somesub  #
-#                            &page=somepage       #
-###################################################
-# Variables are accessed in PHP using             #
-# $_GET['section'], $_GET['subsection'] and       #
-# $_GET['page']                                   #
+#                       => index.php              #
+#                            ?module=$1           #
+#                            &action=$2           #
+#                            &format=$3           #
 ###################################################
 # No more processing occurs if any of these rules #
 # are successful                                  #
@@ -46,7 +42,6 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1/ [R=301,L]
 RewriteRule ^([^/\.]+)/?$ /index.php?module=$1 [QSA,L]
 RewriteRule ^([^\?/\.]+)/([^\?/\.]+)/?$ /index.php?module=$1&action=$2 [QSA,L]
 RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ /index.php?module=$1&action=$2&format=$3 [QSA,L]
-RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ /index.php?module=$1&action=$2&format=$3 [QSA,L]
 
 ###################################################
 # CHARSET, COMPRESSION & CACHING                  #

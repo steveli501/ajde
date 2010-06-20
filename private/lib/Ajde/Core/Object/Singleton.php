@@ -16,7 +16,7 @@ interface Ajde_Core_Object_Singleton_Interface
     public static function getInstance();
 }
 
-abstract class Ajde_Core_Object_Singleton extends Ajde_Core_Object
+abstract class Ajde_Core_Object_Singleton extends Ajde_Core_Object_Magic
 implements Ajde_Core_Object_Singleton_Interface
 {
 	protected static $__pattern = self::OBJECT_PATTERN_SINGLETON;

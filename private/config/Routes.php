@@ -1,6 +1,6 @@
 <?php
 
-Class Routes {
+class Routes {
 
 	protected static $routes = array(
 		"home" => "home/home",

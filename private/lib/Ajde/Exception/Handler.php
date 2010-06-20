@@ -53,9 +53,9 @@ class Ajde_Exception_Handler extends Ajde_Core_Object_Static
 		$message .= '<ol>';
 		foreach($exception->getTrace() as $item)
 			$message .= sprintf('<li> <i>%s</i> on line <b>%s</b> calling %s',
-					isset($item['file']) ? $item['file'] : '<unknown file>',
-					isset($item['line']) ? $item['line'] : '<unknown line>',
-					isset($item['function']) ? $item['function'] : '<unknown function>');
+					isset($item['file']) ? $item['file'] : '&lt;unknown file&gt;',
+					isset($item['line']) ? $item['line'] : '&lt;unknown line&gt;',
+					isset($item['function']) ? $item['function'] : '&lt;unknown function&gt;');
 		$message .= '</ol>';
 
 		if ($exception instanceof Ajde_Exception && $exception->getCode()) {

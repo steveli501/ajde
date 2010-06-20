@@ -2,7 +2,12 @@
 
 class Ajde_Core_Autoloader
 {
-	public static function autoloader($className)
+	public static function register() {
+		// Configure autoloading
+		spl_autoload_register(array("Ajde_Core_Autoloader", "autoload"));
+	}
+
+	public static function autoload($className)
 	{
 	    // Add libraries and config to include path
 		$dirs = array(
@@ -29,7 +34,6 @@ class Ajde_Core_Autoloader
 			foreach (array_unique($files) as $file)
 			{
 				$path = $dir.$file;
-				echo $path."<br>";
 				if (file_exists($path)) {
 					include_once($path);
 					return;
@@ -38,6 +42,13 @@ class Ajde_Core_Autoloader
 
 		}
 
-		throw new Ajde_Exception("Unable to load $className");
+		/*
+		 * Throwing exceptions is only possible as of PHP 5.3.0
+		 * See: http://php.net/manual/en/language.oop5.autoload.php
+		 */
+		if (version_compare(PHP_VERSION, '5.3.0') >= 0)
+		{
+			throw new Ajde_Core_Autoloader_Exception("Unable to load $className", 90005);
+		}
 	}
 }

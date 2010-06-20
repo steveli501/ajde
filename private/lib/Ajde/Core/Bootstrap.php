@@ -4,15 +4,8 @@ class Ajde_Core_Bootstrap
 {	
 	public function run()
 	{
-		$this->configureAutoloader();
 		$cue = Config::getInstance()->bootstrap;
 		$this->runCue($cue);
-	}
-
-	public function configureAutoloader() {
-		// Configure autoloading
-		require_once(PRIVATE_DIR.CLASS_DIR."Ajde/Core/Autoloader.php");
-		spl_autoload_register(array("Ajde_Core_Autoloader", "autoloader"));
 	}
 
 	public function runCue($cue) {
@@ -20,7 +13,6 @@ class Ajde_Core_Bootstrap
 		 * Our bootstrapper calls the bootstrap() methods on all modules defined
 		 * in Config::get("bootstrap").
 		 */
-
 		foreach($cue as $className)
 		{
 			// See if $className is a subclass of Ajde_Core_Object
