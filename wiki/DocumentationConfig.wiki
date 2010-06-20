@@ -1,0 +1,28 @@
+#labels Documentation
+= Documentation Config =
+
+More information about configuration settings in Ajde.
+
+
+= Details =
+
+Ajde provides configuration settings for several development stages. All configuration settings are saved in PHP classes in the `private/config` directory.
+
+The default package comes with pre-defined configuration file for the development stage (`Config_Dev`), which extends the settings from the base configuration (`Config_Base`).
+
+= Examples =
+
+== Getting configuration parameters ==
+
+If we want to refer to our configuration parameters, we call `Config::getInstance()` - which returns a subclass of the `Config_Base` class depending on the currently selected stage defined in `Config::$stage` - or `Config::get($param)` to get only one parameter.
+
+{{{
+// Multiple parameters
+$config = Config::getInstance();
+printf("Current stage: %s<br/>", $config::$stage);
+printf("Project name: %s<br/>", $config->sitename);
+printf("Project language: %s<br/>", $config->lang);
+
+// Single parameter
+printf("Project identifier: %s<br/>", Config::get("ident");
+}}}
