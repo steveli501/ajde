@@ -7,12 +7,20 @@ abstract class Ajde_Core_Object
 	const OBJECT_PATTERN_SINGLETON		= 2;
 	const OBJECT_PATTERN_STATIC			= 3;
 
-	protected static $__pattern = self::OBJECT_MODE_UNDEFINED;
+	protected static $__pattern;
 
-	public static function __getPattern()
-	{
-		$caller = get_called_class();
-		return $caller::$__pattern;
-	}
+	/**
+	 * We would want to make this non-abstract, but since get_called_class() is
+	 * not available in PHP < 5.3.0 we implement this in all subclasses
+	 *
+	 * It would look like this:
+	 * 
+	 * public static function __getPattern()
+	 * {
+	 *  $caller = get_called_class();
+	 * 	return $caller::$__pattern;
+	 * }
+	 */
+	abstract static function __getPattern();
 
 }

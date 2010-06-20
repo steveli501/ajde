@@ -12,30 +12,59 @@ class Ajde_Exception_Handler extends Ajde_Core_Object_Static
 
 	public static function errorHandler($errno, $errstr, $errfile, $errline)
 	{
+		error_log(sprintf("PHP error: %s in %s on line %s", $errstr, $errfile, $errline));
 		throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 	}
 
 	public static function handler(Exception $exception)
 	{
-		$message = "PHP Uncaught exception: " . $exception->getMessage();
 		if (Config::getInstance()->debug === true)
 		{	
-			echo $message;			
+			echo self::trace($exception);
 		}
-		error_log($message);
+		else
+		{
+			Ajde_Http_Response::redirectServerError();
+		}
 	}
 
-	public static function warning($msg)
+	public static function trace(Exception $exception)
 	{
-		html::messageBox($msg, "Warning", "ca5600");
-		self::log(error::TYPE_WARNING, $msg);
-	}
+		if ($exception instanceof ErrorException)
+		{
+			$type = "PHP Error " . self::getErrorType($exception->getSeverity());
+		}
+		elseif ($exception instanceof Ajde_Exception)
+		{
+			$type = "Ajde uncaught exception " . $exception->getCode();
+		}
+		else
+		{
+			$type = "Uncaught exception " . $exception->getCode();
+		}
 
-	public static function fatal($msg)
-	{
-		html::messageBox($msg, "Error", "800000");
-		self::log(error::TYPE_FATAL, $msg);
-		die();
+		$message = sprintf("%s: <u>%s</u> in <i>%s</i> on line <b>%s</b>",
+				$type,
+				$exception->getMessage(),
+				$exception->getFile(),
+				$exception->getLine()				
+		);
+
+		$message .= '<ol>';
+		foreach($exception->getTrace() as $item)
+			$message .= sprintf('<li> <i>%s</i> on line <b>%s</b> calling %s',
+					isset($item['file']) ? $item['file'] : '<unknown file>',
+					isset($item['line']) ? $item['line'] : '<unknown line>',
+					isset($item['function']) ? $item['function'] : '<unknown function>');
+		$message .= '</ol>';
+
+		if ($exception instanceof Ajde_Exception && $exception->getCode()) {
+			$message .= sprintf('<a href="%s">Ajde documentation on error %s</a>',
+				Ajde_Core_Documentation::getUrl($exception->getCode()),
+				$exception->getCode()
+			);
+		}
+		return $message;
 	}
 	
 	public static function getErrorType($type)

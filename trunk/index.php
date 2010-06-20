@@ -4,7 +4,7 @@
 error_reporting(E_ALL);
 
 if (version_compare(PHP_VERSION, '5.2.3') < 0) {
-	die('<h3>Ajde requires PHP/5.1.2 or higher.<br>You are currently running PHP/'.phpversion().'.</h3><p>You should contact your host to see if they can upgrade your version of PHP.</p>');
+	die('<h3>Ajde requires PHP/5.2.3 or higher.<br>You are currently running PHP/'.phpversion().'.</h3><p>You should contact your host to see if they can upgrade your version of PHP.</p>');
 }
 
 // Now, where can we find the private files?
@@ -15,7 +15,7 @@ define('CONFIG_DIR', 'config/');
 require_once(PRIVATE_DIR.CLASS_DIR."Ajde/Core/Bootstrap.php");
 
 $bootstrap = new Ajde_Core_Bootstrap();
-$bootstrap->init();
+$bootstrap->run();
 
 die('end here for now...');
 
