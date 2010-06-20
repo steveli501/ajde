@@ -15,7 +15,7 @@ class Ajde_Http_Response
 	public static function dieOnCode($code)
 	{
 		header("HTTP/1.0 ".$code." ".self::getResponseType($code));
-		ob_clean();
+		ob_get_clean();
 		header("Status: $code");
 		header("Content-type: text/html; charset=UTF-8");
 		$_SERVER['REDIRECT_STATUS'] = $code;

@@ -1,13 +1,22 @@
 <?php
 
-class Ajde_Core_App
+class Ajde_Core_App extends Ajde_Core_Object_Singleton
 {
+	/**
+	 *
+	 * @return Ajde_Core_App
+	 */
+	public static function app()
+	{
+		return self::getInstance();
+	}
+
 	/**
 	 *
 	 * @staticvar Ajde_Core_App $instance
 	 * @return Ajde_Core_App
 	 */
-	public static function app()
+	public static function getInstance()
 	{
 		static $instance;
 		return $instance === null ? $instance = new self : $instance;
@@ -26,17 +35,12 @@ class Ajde_Core_App
 	{
 		$app = self::app();
 
-		// Autoloader init
-		$app->_configureAutoloader();
-		
 		// Bootstrap init
 		require_once(PRIVATE_DIR.CLASS_DIR."Ajde/Core/Bootstrap.php");
 		$bootstrap = new Ajde_Core_Bootstrap();
 		$bootstrap->run();
-	}
 
-	private function _configureAutoloader() {
-		require_once(PRIVATE_DIR.CLASS_DIR."Ajde/Core/Autoloader.php");
-		Ajde_Core_Autoloader::register();
+		$request = Ajde_Http_Request::fromGlobal();
+		$document = Ajde_Document::fromRequest($request);
 	}
 }
