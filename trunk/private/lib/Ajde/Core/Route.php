@@ -1,8 +1,8 @@
 <?php
 
-class Ajde_Core_Route
+class Ajde_Core_Route extends Ajde_Core_Object_Static
 {
-	public static function buildRoute($request) {
+	public static function buildRoute(Ajde_Http_Request $request) {
 		$ret = $request["module"];
 		if (isset($request["action"])) {
 			$ret .= "/" . $request["action"];

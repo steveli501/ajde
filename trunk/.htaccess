@@ -14,7 +14,7 @@ RewriteEngine on
 
 # Do not process images, JS, PHP or CSS files
 
-RewriteRule \.(css|jpe?g|gif|png|js|pdf|ico)$ - [L]
+RewriteRule \.(php|css|jpe?g|gif|png|js|pdf|ico)$ - [L]
 
 # Add a trailing slash if needed
 
@@ -24,17 +24,6 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1/ [R=301,L]
 ###################################################
 # Rewrite web pages to one master page            #
 ###################################################
-# /somepage/            => index.php              #
-#                            ?module=$1           #
-# /somesection/somepage => index.php              #
-#                            ?module=$1           #
-#                            &action=$2           #
-# /somesection/somesub/somepage/                  #
-#                       => index.php              #
-#                            ?module=$1           #
-#                            &action=$2           #
-#                            &format=$3           #
-###################################################
 # No more processing occurs if any of these rules #
 # are successful                                  #
 ###################################################
@@ -42,6 +31,9 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1/ [R=301,L]
 RewriteRule ^([^/\.]+)/?$ /index.php?module=$1 [QSA,L]
 RewriteRule ^([^\?/\.]+)/([^\?/\.]+)/?$ /index.php?module=$1&action=$2 [QSA,L]
 RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ /index.php?module=$1&action=$2&format=$3 [QSA,L]
+
+RewriteRule ^([^/\.]+)\.([^/\.]+)$ /index.php?module=$1&format=$2 [QSA,L]
+RewriteRule ^([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$ /index.php?module=$1&action=$2&format=$3 [QSA,L]
 
 ###################################################
 # CHARSET, COMPRESSION & CACHING                  #
