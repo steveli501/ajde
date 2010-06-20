@@ -19,10 +19,48 @@ If we want to refer to our configuration parameters, we call `Config::getInstanc
 {{{
 // Multiple parameters
 $config = Config::getInstance();
-printf("Current stage: %s<br/>", $config::$stage);
+printf("Current stage: %s<br/>", Config::$stage);
 printf("Project name: %s<br/>", $config->sitename);
 printf("Project language: %s<br/>", $config->lang);
 
 // Single parameter
-printf("Project identifier: %s<br/>", Config::get("ident");
+printf("Project identifier: %s<br/>", Config::get("ident"));
 }}}
+
+== Defining configuration parameters ==
+
+If we want to define different configurations for - let's say - our database in the live and development stage, do the following.
+
+First, edit the `Config_Base` class and change the `$db_` parameters to null, because we will override them in the respective subclasses `Config_Live` and `Config_Dev`.
+
+{{{
+// Database settings
+public $db_host 			= null;
+public $db_user 			= null;
+public $db_password 			= null;
+public $db_db 				= null;
+}}}
+
+Now, make a new configuration file `Config_Live.php` in the `private/config` directory containing the following code.
+
+{{{
+<?php
+
+class Config_Live extends Config_Base {
+	
+	// Database settings
+	public $db_host 			= "live.host";
+	public $db_user 			= "live_user";
+	public $db_password 			= "live_pw";
+	public $db_db 				= "live_db";
+
+	function __construct() {
+		parent::__construct();
+	}
+	
+}
+}}}
+
+And finally, edit the `Config_Dev` class to also contain the above database parameters.
+
+Now, when the `Config::$stage` setting changes between *dev* and *live*, the database parameters retrieved via the `Config` class will change accordingly.
