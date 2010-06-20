@@ -1,6 +1,6 @@
 <?php
 
-Class Config_Base
+class Config_Base
 {	
 	// Site parameters
 	public $ident				= "ajde";

@@ -1,6 +1,6 @@
 <?php
 
-Class Config_Dev extends Config_Base {
+class Config_Dev extends Config_Base {
 	
 	public $debug				= true;
 

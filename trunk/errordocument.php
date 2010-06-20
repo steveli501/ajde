@@ -26,6 +26,6 @@ function desc() {
 	<h1>ERROR <?php echo $code; ?> - <?php echo desc(); ?></h1>
 	<h3>Unfortunately, something went wront.</h3>
 	<hr/>
-	<p><a href="">Ajde open framework</a>
+	<p><a href="http://code.google.com/p/ajde">Ajde open framework</a>
 </body> 
 </html> 

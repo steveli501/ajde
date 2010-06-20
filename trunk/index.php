@@ -12,10 +12,10 @@ define('PRIVATE_DIR', 'private/');
 define('CLASS_DIR', 'lib/');
 define('CONFIG_DIR', 'config/');
 
-require_once(PRIVATE_DIR.CLASS_DIR."Ajde/Core/Bootstrap.php");
+require_once(PRIVATE_DIR.CLASS_DIR."Ajde/App.php");
 
-$bootstrap = new Ajde_Core_Bootstrap();
-$bootstrap->run();
+$app = Ajde::create();
+$app->run();
 
 die('end here for now...');
 

@@ -22,5 +22,4 @@ abstract class Ajde_Core_Object
 	 * }
 	 */
 	abstract static function __getPattern();
-
 }
