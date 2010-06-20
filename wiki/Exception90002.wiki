@@ -1,3 +1,4 @@
+#labels Exception
 = Exception 90002 =
 == Bootstrap method in _CLASSNAME_ doesn't exist ==
 
