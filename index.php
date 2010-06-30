@@ -36,9 +36,6 @@ $app->run();
 
 die('end here for now...');
 
-// start session
-session_start();
-
 // request
 $request = new request($_GET);
 

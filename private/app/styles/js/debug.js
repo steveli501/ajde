@@ -1,3 +1,0 @@
-var debug = {
-	print : function() {}
-};

@@ -19,11 +19,12 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 	public static function handler(Exception $exception)
 	{
 		if (Config::getInstance()->debug === true)
-		{	
+		{
 			echo self::trace($exception);
 		}
 		else
 		{
+			Ajde_Exception_Log::logException($exception);
 			Ajde_Http_Response::redirectServerError();
 		}
 	}
@@ -43,7 +44,7 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 			$type = "Uncaught exception " . $exception->getCode();
 		}
 
-		$message = sprintf("%s: <u>%s</u> in <i>%s</i> on line <b>%s</b>",
+		$message = sprintf("%s: <u>%s</u> in <i>%s</i> on line <b>%s</b>\n",
 				$type,
 				$exception->getMessage(),
 				$exception->getFile(),
@@ -52,7 +53,7 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 
 		$message .= '<ol>';
 		foreach($exception->getTrace() as $item)
-			$message .= sprintf('<li> <i>%s</i> on line <b>%s</b> calling %s',
+			$message .= sprintf("<li> <i>%s</i> on line <b>%s</b> calling %s\n",
 					isset($item['file']) ? $item['file'] : '&lt;unknown file&gt;',
 					isset($item['line']) ? $item['line'] : '&lt;unknown line&gt;',
 					isset($item['function']) ? $item['function'] : '&lt;unknown function&gt;');

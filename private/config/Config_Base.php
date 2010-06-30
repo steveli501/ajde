@@ -30,6 +30,7 @@ class Config_Base
 	// Which modules should we call on bootstrapping?
 	public $bootstrap			= array(
 									"Ajde_Exception_Handler",
+									"Ajde_Session",
 									);
 
 	function __construct()
