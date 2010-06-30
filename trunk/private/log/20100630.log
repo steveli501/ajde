@@ -1,0 +1,28 @@
+At 21:57:49+02:00 this exception occured:
+
+Ajde uncaught exception 90003: Bootstrap method in
+						Ajde_Session returned FALSE in /home/joram/htdocs/ajde/private/lib/Ajde/Core/Bootstrap.php on line 52
+ /home/joram/htdocs/ajde/private/lib/Ajde/Core/Bootstrap.php on line 8 calling runCue\n /home/joram/htdocs/ajde/private/lib/Ajde/Core/App.php on line 40 calling run\n /home/joram/htdocs/ajde/index.php on line 35 calling run\nAjde documentation on error 90003At 21:59:16+02:00 this exception occured:
+
+Ajde uncaught exception 90003: Bootstrap method in
+						Ajde_Session returned FALSE in /home/joram/htdocs/ajde/private/lib/Ajde/Core/Bootstrap.php on line 52
+ /home/joram/htdocs/ajde/private/lib/Ajde/Core/Bootstrap.php on line 8 calling runCue
+ /home/joram/htdocs/ajde/private/lib/Ajde/Core/App.php on line 40 calling run
+ /home/joram/htdocs/ajde/index.php on line 35 calling run
+Ajde documentation on error 90003
+
+21:59:55+02:00:
+Ajde uncaught exception 90003: Bootstrap method in
+						Ajde_Session returned FALSE in /home/joram/htdocs/ajde/private/lib/Ajde/Core/Bootstrap.php on line 52
+ /home/joram/htdocs/ajde/private/lib/Ajde/Core/Bootstrap.php on line 8 calling runCue
+ /home/joram/htdocs/ajde/private/lib/Ajde/Core/App.php on line 40 calling run
+ /home/joram/htdocs/ajde/index.php on line 35 calling run
+Ajde documentation on error 90003
+
+22:00:51+02:00:
+Ajde uncaught exception 90003: Bootstrap method in
+						Ajde_Session returned FALSE in /home/joram/htdocs/ajde/private/lib/Ajde/Core/Bootstrap.php on line 52
+ /home/joram/htdocs/ajde/private/lib/Ajde/Core/Bootstrap.php on line 8 calling runCue
+ /home/joram/htdocs/ajde/private/lib/Ajde/Core/App.php on line 40 calling run
+ /home/joram/htdocs/ajde/index.php on line 35 calling run
+Ajde documentation on error 90003
