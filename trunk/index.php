@@ -25,6 +25,7 @@ register_shutdown_function('shutdown');
 define('PRIVATE_DIR', 'private/');
 define('CLASS_DIR', 'lib/');
 define('CONFIG_DIR', 'config/');
+define('APP_DIR', 'app/');
 
 // Configure the autoloader
 require_once(PRIVATE_DIR.CLASS_DIR."Ajde/Core/Autoloader.php");
@@ -33,30 +34,3 @@ Ajde_Core_Autoloader::register();
 // Run the Ajde framework application
 $app = Ajde::create();
 $app->run();
-
-die('end here for now...');
-
-// request
-$request = new request($_GET);
-
-// begin document
-$doc = document::createInstance($request);
-
-// prefs
-prefs::createInstance();
-
-// preload
-preloader::getInstance()->run();
-
-// main contents
-ob_start();
-module::load($request);	
-$doc->contents["main"] = ob_get_contents();
-ob_end_clean();
-
-// echo document
-$doc->output("header");
-$doc->output("body");
-$doc->output("footer");
-	
-?>

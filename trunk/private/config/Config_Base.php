@@ -11,8 +11,8 @@ class Config_Base
 									);
 	public $defaultRoute		= array(
 									"module" => "home",
-									"action" => "default",
-									"format" => "page"
+									"action" => "view",
+									"format" => "html"
 									);									
 	public $lang 				= "en";
 	public $style 				= "default";
