@@ -1,0 +1,9 @@
+#labels Documentation
+= Documentation Routing =
+
+More information about how URLs are parsed in Ajde.
+
+
+= Details =
+
+= Examples =
