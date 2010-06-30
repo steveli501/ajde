@@ -1,7 +1,10 @@
 <?php
 
-class Ajde_Http_Response
+class Ajde_Http_Response extends Ajde_Object_Standard
 {
+	const REDIRECT_HOMEPAGE = 1;
+	const REDIRECT_REFFERER = 2;
+	
 	public static function redirectNotFound()
 	{
 		self::dieOnCode("404");
@@ -37,6 +40,45 @@ class Ajde_Http_Response
 			case 503: return "Service Unavailable";
 			case 504: return "Bad Timeout";
 		}
+	}
+
+	function setRedirect($url = null)
+	{
+		if ($url === true || $url === self::REDIRECT_HOMEPAGE) {
+			$this->addHeader("Location", "/");
+		} elseif ($url === self::REDIRECT_REFFERER) {
+			$this->addHeader("Location", Ajde_Http_Request::getRefferer());
+		} elseif (substr($url, 0, 7) == "http://") {
+			$this->addHeader("Location", $url);
+		} elseif ($url) {
+			$this->addHeader("Location", "/$url");
+		} else {
+			$self = $_SERVER["PHP_SELF"].($_SERVER["QUERY_STRING"] ? "?" : "").$_SERVER["QUERY_STRING"];
+			$this->addHeader("Location", $self);
+		}
+	}
+
+	function addHeader($name, $value)
+	{
+		$headers = (array) $this->get("headers");
+		$headers[$name] = $value;
+		$this->set("headers", $headers);
+	}
+
+	function send()
+	{
+		$contents = ob_get_contents();
+		ob_end_clean();
+
+		if ($this->has("headers"))
+		{
+			foreach($this->get("headers") as $name => $value)
+			{
+				header("$name: $value");
+			}
+		}
+
+		echo $contents;
 	}
 
 }

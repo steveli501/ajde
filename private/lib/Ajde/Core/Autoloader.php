@@ -12,7 +12,8 @@ class Ajde_Core_Autoloader
 	    // Add libraries and config to include path
 		$dirs = array(
 			PRIVATE_DIR.CLASS_DIR,
-			PRIVATE_DIR.CONFIG_DIR
+			PRIVATE_DIR.CONFIG_DIR,
+			PRIVATE_DIR.APP_DIR
 		);
 
 		$files = array();
@@ -28,6 +29,9 @@ class Ajde_Core_Autoloader
 		$tail = end($classNameArray);
 		$head = implode("/", $classNameArray);
 		$files[] = $head . "/" . $tail . ".php";
+
+		// controller
+		$files[] = strtolower($className) . "/" . strtolower($className) . "Controller.php";
 
 		foreach ($dirs as $dir)
 		{
@@ -50,5 +54,28 @@ class Ajde_Core_Autoloader
 		{
 			throw new Ajde_Core_Autoloader_Exception("Unable to load $className", 90005);
 		}
+	}
+
+	public static function exists($classname)
+	{
+		try
+		{
+			// Pre PHP 5.3.0
+			if (!class_exists($classname)) {
+				return false;
+			}
+		}
+		catch (Ajde_Exception $exception)
+		{
+			if ($exception->getCode() === 90005)
+			{
+				return false;
+			}
+			else
+			{
+				throw $exception;
+			}
+		}
+		return true;
 	}
 }
