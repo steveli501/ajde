@@ -1,0 +1,10 @@
+#labels Exception
+= Exception 90010 =
+== Template for module _MODULE_ with action _ACTION_ not found ==
+
+= Details =
+
+The requested template is not available. Make sure the appropriate template file exists.
+
+Example:
+When accessing the URL `http://www.ajdedomain.com/guestbook/new.html`, Ajde tries to load the template `private/app/guestbook/templates/new.html.php`.
