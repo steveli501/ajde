@@ -45,17 +45,19 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 		$request = Ajde_Http_Request::fromGlobal();
 		$this->setRequest($request);
 
-		// Load document and controller
+		// Load document
 		$document = Ajde_Document::fromRequest($request);
 		$this->setDocument($document);
+
+		// Load controller
 		$controller = Ajde_Controller::fromRequest($request);
 		$this->setController($controller);
 
-		// Set fresh response
+		// Create fresh response
 		$response = new Ajde_Http_Response();
 		$this->setResponse($response);
 
-		// Invoke action
+		// Invoke controller action
 		$actionResult = $controller->invoke();
 
 		// Get document contents
