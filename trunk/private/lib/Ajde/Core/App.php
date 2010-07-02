@@ -35,8 +35,6 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 	{
 		$app = self::app();
 
-		ob_start();
-
 		// Bootstrap init
 		$bootstrap = new Ajde_Core_Bootstrap();
 		$bootstrap->run();
@@ -59,9 +57,17 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 
 		// Invoke controller action
 		$actionResult = $controller->invoke();
+		$document->setBody($actionResult);
+
+		if (!$document->hasLayout())
+		{
+			// Load default layout into document
+			$layout = new Ajde_Layout(Config::get("layout"));
+			$document->setLayout($layout);
+		}
 
 		// Get document contents
-		$document->render($actionResult);
+		$document->render();
 
 		// Output the headers and buffer
 		$response->send();
@@ -86,6 +92,14 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 	 */
 	public function getRequest() {
 		return $this->get("request");
+	}
+
+	/**
+	 *
+	 * @return Ajde_Http_Response
+	 */
+	public function getResponse() {
+		return $this->get("response");
 	}
 	
 	/**

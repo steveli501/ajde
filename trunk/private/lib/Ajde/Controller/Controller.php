@@ -18,11 +18,13 @@ class Ajde_Controller extends Ajde_Object_Standard
 		return new $module();
 	}
 
-	public function invoke()
+	public function invoke($action = null, $format = 'html')
 	{
-		$request = Ajde::app()->getRequest();
-		$action = $request->getAction();
-		$format = $request->getFormat();
+		if (!isset($action)) {
+			$request = Ajde::app()->getRequest();
+		}
+		$action = isset($action) ? $action : $request->getAction();
+		$format = isset($action) ? $format : $request->getFormat();
 		$defaultFunction = $action . "Default";
 		$formatFunction = $action . ucfirst($action);
 		if (method_exists($this, $formatFunction))
@@ -48,26 +50,8 @@ class Ajde_Controller extends Ajde_Object_Standard
 	public function loadTemplate()
 	{
 		$request = Ajde::app()->getRequest();
-		$filename = Ajde_Template::getFilename(
-				$request->getModule(),
-				$request->getAction(),
-				$request->getFormat()
-		);
-		if (!file_exists($filename)) {
-			$exception = new Ajde_Exception(sprintf("Template for module %s with
-					action %s not found",
-						$request->getModule(),
-						$request->getAction()
-					), 90010);
-			Ajde::routingError($exception);
-		}
-
-		ob_start();
-		include $filename;
-		$contents = ob_get_contents();
-		ob_end_clean();
-
-		return $contents;
+		$template = Ajde_Core_App_Template::fromRequest($request);
+		return $template->getContents();
 	}
 
 	public function redirect()

@@ -65,11 +65,13 @@ class Ajde_Http_Response extends Ajde_Object_Standard
 		$this->set("headers", $headers);
 	}
 
+	function setData($data)
+	{
+		$this->set("data", $data);
+	}
+
 	function send()
 	{
-		$contents = ob_get_contents();
-		ob_end_clean();
-
 		if ($this->has("headers"))
 		{
 			foreach($this->get("headers") as $name => $value)
@@ -78,7 +80,7 @@ class Ajde_Http_Response extends Ajde_Object_Standard
 			}
 		}
 
-		echo $contents;
+		echo $this->getData();
 	}
 
 }
