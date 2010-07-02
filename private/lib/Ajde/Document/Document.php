@@ -4,15 +4,6 @@ class Ajde_Document extends Ajde_Object_Standard
 {
 	/**
 	 *
-	 * @param Ajde_Http_Request $request 
-	 */
-	public function __construct()
-	{
-
-	}
-
-	/**
-	 *
 	 * @param Ajde_Http_Request $request
 	 * @return Ajde_Document
 	 */
@@ -28,8 +19,34 @@ class Ajde_Document extends Ajde_Object_Standard
 		return new $documentClass();
 	}
 
-	public function render($contents)
+	/**
+	 * @return Ajde_Layout
+	 */
+	public function getLayout() {
+		return $this->get("layout");
+	}
+
+	/**
+	 *
+	 * @param string $contents
+	 */
+	public function setBody($contents)
 	{
-		echo $contents;
+		$this->set('body', $contents);
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	public function getBody()
+	{
+		return $this->get('body');
+	}
+
+	public function render()
+	{
+		$contents = $this->getLayout()->getContents();
+		Ajde::app()->getResponse()->setData($contents);
 	}
 }

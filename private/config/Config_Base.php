@@ -15,7 +15,7 @@ class Config_Base
 									"format" => "html"
 									);									
 	public $lang 				= "en";
-	public $style 				= "default";
+	public $layout 				= "default";
 	
 	// Performance
 	public $compressResources	= false;

@@ -67,6 +67,7 @@ class Ajde_Core_Autoloader
 		}
 		catch (Ajde_Exception $exception)
 		{
+			// 90005: Unable to load CLASSNAME
 			if ($exception->getCode() === 90005)
 			{
 				return false;
