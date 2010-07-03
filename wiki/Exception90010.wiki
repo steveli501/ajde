@@ -1,6 +1,6 @@
 #labels Exception
 = Exception 90010 =
-== Template for module _MODULE_ with action _ACTION_ not found ==
+== Template file _FILENAME_ not found ==
 
 = Details =
 
