@@ -1,7 +1,12 @@
 <?php
 
-class Ajde_Document extends Ajde_Object_Standard
+abstract class Ajde_Document extends Ajde_Object_Standard
 {
+	public function  __construct()
+	{
+		
+	}
+
 	/**
 	 *
 	 * @param Ajde_Http_Request $request
@@ -49,4 +54,15 @@ class Ajde_Document extends Ajde_Object_Standard
 		$contents = $this->getLayout()->getContents();
 		Ajde::app()->getResponse()->setData($contents);
 	}
+
+	/**
+	 *
+	 * @param <type> $resourceType
+	 * @param <type> $filename
+	 * @return <type> 
+	 */
+	abstract public function addResource(Ajde_Template_Resource $resource);
+
+	abstract public function getResourceTypes();
+
 }

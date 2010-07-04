@@ -6,8 +6,11 @@ class Ajde_Layout extends Ajde_Template
 	{
 		$this->setName($name);
 		$this->setStyle($style);
-		$filename = PRIVATE_DIR.'layout/'.$this->getName().'/template/'.$this->getStyle().'.'.$format.'.php';
-		parent::__construct($filename);
+
+		$base = PRIVATE_DIR.'layout/'.$this->getName() . '/';
+		$action = $this->getStyle();
+		$format = $format;
+		parent::__construct($base, $action, $format);
 	}
 
 	public function setName($name)
@@ -20,13 +23,18 @@ class Ajde_Layout extends Ajde_Template
 		$this->set("style", $style);
 	}
 
-	public function setBody($contents)
+	public function getName()
 	{
-		$this->set("body", $contents);
+		return $this->get('name');
 	}
 
-	public function getBody()
+	public function getStyle()
 	{
-		$this->get("body");
+		return $this->get('style');
+	}
+
+	public function getFormat()
+	{
+		return $this->get('format');
 	}
 }
