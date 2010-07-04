@@ -59,19 +59,4 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 			}
 		}
 	}
-
-	public function getResourceFilename($resourceType, $action)
-	{
-		return $this->getBase() . 'res/' . $resourceType . '/' . $action . '.' . $resourceType;
-	}
-	
-	protected function checkResourceExist($resourceType, $action)
-	{
-		$filename = $this->getResourceFilename($resourceType, $action);
-		if (!file_exists($filename)) {
-			return $filename;
-		}
-		return false;
-
-	}
 }

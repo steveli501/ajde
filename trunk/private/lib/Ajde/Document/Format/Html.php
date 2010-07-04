@@ -7,7 +7,7 @@ class Ajde_Document_Format_Html extends Ajde_Document
 
 	public function  __construct()
 	{
-		Ajde_Event::register('Ajde_Template', 'beforeGetContents', 'autoAddResources');
+		Ajde_Event::register('Ajde_Tempflate', 'beforeGetContents', 'autoAddResources');
 		parent::__construct();
 	}
 
