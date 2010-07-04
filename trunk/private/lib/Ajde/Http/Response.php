@@ -60,7 +60,11 @@ class Ajde_Http_Response extends Ajde_Object_Standard
 
 	function addHeader($name, $value)
 	{
-		$headers = (array) $this->get("headers");
+		$headers = array();
+		if ($this->has('headers'))
+		{
+			$headers = $this->get('headers');
+		}
 		$headers[$name] = $value;
 		$this->set("headers", $headers);
 	}
