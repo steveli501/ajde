@@ -4,7 +4,7 @@
 
 = Details =
 
-When registering or triggering an `Ajde_Event`, the object parameter is incorrect. This parameter must be either a object instance or an existing classname.
+When invoking an `Ajde_Event`, the object parameter is incorrect. This parameter must be either a object instance or an existing classname.
 
 Example:
 {{{
