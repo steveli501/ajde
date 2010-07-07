@@ -35,8 +35,8 @@ class Config_Base
 
 	function __construct()
 	{
-		$this->site_root = $_SERVER["DOCUMENT_ROOT"].str_replace("/index.php", "", $_SERVER["PHP_SELF"]);
-		$this->site_url = $_SERVER["SERVER_NAME"];
+		$this->local_root = $_SERVER["DOCUMENT_ROOT"].str_replace("/index.php", "", $_SERVER["PHP_SELF"]);
+		$this->site_root = $_SERVER["SERVER_NAME"];
 	}
 	
 }

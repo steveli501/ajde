@@ -55,7 +55,18 @@ class Ajde_Event extends Ajde_Object_Static
 						}
 						if (isset($callback))
 						{
-							call_user_func($callback);
+							$trace = debug_backtrace();
+							$event = array_shift($trace);
+							$caller = array_shift($trace);
+
+							if (isset($caller['object']))
+							{
+								call_user_func($callback, $caller['object']);
+							}
+							else
+							{
+								throw new Ajde_Exception('lala');
+							}
 						}
 						else
 						{

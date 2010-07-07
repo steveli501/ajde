@@ -44,19 +44,4 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 		ob_end_clean();
 		return $contents;
 	}
-
-	public function autoAddResources()
-	{
-		$document = Ajde::app()->getDocument();
-		foreach($document->getResourceTypes() as $resourceType) {
-			if ($defaultResource = Ajde_Template_Resource::lazyCreate($resourceType, $this->getBase(), 'default', $this->getFormat()))
-			{
-				$document->addResource($defaultResource);
-			}
-			if ($this->getAction() != 'default' && $actionResource = Ajde_Template_Resource::lazyCreate($resourceType, $this->getBase(), $this->getAction(), $this->getFormat()))
-			{
-				$document->addResource($actionResource);
-			}
-		}
-	}
 }
