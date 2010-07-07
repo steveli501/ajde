@@ -10,6 +10,14 @@ class Ajde_Template_Resource extends Ajde_Object_Standard
 		$this->setType($type);
 	}
 
+	/**
+	 *
+	 * @param string $type
+	 * @param string $base
+	 * @param string $action
+	 * @param string $format (optional)
+	 * @return Ajde_Template_Resource
+	 */
 	public static function lazyCreate($type, $base, $action, $format = 'html')
 	{
 		$filename = self::getFilenameFromStatic($base, $type, $action);
@@ -18,6 +26,18 @@ class Ajde_Template_Resource extends Ajde_Object_Standard
 			return new self($type, $base, $action, $format);
 		}
 		return false;
+	}
+
+	/**
+	 *
+	 * @param string $encodedResource
+	 * @return Ajde_Template_Resource
+	 */
+	public static function fromLinkUrl($encodedResource)
+	{
+		$resourceArray = unserialize(base64_decode($encodedResource));
+		$resource = new self($resourceArray['type'], $resourceArray['base'], $resourceArray['action']);
+		return $resource;
 	}
 
 	public function getBase() {
@@ -68,8 +88,15 @@ class Ajde_Template_Resource extends Ajde_Object_Standard
 
 	protected function getLinkUrl()
 	{
-		return 'resource/' . $this->getType() . '/?r=' . urlencode(base64_encode(serialize(
+		$base = 'resource/' . $this->getType() . '/?';
+		$params = '';
+		if (Config::get('debug') === true)
+		{
+			$params .= 'file=' . str_replace('%2F', ':', urlencode($this->getFilename())) . '&';
+		}
+		$params .= 'r=' . urlencode(base64_encode(serialize(
 				array('type' => $this->getType(), 'base' => $this->getBase(), 'action' => $this->getAction()))));
+		return $base.$params;
 	}
 
 	public function getContents() {
@@ -83,12 +110,25 @@ class Ajde_Template_Resource extends Ajde_Object_Standard
 	public function getLinkCode() {
 		ob_start();
 
-		// vars for use in link template
+		// variables for use in included link template
 		$url = $this->getLinkUrl();
-
+		
 		include $this->getLinkTemplateFilename();
 		$contents = ob_get_contents();
 		ob_end_clean();
 		return $contents;
+	}
+
+	public function getContentType()
+	{
+		switch ($this->getType())
+		{
+			case 'css':
+				return 'text/css';
+				break;
+			case 'js':
+				return 'text/javascript';
+				break;
+		}
 	}
 }

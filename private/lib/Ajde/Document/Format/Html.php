@@ -7,7 +7,7 @@ class Ajde_Document_Format_Html extends Ajde_Document
 
 	public function  __construct()
 	{
-		Ajde_Event::register('Ajde_Tempflate', 'beforeGetContents', 'autoAddResources');
+		Ajde_Event::register('Ajde_Template', 'beforeGetContents', array($this, 'autoAddResources'));
 		parent::__construct();
 	}
 
@@ -43,6 +43,20 @@ class Ajde_Document_Format_Html extends Ajde_Document
 	public function addResource(Ajde_Template_Resource $resource)
 	{
 		$this->_resources[] = $resource;
+	}
+
+	public function autoAddResources(Ajde_Template $template)
+	{
+		foreach($this->getResourceTypes() as $resourceType) {
+			if ($defaultResource = Ajde_Template_Resource::lazyCreate($resourceType, $template->getBase(), 'default', $template->getFormat()))
+			{
+				$this->addResource($defaultResource);
+			}
+			if ($template->getAction() != 'default' && $actionResource = Ajde_Template_Resource::lazyCreate($resourceType, $template->getBase(), $template->getAction(), $template->getFormat()))
+			{
+				$this->addResource($actionResource);
+			}
+		}
 	}
 	
 }
