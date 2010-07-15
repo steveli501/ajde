@@ -67,9 +67,13 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 		}
 
 		// Get document contents
-		$document->render();
+		$contents = $document->render();
 
-		// Output the headers and buffer
+		// Let the cache handle the response
+		$cache = Ajde_Cache::getInstance();
+		$cache->setResponse($contents);
+		
+		// Output the buffer
 		$response->send();
 	}
 
@@ -116,6 +120,18 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 	 */
 	public function getController() {
 		return $this->get("controller");
+	}
+
+	public static function includeFile($filename)
+	{
+		Ajde_Cache::getInstance()->addFile($filename);
+		include $filename;
+	}
+
+	public static function includeFileOnce($filename)
+	{
+		Ajde_Cache::getInstance()->addFile($filename);
+		include_once $filename;
 	}
 
 }

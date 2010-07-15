@@ -4,6 +4,8 @@ class Ajde_Http_Response extends Ajde_Object_Standard
 {
 	const REDIRECT_HOMEPAGE = 1;
 	const REDIRECT_REFFERER = 2;
+
+	const RESPONSE_TYPE_NOT_MODIFIED = 304;
 	
 	public static function redirectNotFound()
 	{
@@ -17,19 +19,25 @@ class Ajde_Http_Response extends Ajde_Object_Standard
 
 	public static function dieOnCode($code)
 	{
-		header("HTTP/1.0 ".$code." ".self::getResponseType($code));
-		ob_get_clean();
-		header("Status: $code");
+		self::setResponseType($code);
 		header("Content-type: text/html; charset=UTF-8");
 		$_SERVER['REDIRECT_STATUS'] = $code;
 		include("errordocument.php");
 		die();
 	}
 
+	public static function setResponseType($code)
+	{
+		header("HTTP/1.0 ".$code." ".self::getResponseType($code));
+		ob_get_clean();
+		header("Status: $code");
+	}
+
 	protected static function getResponseType($code)
 	{
 		switch ($code)
 		{
+			case 304: return "Not Modified";
 			case 400: return "Bad Request";
 			case 401: return "Unauthorized";
 			case 403: return "Forbidden";
@@ -51,6 +59,7 @@ class Ajde_Http_Response extends Ajde_Object_Standard
 		} elseif (substr($url, 0, 7) == "http://") {
 			$this->addHeader("Location", $url);
 		} elseif ($url) {
+			// TODO: goes wrong when app is not installed in webroot
 			$this->addHeader("Location", "/$url");
 		} else {
 			$self = $_SERVER["PHP_SELF"].($_SERVER["QUERY_STRING"] ? "?" : "").$_SERVER["QUERY_STRING"];

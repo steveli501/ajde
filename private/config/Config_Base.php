@@ -20,6 +20,7 @@ class Config_Base
 	// Performance
 	public $compressResources	= false;
 	public $debug 				= false;
+	public $useCache			= true;
 	
 	// Database settings
 	public $db_host 			= "localhost";

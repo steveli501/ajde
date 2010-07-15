@@ -39,9 +39,22 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 	public function getContents() {
 		Ajde_Event::trigger($this, 'beforeGetContents');
 		ob_start();
+
+		Ajde_Cache::getInstance()->addFile($this->getFilename());
 		include $this->getFilename();
+		
 		$contents = ob_get_contents();
 		ob_end_clean();
+		Ajde_Event::trigger($this, 'afterGetContents');
 		return $contents;
+	}
+
+	public function requireJsLibrary($name, $version)
+	{
+		$url = Ajde_Template_Resource_JsLibrary::getUrl($name, $version);
+		$resource = new Ajde_Template_Resource_Remote(Ajde_Template_Resource::TYPE_JAVASCRIPT, $url);
+		Ajde::app()->getDocument()->addResource($resource, Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
+
+
 	}
 }
