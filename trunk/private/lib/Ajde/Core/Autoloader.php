@@ -39,7 +39,11 @@ class Ajde_Core_Autoloader
 			{
 				$path = $dir.$file;
 				if (file_exists($path)) {
-					include_once($path);
+					if (class_exists('Ajde_Cache'))
+					{
+						Ajde_Cache::getInstance()->addFile($path);
+					}
+					include_once $path;
 					return;
 				}
 			}

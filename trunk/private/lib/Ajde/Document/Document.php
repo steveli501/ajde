@@ -51,8 +51,7 @@ abstract class Ajde_Document extends Ajde_Object_Standard
 
 	public function render()
 	{
-		$contents = $this->getLayout()->getContents();
-		Ajde::app()->getResponse()->setData($contents);
+		return $this->getLayout()->getContents();
 	}
 
 	/**

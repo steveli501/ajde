@@ -16,7 +16,7 @@ class Resource extends Ajde_Controller
 	{
 		// get resource from request
 		$encoded = Ajde::app()->getRequest()->getParam('r');
-		$resource = Ajde_Template_Resource::fromLinkUrl($encoded);
+		$resource = Ajde_Template_Resource_Local::fromLinkUrl($encoded);
 
 		// prepare document
 		Ajde::app()->getDocument()->setLayout(new Ajde_Layout('empty'));

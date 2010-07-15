@@ -65,7 +65,8 @@ class Ajde_Event extends Ajde_Object_Static
 							}
 							else
 							{
-								throw new Ajde_Exception('lala');
+								// TODO: exception
+								throw new Ajde_Exception('TODO');
 							}
 						}
 						else
