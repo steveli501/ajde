@@ -18,11 +18,17 @@ abstract class Ajde_Template_Resource extends Ajde_Object_Standard
 		return $this->get('type');
 	}
 
-	protected function getLinkTemplateFilename()
+	protected function _getLinkTemplateFilename()
+	{
+		$format = $this->hasFormat() ? $this->getFormat() : null;
+		return self::getLinkTemplateFilename($this->getType(), $format);
+	}
+
+	public static function getLinkTemplateFilename($type, $format = null)
 	{
 		$layout = Ajde::app()->getDocument()->getLayout();
-		$format = $this->hasFormat() ? $this->getFormat() : 'html';
-		return PRIVATE_DIR . LAYOUT_DIR . $layout->getName() . '/link/' . $this->getType() . '.' . $format . '.php';
+		$format = isset($format) ? $format : 'html';
+		return PRIVATE_DIR . LAYOUT_DIR . $layout->getName() . '/link/' . $type . '.' . $format . '.php';
 	}
 
 	public function getLinkCode() {
@@ -31,24 +37,11 @@ abstract class Ajde_Template_Resource extends Ajde_Object_Standard
 		// variables for use in included link template
 		$url = $this->getLinkUrl();
 		
-		Ajde_Cache::getInstance()->addFile($this->getLinkTemplateFilename());
-		include $this->getLinkTemplateFilename();
+		Ajde_Cache::getInstance()->addFile($this->_getLinkTemplateFilename());
+		include $this->_getLinkTemplateFilename();
 		
 		$contents = ob_get_contents();
 		ob_end_clean();
 		return $contents;
-	}
-
-	public function getContentType()
-	{
-		switch ($this->getType())
-		{
-			case self::TYPE_STYLESHEET:
-				return 'text/css';
-				break;
-			case self::TYPE_JAVASCRIPT:
-				return 'text/javascript';
-				break;
-		}
 	}
 }

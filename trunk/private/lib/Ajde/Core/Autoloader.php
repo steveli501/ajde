@@ -60,12 +60,12 @@ class Ajde_Core_Autoloader
 		}
 	}
 
-	public static function exists($classname)
+	public static function exists($className)
 	{
 		try
 		{
 			// Pre PHP 5.3.0
-			if (!class_exists($classname)) {
+			if (!class_exists($className)) {
 				return false;
 			}
 		}

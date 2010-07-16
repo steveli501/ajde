@@ -1,3 +1,3 @@
-<?php $this->requireJsLibrary('jquery', '1.4'); ?>
+<?php //$this->requireJsLibrary('jquery', '1.4'); ?>
 
-guestbook aje!
+Hello world aje!

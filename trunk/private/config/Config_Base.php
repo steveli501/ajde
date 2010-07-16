@@ -18,7 +18,7 @@ class Config_Base
 	public $layout 				= "default";
 	
 	// Performance
-	public $compressResources	= false;
+	public $compressResources	= true;
 	public $debug 				= false;
 	public $useCache			= true;
 	

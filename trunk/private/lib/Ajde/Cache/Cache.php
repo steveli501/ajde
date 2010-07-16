@@ -5,6 +5,7 @@ class Ajde_Cache extends Ajde_Object_Singleton
 	protected $_hashContext;
 	protected $_hashFinal;
 	protected $_lastModified = array();
+	protected $_contents;
 
 	/**
 	 *
@@ -70,7 +71,17 @@ class Ajde_Cache extends Ajde_Object_Singleton
 		return $serverETag == $this->getHash();
 	}
 
-	public function setResponse($contents)
+	public function setContents($contents)
+	{
+		$this->set('contents', $contents);
+	}
+
+	public function getContents()
+	{
+		return $this->get('contents');
+	}
+
+	public function saveResponse()
 	{
 		$response = Ajde::app()->getResponse();
 		if ($this->ETagMatch() && Config::get('useCache'))
@@ -83,7 +94,7 @@ class Ajde_Cache extends Ajde_Object_Singleton
 		{
 			$response->addHeader('Last-Modified', gmdate('D, d M Y H:i:s', $this->getLastModified()) . ' GMT');
 			$response->addHeader('Etag', $this->getHash());
-			$response->setData($contents);
+			$response->setData($this->hasContents() ? $this->getContents() : false);
 		}
 	}
 

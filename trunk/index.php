@@ -28,6 +28,7 @@ define('LIB_DIR', 'lib/');
 define('CONFIG_DIR', 'config/');
 define('APP_DIR', 'app/');
 define('LAYOUT_DIR', 'layout/');
+define('CACHE_DIR', 'shared/cache/');
 
 // Configure the autoloader
 require_once(PRIVATE_DIR.LIB_DIR."Ajde/Core/Autoloader.php");
