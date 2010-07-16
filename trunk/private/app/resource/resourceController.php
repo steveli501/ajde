@@ -2,12 +2,12 @@
 
 class Resource extends Ajde_Controller
 {
-	function cssDefault()
+	function localCss()
 	{
 		return $this->getResource();
 	}
 
-	function jsDefault()
+	function localJs()
 	{
 		return $this->getResource();
 	}
