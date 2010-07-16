@@ -78,15 +78,15 @@ class Ajde_Template_Resource_Local extends Ajde_Template_Resource
 
 	protected function getLinkUrl()
 	{
-		$base = 'resource/local/' . $this->getType() . '/?';
-		$params = '';
+		$url = 'resource/local/' . $this->getType() . '/';
+		$url .= 'r=' . urlencode(base64_encode(serialize(
+				array('type' => $this->getType(), 'base' => $this->getBase(), 'action' => $this->getAction()))));
+		$url .= '/';
 		if (Config::get('debug') === true)
 		{
-			$params .= 'file=' . str_replace('%2F', ':', urlencode($this->getFilename())) . '&';
+			$url .= '?file=' . str_replace('%2F', ':', urlencode($this->getFilename()));
 		}
-		$params .= 'r=' . urlencode(base64_encode(serialize(
-				array('type' => $this->getType(), 'base' => $this->getBase(), 'action' => $this->getAction()))));
-		return $base.$params;
+		return $url;
 	}
 
 	public function getContents() {

@@ -2,25 +2,31 @@
 
 class Resource extends Ajde_Controller
 {
-	function localCss()
+	function localDefault()
 	{
-		return $this->getResource();
+		return $this->_getLocalResource();
 	}
 
-	function localJs()
+	function compressedDefault()
 	{
-		return $this->getResource();
+		return $this->_getCompressedResource();
 	}
 
-	function getResource()
+	protected function _getLocalResource()
+	{
+		return $this->_getResource('Ajde_Template_Resource_Local');
+	}
+
+	protected function _getCompressedResource()
+	{
+		return $this->_getResource('Ajde_Template_Resource_Local_Compressed');
+	}
+
+	protected function _getResource($className)
 	{
 		// get resource from request
-		$encoded = Ajde::app()->getRequest()->getParam('r');
-		$resource = Ajde_Template_Resource_Local::fromLinkUrl($encoded);
-
-		// prepare document
-		Ajde::app()->getDocument()->setLayout(new Ajde_Layout('empty'));
-		Ajde::app()->getResponse()->addHeader('Content-type', $resource->getContentType());
+		$encoded = Ajde::app()->getRequest()->getParam('id');
+		$resource = $className::fromLinkUrl($encoded);
 		return $resource->getContents();
 	}
 

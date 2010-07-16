@@ -69,9 +69,10 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 		// Get document contents
 		$contents = $document->render();
 
-		// Let the cache handle the response
+		// Let the cache handle the contents and have it saved to the response
 		$cache = Ajde_Cache::getInstance();
-		$cache->setResponse($contents);
+		$cache->setContents($contents);
+		$cache->saveResponse();
 		
 		// Output the buffer
 		$response->send();

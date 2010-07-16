@@ -7,6 +7,7 @@ class Ajde_Document_Format_Html extends Ajde_Document
 	const RESOURCE_POSITION_LAST = 2;
 	
 	protected $_resources = array();
+	protected $_compressors = array();
 	protected $_meta = array();
 
 	public function  __construct()
@@ -17,6 +18,12 @@ class Ajde_Document_Format_Html extends Ajde_Document
 		 */
 		Ajde_Event::register('Ajde_Template', 'beforeGetContents', array($this, 'autoAddResources'));
 		parent::__construct();
+	}
+
+	public function render()
+	{
+		Ajde::app()->getResponse()->addHeader('Content-type', 'text/html');
+		return parent::render();
 	}
 
 	/**
@@ -37,20 +44,48 @@ class Ajde_Document_Format_Html extends Ajde_Document
 
 	public function renderResources()
 	{
+		return Config::get('compressResources') ?
+			$this->renderCompressedResources() :
+			$this->renderAllResources();
+	}
+
+	public function renderAllResources()
+	{
 		$code = '';
-		if (Config::get('compressResources'))
+		foreach ($this->_resources as $resource)
 		{
-			foreach ($this->_resources as $resource) {
-				/* @var $resource Ajde_Template_Resource */
+			/* @var $resource Ajde_Template_Resource */
+			$code .= $resource->getLinkCode() . PHP_EOL;
+		}
+		return $code;
+	}
+
+	public function renderCompressedResources()
+	{
+		$code = '';
+		foreach ($this->_resources as $resource)
+		{
+			/* @var $resource Ajde_Template_Resource */
+			if ($resource instanceof Ajde_Template_Resource_Local)
+			{
+				if (!isset($this->_compressors[$resource->getType()]))
+				{
+					$this->_compressors[$resource->getType()] =
+							Ajde_Template_Resource_Local_Compressor::fromType($resource->getType());
+				}
+				$compressor = $this->_compressors[$resource->getType()];
+				/* @var $compressor Ajde_Template_Resource_Local_Compressor */
+				$compressor->addResource($resource);
+			}
+			else
+			{
 				$code .= $resource->getLinkCode() . PHP_EOL;
 			}
 		}
-		else
+		foreach ($this->_compressors as $compressor)
 		{
-			foreach ($this->_resources as $resource) {
-				/* @var $resource Ajde_Template_Resource */
-				$code .= $resource->getLinkCode() . PHP_EOL;
-			}
+			$resource = $compressor->process();
+			$code .= $resource->getLinkCode() . PHP_EOL;
 		}
 		return $code;
 	}
