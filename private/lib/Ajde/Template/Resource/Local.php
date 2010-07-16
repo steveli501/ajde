@@ -78,7 +78,7 @@ class Ajde_Template_Resource_Local extends Ajde_Template_Resource
 
 	protected function getLinkUrl()
 	{
-		$base = 'resource/' . $this->getType() . '/?';
+		$base = 'resource/local/' . $this->getType() . '/?';
 		$params = '';
 		if (Config::get('debug') === true)
 		{

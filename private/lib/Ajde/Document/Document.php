@@ -58,8 +58,8 @@ abstract class Ajde_Document extends Ajde_Object_Standard
 	 *
 	 * @param Ajde_Template_Resource $resource
 	 */
-	abstract public function addResource(Ajde_Template_Resource $resource);
+	public function addResource(Ajde_Template_Resource $resource) {}
 
-	abstract public function getResourceTypes();
+	public function getResourceTypes() {}
 
 }

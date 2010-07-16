@@ -18,15 +18,15 @@ class Ajde_Controller extends Ajde_Object_Standard
 		return new $module();
 	}
 
-	public function invoke($action = null, $format = 'html')
+	public function invoke($action = null, $format = null)
 	{
-		if (!isset($action)) {
+		if (!isset($action) || !isset($format)) {
 			$request = Ajde::app()->getRequest();
 		}
 		$action = isset($action) ? $action : $request->getAction();
-		$format = isset($action) ? $format : $request->getFormat();
+		$format = isset($format) ? $format : $request->getFormat();
 		$defaultFunction = $action . "Default";
-		$formatFunction = $action . ucfirst($action);
+		$formatFunction = $action . ucfirst($format);
 		if (method_exists($this, $formatFunction))
 		{
 			$actionFunction = $formatFunction;

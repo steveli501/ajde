@@ -11,7 +11,8 @@ class Ajde_Document_Format_Html extends Ajde_Document
 
 	public function  __construct()
 	{
-		/* We add the resources before the template is included, otherwise the
+		/*
+		 * We add the resources before the template is included, otherwise the
 		 * layout resources never make it into the <head> section.
 		 */
 		Ajde_Event::register('Ajde_Template', 'beforeGetContents', array($this, 'autoAddResources'));
@@ -30,9 +31,26 @@ class Ajde_Document_Format_Html extends Ajde_Document
 	public function renderHead()
 	{		
 		$code = '';
-		foreach ($this->_resources as $resource) {							
-			/* @var $resource Ajde_Template_Resource */
-			$code .= $resource->getLinkCode() . PHP_EOL;
+		$code .= $this->renderResources();
+		return $code;
+	}
+
+	public function renderResources()
+	{
+		$code = '';
+		if (Config::get('compressResources'))
+		{
+			foreach ($this->_resources as $resource) {
+				/* @var $resource Ajde_Template_Resource */
+				$code .= $resource->getLinkCode() . PHP_EOL;
+			}
+		}
+		else
+		{
+			foreach ($this->_resources as $resource) {
+				/* @var $resource Ajde_Template_Resource */
+				$code .= $resource->getLinkCode() . PHP_EOL;
+			}
 		}
 		return $code;
 	}
