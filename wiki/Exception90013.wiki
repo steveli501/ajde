@@ -1,4 +1,4 @@
-#labels Documentation
+#labels Exception
 = Exception 90013 =
 == JavaScript library _LIBRARYNAME_ not available ==
 
