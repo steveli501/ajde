@@ -5,7 +5,7 @@ class Ajde_FS_Find extends Ajde_Object_Static
 	public static function findFile($dir, $pattern)
 	{
 		// Escape for regex pattern
-		// TODO: this is waaaay too simplistic
+		// TODO: this is way too simplistic
 		$regex = '/' . str_replace('.', '\.', $pattern) . '/';
 		// Asterix wildcard
 		$regex = str_replace('*', '.+', $regex);

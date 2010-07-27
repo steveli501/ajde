@@ -18,8 +18,7 @@ abstract class Ajde_Template_Resource_Local_Compressor extends Ajde_Object_Stand
 		$className = __CLASS__ . '_' . ucfirst($type);
 		if (!Ajde_Core_Autoloader::exists($className))
 		{
-			// TODO: exception
-			throw new Ajde_Exception("TODO");
+			throw new Ajde_Exception(sprintf("Compressor for type %s not found", $type), 90017);
 		}
 		return new $className();
 	}
@@ -32,12 +31,10 @@ abstract class Ajde_Template_Resource_Local_Compressor extends Ajde_Object_Stand
 	{
 		if (is_array($resources))
 		{
-			$this->_resources = $resources;
-		}
-		else
-		{
-			// TODO: exception
-			throw new Ajde_Exception("TODO");
+			foreach($resources as $resource)
+			{
+				$this->addResource($resource);
+			}
 		}
 	}
 
@@ -149,8 +146,7 @@ abstract class Ajde_Template_Resource_Local_Compressor extends Ajde_Object_Stand
 		}
 		if (!is_writable($this->getBase()))
 		{
-			// TODO: exception
-			throw new Ajde_Exception("TODO");
+			throw new Ajde_Exception(sprintf("Directory %s is not writable", $this->getBase()), 90014);
 		}
 		file_put_contents($this->getFilename(), $this->compress($contentsToCompress));
 	}

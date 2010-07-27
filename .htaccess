@@ -6,6 +6,7 @@ php_value display_startup_errors 1
 # Turn the RewriteEngine on
 
 RewriteEngine on
+#RewriteBase /ajde
 
 # Add a leading www to domain if one is missing
 
@@ -28,13 +29,13 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1/ [R=301,L]
 # are successful                                  #
 ###################################################
 
-RewriteRule ^([^/\.]+)/?$ /index.php?module=$1 [QSA,L]
-RewriteRule ^([^\?/\.]+)/([^\?/\.]+)/?$ /index.php?module=$1&action=$2 [QSA,L]
-RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ /index.php?module=$1&action=$2&format=$3 [QSA,L]
-RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ /index.php?module=$1&action=$2&format=$3&id=$4 [QSA,L]
+RewriteRule ^([^/\.]+)/?$ index.php?module=$1 [QSA,L]
+RewriteRule ^([^\?/\.]+)/([^\?/\.]+)/?$ index.php?module=$1&action=$2 [QSA,L]
+RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ index.php?module=$1&action=$2&format=$3 [QSA,L]
+RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ index.php?module=$1&action=$2&format=$3&id=$4 [QSA,L]
 
-RewriteRule ^([^/\.]+)\.([^/\.]+)$ /index.php?module=$1&format=$2 [QSA,L]
-RewriteRule ^([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$ /index.php?module=$1&action=$2&format=$3 [QSA,L]
+RewriteRule ^([^/\.]+)\.([^/\.]+)$ index.php?module=$1&format=$2 [QSA,L]
+RewriteRule ^([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$ index.php?module=$1&action=$2&format=$3 [QSA,L]
 
 ###################################################
 # CHARSET, COMPRESSION & CACHING                  #

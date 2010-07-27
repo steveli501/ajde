@@ -20,7 +20,7 @@ class Ajde_Exception_Log extends Ajde_Object_Static
 			return false;
 		}
 		fwrite($fh, "\n\n".date("H:i:sP") . ":\n");
-		$trace = strip_tags( Ajde_Exception_Handler::trace($exception) );
+		$trace = strip_tags( Ajde_Exception_Handler::trace($exception, Ajde_Exception_Handler::EXCEPTION_TRACE_LOG) );
 		fwrite($fh, $trace);
 		fclose($fh);
 	}
