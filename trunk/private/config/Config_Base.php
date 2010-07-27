@@ -19,6 +19,7 @@ class Config_Base
 	
 	// Performance
 	public $compressResources	= true;
+	public $compressHtml		= true;
 	public $debug 				= false;
 	public $useCache			= true;
 	

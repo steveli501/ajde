@@ -23,6 +23,10 @@ class Ajde_Document_Format_Html extends Ajde_Document
 	public function render()
 	{
 		Ajde::app()->getResponse()->addHeader('Content-type', 'text/html');
+		if (Config::get('compressHtml') == true)
+		{
+			Ajde_Event::register('Ajde_Layout', 'afterGetContents', 'Ajde_Document_Format_Html_Compressor::compress');
+		}
 		return parent::render();
 	}
 

@@ -10,7 +10,7 @@ class Ajde_Event extends Ajde_Object_Static
 	 * to trigger different callbacks for the same event on different object instances
 	 * of the same class.
 	 * 
-	 * @param mixed $object Object instance or classname
+	 * @param mixed $object Object instance or classname triggering the event
 	 * @param string $event Event name
 	 * @param mixed $callback Callback
 	 * @return boolean true
@@ -56,7 +56,7 @@ class Ajde_Event extends Ajde_Object_Static
 						if (isset($callback))
 						{
 							$trace = debug_backtrace();
-							$event = array_shift($trace);
+							$current = array_shift($trace);
 							$caller = array_shift($trace);
 
 							if (isset($caller['object']))
