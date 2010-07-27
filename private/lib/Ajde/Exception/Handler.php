@@ -44,18 +44,24 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 			$type = "Uncaught exception " . $exception->getCode();
 		}
 
-		$message = sprintf("%s: <u>%s</u> in <i>%s</i> on line <b>%s</b>\n",
+		$message = sprintf("%s: <u>%s</u> in %s\n",
 				$type,
 				$exception->getMessage(),
-				$exception->getFile(),
-				$exception->getLine()				
+				self::embedScript(
+						$exception->getFile(),
+						$exception->getLine(),
+						true
+				)
 		);
 
 		$message .= '<ol>';
 		foreach($exception->getTrace() as $item)
-			$message .= sprintf("<li> <i>%s</i> on line <b>%s</b> calling %s\n",
-					isset($item['file']) ? $item['file'] : '&lt;unknown file&gt;',
-					isset($item['line']) ? $item['line'] : '&lt;unknown line&gt;',
+			$message .= sprintf("<li> %s calling %s\n",
+					self::embedScript(
+							isset($item['file']) ? $item['file'] : null,
+							isset($item['line']) ? $item['line'] : null,
+							false
+					),
 					isset($item['function']) ? $item['function'] : '&lt;unknown function&gt;');
 		$message .= '</ol>';
 
@@ -89,6 +95,39 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 			case 16384: return "E_USER_DEPRECATED";
 			case 30719: return "E_ALL";
 		}
+	}
+
+	protected static function embedScript($filename = null, $line = null, $expand = false)
+	{
+		$lineOffset = 3;
+		if (isset($filename) && isset($line))
+		{
+			$lines = file($filename);
+			$file = '';
+			for ($i = max(0, $line - $lineOffset - 1); $i < min($line + $lineOffset, count($lines)); $i++)
+			{
+				if ($i == $line - 1)
+				{
+					$file .= "<span style='background-color: yellow;'>" . htmlentities($lines[$i]) . "</span>";
+				}
+				else
+				{
+					$file .= htmlentities($lines[$i]);
+				}
+			}
+		}
+
+		$id = md5(microtime());
+		return sprintf(
+				"<a
+					onclick='document.getElementById(\"$id\").style.display = document.getElementById(\"$id\").style.display == \"block\" ? \"none\" : \"block\";'
+					href='javascript:void(0);'
+				><i>%s</i> on line <b>%s</b></a><pre style='border: 1px solid gray; background-color: #eee; display: %s;' id='$id'>%s</pre>",
+				$filename,
+				$line,
+				$expand ? "block" : "none",
+				$file
+		);
 	}
 	
 }

@@ -84,7 +84,7 @@ class cssmin
 		if (in_array("preserve-urls", $options))
 			{
 			// Decode url()
-			$css = preg_replace_callback("/url\s*\((.*)\)/siU", "cssmin_encode_url", $css);
+			$css = preg_replace_callback("/url\s*\((.*)\)/siU", "cssmin_decode_url", $css);
 			}
 		return $css;
 		}

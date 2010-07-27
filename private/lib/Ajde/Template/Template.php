@@ -2,6 +2,8 @@
 
 abstract class Ajde_Template extends Ajde_Object_Standard
 {
+	public $_contents = null;
+	
 	public function  __construct($base, $action, $format = 'html')
 	{
 		$this->setBase($base);
@@ -10,7 +12,8 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 		$this->exist();
 	}
 
-	public function exist() {
+	public function exist()
+	{
 		$filename = $this->getFilename();
 		if (!file_exists($filename)) {
 			$exception = new Ajde_Exception(sprintf("Template file %s not
@@ -24,20 +27,39 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 		return $this->getBase() . 'template/' . $this->getAction() . '.' . $this->getFormat() . '.php';
 	}
 
-	public function getBase() {
+	public function getBase()
+	{
 		return $this->get('base');
 	}
 
-	public function getAction() {
+	public function getAction()
+	{
 		return $this->get('action');
 	}
 
-	public function getFormat() {
+	public function getFormat()
+	{
 		return $this->get('format');
 	}
 
-	public function getContents() {
-		Ajde_Event::trigger($this, 'beforeGetContents');
+	public function getContents()
+	{
+		if (!isset($this->_contents))
+		{
+			Ajde_Event::trigger($this, 'beforeGetContents');
+			$this->setContents($this->includeContents());
+			Ajde_Event::trigger($this, 'afterGetContents');
+		}
+		return $this->_contents;
+	}
+
+	public function setContents($contents)
+	{
+		$this->_contents = $contents;
+	}
+
+	public function includeContents()
+	{
 		ob_start();
 
 		Ajde_Cache::getInstance()->addFile($this->getFilename());
@@ -45,10 +67,9 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 		
 		$contents = ob_get_contents();
 		ob_end_clean();
-		Ajde_Event::trigger($this, 'afterGetContents');
 		return $contents;
 	}
-
+	
 	public function requireJsLibrary($name, $version)
 	{
 		$url = Ajde_Template_Resource_JsLibrary::getUrl($name, $version);
