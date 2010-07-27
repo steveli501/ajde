@@ -53,14 +53,13 @@ class Ajde_Http_Response extends Ajde_Object_Standard
 	function setRedirect($url = null)
 	{
 		if ($url === true || $url === self::REDIRECT_HOMEPAGE) {
-			$this->addHeader("Location", "/");
+			$this->addHeader("Location", Config::get('site_path'));
 		} elseif ($url === self::REDIRECT_REFFERER) {
 			$this->addHeader("Location", Ajde_Http_Request::getRefferer());
 		} elseif (substr($url, 0, 7) == "http://") {
 			$this->addHeader("Location", $url);
 		} elseif ($url) {
-			// TODO: goes wrong when app is not installed in webroot
-			$this->addHeader("Location", "/$url");
+			$this->addHeader("Location", Config::get('site_path') . $url);
 		} else {
 			$self = $_SERVER["PHP_SELF"].($_SERVER["QUERY_STRING"] ? "?" : "").$_SERVER["QUERY_STRING"];
 			$this->addHeader("Location", $self);

@@ -61,12 +61,18 @@ class Ajde_Event extends Ajde_Object_Static
 
 							if (isset($caller['object']))
 							{
-								call_user_func($callback, $caller['object']);
+								// http://www.php.net/manual/en/function.call-user-func.php
+								// Note: Note that the parameters for call_user_func() are not passed by reference.
+								call_user_func_array($callback, array(&$caller['object']));
+							}
+							elseif ($callback instanceof Closure)
+							{
+								$callback();
 							}
 							else
 							{
-								// TODO: exception
-								throw new Ajde_Exception('TODO');
+								throw new Ajde_Exception("Event context needed to
+									fire, none detected", 90015);
 							}
 						}
 						else
@@ -75,7 +81,7 @@ class Ajde_Event extends Ajde_Object_Static
 							// because of the __call magic function. Workaround
 							// could be something like in_array("bar",get_class_methods($f1)
 							// see: http://php.net/manual/en/function.method-exists.php
-							throw new Ajde_Exception('Callback is not valid');
+							throw new Ajde_Exception('Callback is not valid', 90016);
 						}
 					}
 				}

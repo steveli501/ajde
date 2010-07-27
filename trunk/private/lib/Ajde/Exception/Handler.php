@@ -29,7 +29,10 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 		}
 	}
 
-	public static function trace(Exception $exception)
+	const EXCEPTION_TRACE_HTML = 1;
+	const EXCEPTION_TRACE_LOG = 2;
+
+	public static function trace(Exception $exception, $output = self::EXCEPTION_TRACE_HTML)
 	{
 		if ($exception instanceof ErrorException)
 		{
@@ -44,32 +47,46 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 			$type = "Uncaught exception " . $exception->getCode();
 		}
 
-		$message = sprintf("%s: <u>%s</u> in %s\n",
-				$type,
-				$exception->getMessage(),
-				self::embedScript(
+		switch ($output)
+		{
+			case self::EXCEPTION_TRACE_HTML:
+				ob_clean();
+				$message = sprintf("<h3>%s:</h3><h2>%s</h2> in %s\n",
+						$type,
+						$exception->getMessage(),
+						self::embedScript(
+								$exception->getFile(),
+								$exception->getLine(),
+								true
+						)
+				);
+
+				if ($exception instanceof Ajde_Exception && $exception->getCode()) {
+					$message .= sprintf('<strong>|i| :</strong> <a href="%s">Ajde documentation on error %s</a>',
+						Ajde_Core_Documentation::getUrl($exception->getCode()),
+						$exception->getCode()
+					);
+				}
+
+				$message .= '<ol>';
+				foreach($exception->getTrace() as $item)
+					$message .= sprintf("<li> %s calling %s\n",
+							self::embedScript(
+									isset($item['file']) ? $item['file'] : null,
+									isset($item['line']) ? $item['line'] : null,
+									false
+							),
+							isset($item['function']) ? $item['function'] : '&lt;unknown function&gt;');
+				$message .= '</ol>';
+				break;
+			case self::EXCEPTION_TRACE_LOG:
+				$message = sprintf("%s: %s in %s on line %s",
+						$type,
+						$exception->getMessage(),
 						$exception->getFile(),
-						$exception->getLine(),
-						true
-				)
-		);
-
-		$message .= '<ol>';
-		foreach($exception->getTrace() as $item)
-			$message .= sprintf("<li> %s calling %s\n",
-					self::embedScript(
-							isset($item['file']) ? $item['file'] : null,
-							isset($item['line']) ? $item['line'] : null,
-							false
-					),
-					isset($item['function']) ? $item['function'] : '&lt;unknown function&gt;');
-		$message .= '</ol>';
-
-		if ($exception instanceof Ajde_Exception && $exception->getCode()) {
-			$message .= sprintf('<a href="%s">Ajde documentation on error %s</a>',
-				Ajde_Core_Documentation::getUrl($exception->getCode()),
-				$exception->getCode()
-			);
+						$exception->getLine()
+				);
+				break;
 		}
 		return $message;
 	}

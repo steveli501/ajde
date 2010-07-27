@@ -8,7 +8,7 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 	 * @return Ajde_Core_App
 	 */
 	public static function getInstance()
-	{
+	{		
 		static $instance;
 		return $instance === null ? $instance = new self : $instance;
 	}

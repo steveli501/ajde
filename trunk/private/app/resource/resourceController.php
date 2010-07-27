@@ -26,6 +26,9 @@ class Resource extends Ajde_Controller
 	{
 		// get resource from request
 		$encoded = Ajde::app()->getRequest()->getParam('id');
+		if (!Ajde_Core_Autoloader::exists($className)) {
+			throw new Ajde_Controller_Exception("Resource type could not be loaded");
+		}
 		$resource = $className::fromLinkUrl($encoded);
 		return $resource->getContents();
 	}
