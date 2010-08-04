@@ -119,6 +119,10 @@ abstract class Ajde_Template_Resource_Local_Compressor extends Ajde_Object_Stand
 		return array('status' => self::CACHE_STATUS_NOT_EXIST, 'fileName' => '');
 	}
 
+	/**
+	 * 
+	 * @return Ajde_Template_Resource_Local_Compressed
+	 */
 	public function process()
 	{
 		$hash = $this->getHash();
