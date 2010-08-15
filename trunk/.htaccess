@@ -29,13 +29,15 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}/$1/ [R=301,L]
 # are successful                                  #
 ###################################################
 
-RewriteRule ^([^/\.]+)/?$ index.php?module=$1 [QSA,L]
-RewriteRule ^([^\?/\.]+)/([^\?/\.]+)/?$ index.php?module=$1&action=$2 [QSA,L]
-RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ index.php?module=$1&action=$2&format=$3 [QSA,L]
-RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ index.php?module=$1&action=$2&format=$3&id=$4 [QSA,L]
+#RewriteRule ^([^/\.]+)/?$ index.php?module=$1 [QSA,L]
+#RewriteRule ^([^\?/\.]+)/([^\?/\.]+)/?$ index.php?module=$1&action=$2 [QSA,L]
+#RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ index.php?module=$1&action=$2&format=$3 [QSA,L]
+#RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ index.php?module=$1&action=$2&format=$3&id=$4 [QSA,L]
 
-RewriteRule ^([^/\.]+)\.([^/\.]+)$ index.php?module=$1&format=$2 [QSA,L]
-RewriteRule ^([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$ index.php?module=$1&action=$2&format=$3 [QSA,L]
+#RewriteRule ^([^/\.]+)\.([^/\.]+)$ index.php?module=$1&format=$2 [QSA,L]
+#RewriteRule ^([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$ index.php?module=$1&action=$2&format=$3 [QSA,L]
+
+RewriteRule ^(.+)$ index.php?_route=$1 [QSA,L]
 
 ###################################################
 # CHARSET, COMPRESSION & CACHING                  #

@@ -42,13 +42,17 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 		// Get request
 		$request = Ajde_Http_Request::fromGlobal();
 		$this->setRequest($request);
+		
+		// Get route
+		$route = $request->getRoute();
+		$this->setRoute($route);
 
 		// Load document
-		$document = Ajde_Document::fromRequest($request);
+		$document = Ajde_Document::fromRoute($route);
 		$this->setDocument($document);
 
 		// Load controller
-		$controller = Ajde_Controller::fromRequest($request);
+		$controller = Ajde_Controller::fromRoute($route);
 		$this->setController($controller);
 
 		// Create fresh response
@@ -105,6 +109,14 @@ class Ajde_Core_App extends Ajde_Object_Singleton
 	 */
 	public function getResponse() {
 		return $this->get("response");
+	}
+	
+	/**
+	 * 
+	 * @return Ajde_Core_Route
+	 */
+	public function getRoute() {
+		return $this->get("route");
 	}
 	
 	/**

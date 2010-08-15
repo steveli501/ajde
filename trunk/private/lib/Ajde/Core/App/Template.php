@@ -4,14 +4,14 @@ class Ajde_Core_App_Template extends Ajde_Template
 {
 	/**
 	 *
-	 * @param Ajde_Http_Request $request
+	 * @param Ajde_Core_Route $route
 	 * @return Ajde_Core_App_Template
 	 */
-	public static function fromRequest(Ajde_Http_Request $request)
+	public static function fromRoute(Ajde_Core_Route $route)
 	{
-		$base = PRIVATE_DIR.APP_DIR.$request->getModule() . '/';
-		$action = $request->getAction();
-		$format = $request->getFormat();
+		$base = PRIVATE_DIR.APP_DIR.$route->getModule() . '/';
+		$action = $route->getAction();
+		$format = $route->getFormat();
 		return new self($base, $action, $format);
 	}
 }

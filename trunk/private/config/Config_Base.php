@@ -9,11 +9,12 @@ class Config_Base
 									"number" => "0",
 									"name" => "alpha"
 									);
-	public $defaultRoute		= array(
+	public $homepageRoute		= "home.html";
+	public $defaultRouteParts	= array(
 									"module" => "home",
 									"action" => "view",
 									"format" => "html"
-									);									
+									);       
 	public $lang 				= "en";
 	public $layout 				= "default";
 	

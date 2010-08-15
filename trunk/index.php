@@ -7,9 +7,11 @@ if (version_compare(PHP_VERSION, '5.2.3') < 0) {
 
 // Show errors before errorhandler is initialized in bootstrapping
 error_reporting(E_ALL);
+
+// Uncomment to display uncatchable fatal errors
 //ini_set('display_errors', 0);
 
-// Catch fatal errors
+// Try to catch fatal errors
 function shutdown()
 {
 	$traceOn = array(E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR);
@@ -21,7 +23,7 @@ function shutdown()
 }
 register_shutdown_function('shutdown');
 
-// Now, where can we find the files?
+// Define paths
 define('PRIVATE_DIR', 'private/');
 define('PUBLIC_DIR', 'public/');
 define('LIB_DIR', 'lib/');
@@ -34,6 +36,6 @@ define('CACHE_DIR', 'shared/cache/');
 require_once(PRIVATE_DIR.LIB_DIR."Ajde/Core/Autoloader.php");
 Ajde_Core_Autoloader::register();
 
-// Run the Ajde framework application
+// Run the main application
 $app = Ajde::create();
 $app->run();
