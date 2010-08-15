@@ -6,15 +6,15 @@ abstract class Ajde_Document extends Ajde_Object_Standard
 	{
 		
 	}
-
+	
 	/**
 	 *
-	 * @param Ajde_Http_Request $request
+	 * @param Ajde_Core_Route $route
 	 * @return Ajde_Document
 	 */
-	public static function fromRequest(Ajde_Http_Request $request)
+	public static function fromRoute(Ajde_Core_Route $route)
 	{
-		$format = $request->getParam("format");
+		$format = $route->getFormat();
 		$documentClass = "Ajde_Document_Format_" . ucfirst($format);
 		if (!Ajde_Core_Autoloader::exists($documentClass)) {
 			$exception = new Ajde_Exception("Document format $format not found",
@@ -22,7 +22,7 @@ abstract class Ajde_Document extends Ajde_Object_Standard
 			Ajde::routingError($exception);
 		}
 		return new $documentClass();
-	}
+	}	
 
 	/**
 	 * @return Ajde_Layout

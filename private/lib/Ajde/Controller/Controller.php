@@ -4,12 +4,12 @@ class Ajde_Controller extends Ajde_Object_Standard
 {
 	/**
 	 *
-	 * @param Ajde_Request $request
+	 * @param Ajde_Core_Route $route
 	 * @return Ajde_Controller
 	 */
-	public static function fromRequest(Ajde_Http_Request $request)
+	public static function fromRoute(Ajde_Core_Route $route)
 	{
-		$module = $request->getParam("module");
+		$module = $route->getModule();
 		if (!Ajde_Core_Autoloader::exists($module)) {
 			$exception = new Ajde_Exception("Controller for module $module not found",
 					90008);
@@ -21,10 +21,10 @@ class Ajde_Controller extends Ajde_Object_Standard
 	public function invoke($action = null, $format = null)
 	{
 		if (!isset($action) || !isset($format)) {
-			$request = Ajde::app()->getRequest();
+			$route = Ajde::app()->getRoute();
 		}
-		$action = isset($action) ? $action : $request->getAction();
-		$format = isset($format) ? $format : $request->getFormat();
+		$action = isset($action) ? $action : $route->getAction();
+		$format = isset($format) ? $format : $route->getFormat();
 		$defaultFunction = $action . "Default";
 		$formatFunction = $action . ucfirst($format);
 		if (method_exists($this, $formatFunction))
@@ -38,8 +38,8 @@ class Ajde_Controller extends Ajde_Object_Standard
 		else
 		{
 			$exception = new Ajde_Exception(sprintf("Action %s for module %s not found",
-						$request->getAction(),
-						$request->getModule()
+						$route->getAction(),
+						$route->getModule()
 					), 90011);
 			Ajde::routingError($exception);
 		}
@@ -49,8 +49,8 @@ class Ajde_Controller extends Ajde_Object_Standard
 
 	public function loadTemplate()
 	{
-		$request = Ajde::app()->getRequest();
-		$template = Ajde_Core_App_Template::fromRequest($request);
+		$route = Ajde::app()->getRoute();
+		$template = Ajde_Core_App_Template::fromRoute($route);
 		return $template->getContents();
 	}
 

@@ -4,7 +4,8 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 {
 	public static function bootstrap()
 	{
-		error_reporting(E_ALL);
+		// TODO: why is this defined here? also in index.php!
+		// error_reporting(E_ALL);
 		set_error_handler(array('Ajde_Exception_Handler', 'errorHandler'));
 		set_exception_handler(array('Ajde_Exception_Handler', 'handler'));
 		return true;
@@ -13,19 +14,29 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 	public static function errorHandler($errno, $errstr, $errfile, $errline)
 	{
 		error_log(sprintf("PHP error: %s in %s on line %s", $errstr, $errfile, $errline));
+		// TODO: only possible in PHP >= 5.3 ?
 		throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 	}
 
 	public static function handler(Exception $exception)
 	{
-		if (Config::getInstance()->debug === true)
-		{
-			echo self::trace($exception);
+		try
+		{	
+			if (Config::getInstance()->debug === true)
+			{
+				echo self::trace($exception);
+			}
+			else
+			{
+				Ajde_Exception_Log::logException($exception);
+				
+				Ajde_Http_Response::redirectServerError();
+			}
 		}
-		else
+		catch (Exception $exception)
 		{
-			Ajde_Exception_Log::logException($exception);
-			Ajde_Http_Response::redirectServerError();
+			error_log(self::trace($exception, self::EXCEPTION_TRACE_LOG));
+			die("An uncatched exception occured within the error handler, see the server error_log for details");
 		}
 	}
 
@@ -50,7 +61,10 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 		switch ($output)
 		{
 			case self::EXCEPTION_TRACE_HTML:
-				ob_clean();
+				if (ob_get_level())
+				{
+					ob_clean();
+				}
 				$message = sprintf("<h3>%s:</h3><h2>%s</h2> in %s\n",
 						$type,
 						$exception->getMessage(),
@@ -62,7 +76,7 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 				);
 
 				if ($exception instanceof Ajde_Exception && $exception->getCode()) {
-					$message .= sprintf('<strong>|i| :</strong> <a href="%s">Ajde documentation on error %s</a>',
+					$message .= sprintf('<span style="border:1px solid black;display:inline-block;"><strong style="border-right:1px solid #aaa;padding:1px 8px;display:inline-block;background-color:yellow;">i</strong> <a href="%s">Ajde documentation on error %s</a>&nbsp;</span>',
 						Ajde_Core_Documentation::getUrl($exception->getCode()),
 						$exception->getCode()
 					);
@@ -117,10 +131,10 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 	protected static function embedScript($filename = null, $line = null, $expand = false)
 	{
 		$lineOffset = 3;
+		$file = '';
 		if (isset($filename) && isset($line))
 		{
 			$lines = file($filename);
-			$file = '';
 			for ($i = max(0, $line - $lineOffset - 1); $i < min($line + $lineOffset, count($lines)); $i++)
 			{
 				if ($i == $line - 1)
@@ -139,7 +153,7 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 				"<a
 					onclick='document.getElementById(\"$id\").style.display = document.getElementById(\"$id\").style.display == \"block\" ? \"none\" : \"block\";'
 					href='javascript:void(0);'
-				><i>%s</i> on line <b>%s</b></a><pre style='border: 1px solid gray; background-color: #eee; display: %s;' id='$id'>%s</pre>",
+				><i>%s</i> on line <b>%s</b></a><pre style='border:1px solid gray;background-color:#eee;display:%s;' id='$id'>%s</pre>",
 				$filename,
 				$line,
 				$expand ? "block" : "none",
