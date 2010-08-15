@@ -2,6 +2,16 @@
 
 class Ajde_Controller extends Ajde_Object_Standard
 {
+	public function  __construct($action = null, $format = null)
+	{
+		$this->setModule(strtolower(get_class($this)));
+		if (!isset($action) || !isset($format)) {
+			$defaultParts = Config::get('defaultRouteParts');
+		}
+		$this->setAction(isset($action) ? $action : $defaultParts['action']);
+		$this->setFormat(isset($format) ? $format : $defaultParts['format']);
+	}
+
 	/**
 	 *
 	 * @param Ajde_Core_Route $route
@@ -15,16 +25,13 @@ class Ajde_Controller extends Ajde_Object_Standard
 					90008);
 			Ajde::routingError($exception);
 		}
-		return new $module();
+		return new $module($route->getAction(), $route->getFormat());
 	}
 
 	public function invoke($action = null, $format = null)
 	{
-		if (!isset($action) || !isset($format)) {
-			$route = Ajde::app()->getRoute();
-		}
-		$action = isset($action) ? $action : $route->getAction();
-		$format = isset($format) ? $format : $route->getFormat();
+		$action = isset($action) ? $action : $this->getAction();
+		$format = isset($format) ? $format : $this->getFormat();
 		$defaultFunction = $action . "Default";
 		$formatFunction = $action . ucfirst($format);
 		if (method_exists($this, $formatFunction))
@@ -38,8 +45,8 @@ class Ajde_Controller extends Ajde_Object_Standard
 		else
 		{
 			$exception = new Ajde_Exception(sprintf("Action %s for module %s not found",
-						$route->getAction(),
-						$route->getModule()
+						$this->getAction(),
+						$this->getModule()
 					), 90011);
 			Ajde::routingError($exception);
 		}
@@ -49,8 +56,7 @@ class Ajde_Controller extends Ajde_Object_Standard
 
 	public function loadTemplate()
 	{
-		$route = Ajde::app()->getRoute();
-		$template = Ajde_Core_App_Template::fromRoute($route);
+		$template = new Ajde_Core_App_Template($this->getModule(), $this->getAction(), $this->getFormat());
 		return $template->getContents();
 	}
 

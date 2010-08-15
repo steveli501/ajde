@@ -1,0 +1,1 @@
+<a href="guestbook.html">View guestbook</a> | <a href="guestbook/sign.html">Sign guestbook</a>

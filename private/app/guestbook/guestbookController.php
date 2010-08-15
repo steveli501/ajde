@@ -6,4 +6,14 @@ class Guestbook extends Ajde_Controller
 	{
 		return $this->loadTemplate();
 	}	
+
+	function menuDefault()
+	{
+		return $this->loadTemplate();
+	}
+
+	function signDefault()
+	{
+		return $this->loadTemplate();
+	}
 }

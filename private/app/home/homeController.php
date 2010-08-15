@@ -7,10 +7,4 @@ class Home extends Ajde_Controller
 		Ajde::app()->getResponse()->setRedirect("guestbook.html");
 		return false;
 	}
-
-	function menuDefault()
-	{
-		return $this->loadTemplate();
-	}
-	
 }

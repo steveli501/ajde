@@ -2,6 +2,12 @@
 
 class Ajde_Core_App_Template extends Ajde_Template
 {
+	public function  __construct($module, $action, $format = 'html')
+	{
+		$base = PRIVATE_DIR.APP_DIR.$module . '/';
+		parent::__construct($base, $action, $format);
+	}
+
 	/**
 	 *
 	 * @param Ajde_Core_Route $route
