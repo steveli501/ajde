@@ -30,14 +30,13 @@ class Ajde_Template_Resource_Local extends Ajde_Template_Resource
 
 	/**
 	 *
-	 * @param string $encodedResource
+	 * @param string $hash
 	 * @return Ajde_Template_Resource
 	 */
-	public static function fromLinkUrl($encodedResource)
+	public static function fromHash($hash)
 	{
-		$resourceArray = unserialize(base64_decode($encodedResource));
-		$resource = new self($resourceArray['type'], $resourceArray['base'], $resourceArray['action']);
-		return $resource;
+		$session = new Ajde_Session('_ajde');
+		return $session->get($hash);
 	}
 
 	public function getBase() {
@@ -78,10 +77,12 @@ class Ajde_Template_Resource_Local extends Ajde_Template_Resource
 
 	protected function getLinkUrl()
 	{
-		$url = 'resource/local/' . $this->getType() . '/';
-		$url .= 'r=' . urlencode(base64_encode(serialize(
-				array('type' => $this->getType(), 'base' => $this->getBase(), 'action' => $this->getAction()))));
-		$url .= '/';
+		$hash = md5(serialize($this));
+		$session = new Ajde_Session('_ajde');
+		$session->set($hash, $this);
+		
+		$url = 'resource/local/' . $this->getType() . '/' . $hash . '/';
+
 		if (Config::get('debug') === true)
 		{
 			$url .= '?file=' . str_replace('%2F', ':', urlencode($this->getFilename()));

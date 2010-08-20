@@ -50,6 +50,7 @@ class Ajde_Core_Route extends Ajde_Object_Standard
 			
 			array('%^([^/\.]+)\.([^/\.]+)$%' => array('module', 'format')),
 			array('%^([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$%' => array('module', 'action', 'format')),
+			array('%^([^\?/\.]+)/([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$%' => array('module', 'action', 'id', 'format')),
 		);
 		
 		foreach($rules as $rule)
