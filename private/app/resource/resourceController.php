@@ -29,7 +29,7 @@ class Resource extends Ajde_Controller
 		if (!Ajde_Core_Autoloader::exists($className)) {
 			throw new Ajde_Controller_Exception("Resource type could not be loaded");
 		}
-		$resource = $className::fromHash($hash);
+		$resource = call_user_func_array(array($className,"fromHash"), array($hash));
 		return $resource->getContents();
 	}
 

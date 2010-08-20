@@ -23,7 +23,7 @@ class Ajde_Core_Bootstrap
 						defined while it is configured for bootstrapping", 90001);
 			}
 			// Get bootstrap function callback
-			$mode = $className::__getPattern();
+			$mode = call_user_func(array($className,"__getPattern"));
 			if ($mode === Ajde_Object::OBJECT_PATTERN_STANDARD)
 			{
 				$instance = new $className;
