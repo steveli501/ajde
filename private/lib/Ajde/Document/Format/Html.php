@@ -32,58 +32,76 @@ class Ajde_Document_Format_Html extends Ajde_Document
 
 	/**
 	 *
+	 * @param mixed $resourceTypes
 	 * @return string
 	 */
-	public function getHead()
+	public function getHead($resourceTypes = '*')
 	{
-		return $this->renderHead();
+		if (!is_array($resourceTypes)) {
+			$resourceTypes = (array) $resourceTypes;
+		}
+		return $this->renderHead($resourceTypes);
+	}
+	
+	public function getScripts()
+	{
+		return $this->getHead('js');
 	}
 
-	public function renderHead()
+	public function renderHead(array $resourceTypes = array('*'))
 	{		
 		$code = '';
-		$code .= $this->renderResources();
+		$code .= $this->renderResources($resourceTypes);
+		// TODO: meta tags etc
 		return $code;
 	}
 
-	public function renderResources()
+	public function renderResources(array $types = array('*'))
 	{
 		return Config::get('compressResources') ?
-			$this->renderCompressedResources() :
-			$this->renderAllResources();
+			$this->renderCompressedResources($types) :
+			$this->renderAllResources($types);
 	}
 
-	public function renderAllResources()
+	public function renderAllResources(array $types = array('*'))
 	{
 		$code = '';
 		foreach ($this->_resources as $resource)
 		{
 			/* @var $resource Ajde_Template_Resource */
-			$code .= $resource->getLinkCode() . PHP_EOL;
+			if (current($types) == '*' || in_array($resource->getType(), $types))
+			{
+				$code .= $resource->getLinkCode() . PHP_EOL;
+			}
 		}
 		return $code;
 	}
 
-	public function renderCompressedResources()
+	public function renderCompressedResources(array $types = array('*'))
 	{
+		// Reset compressors
+		$this->_compressors = array();
 		$code = '';
 		foreach ($this->_resources as $resource)
 		{
 			/* @var $resource Ajde_Template_Resource */
-			if ($resource instanceof Ajde_Template_Resource_Local)
-			{
-				if (!isset($this->_compressors[$resource->getType()]))
+			if (current($types) == '*' || in_array($resource->getType(), $types))
+			{				
+				if ($resource instanceof Ajde_Template_Resource_Local)
 				{
-					$this->_compressors[$resource->getType()] =
-							Ajde_Template_Resource_Local_Compressor::fromType($resource->getType());
+					if (!isset($this->_compressors[$resource->getType()]))
+					{
+						$this->_compressors[$resource->getType()] =
+								Ajde_Template_Resource_Local_Compressor::fromType($resource->getType());
+					}
+					$compressor = $this->_compressors[$resource->getType()];
+					/* @var $compressor Ajde_Template_Resource_Local_Compressor */
+					$compressor->addResource($resource);
 				}
-				$compressor = $this->_compressors[$resource->getType()];
-				/* @var $compressor Ajde_Template_Resource_Local_Compressor */
-				$compressor->addResource($resource);
-			}
-			else
-			{
-				$code .= $resource->getLinkCode() . PHP_EOL;
+				else
+				{
+					$code .= $resource->getLinkCode() . PHP_EOL;
+				}
 			}
 		}
 		foreach ($this->_compressors as $compressor)

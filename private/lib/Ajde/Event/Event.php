@@ -32,7 +32,7 @@ class Ajde_Event extends Ajde_Object_Static
 		
 	}
 
-	public static function trigger($object, $event)
+	public static function trigger($object, $event, array $parameters = array())
 	{
 		foreach(self::$eventStack as $className => $eventStack)
 		{
@@ -63,7 +63,8 @@ class Ajde_Event extends Ajde_Object_Static
 							{
 								// http://www.php.net/manual/en/function.call-user-func.php
 								// Note: Note that the parameters for call_user_func() are not passed by reference.
-								call_user_func_array($callback, array(&$caller['object']));
+								$parameterArray = array_merge(array(&$caller['object']), $parameters);
+								call_user_func_array($callback, $parameterArray);
 							}
 							elseif ($callback instanceof Closure)
 							{

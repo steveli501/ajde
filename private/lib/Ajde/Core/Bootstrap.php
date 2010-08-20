@@ -10,9 +10,11 @@ class Ajde_Core_Bootstrap
 
 	public function runCue($cue) {
 		/*
-		 * Our bootstrapper calls the bootstrap() methods on all modules defined
+		 * Our bootstrapper calls the __bootstrap() methods on all modules defined
 		 * in Config::get("bootstrap").
 		 */
+		$bootstrapFunction  = '__bootstrap';
+		
 		foreach($cue as $className)
 		{
 			// See if $className is a subclass of Ajde_Object
@@ -25,16 +27,16 @@ class Ajde_Core_Bootstrap
 			if ($mode === Ajde_Object::OBJECT_PATTERN_STANDARD)
 			{
 				$instance = new $className;
-				$function = array($instance, "bootstrap");
+				$function = array($instance, $bootstrapFunction);
 			}
 			elseif ($mode === Ajde_Object::OBJECT_PATTERN_SINGLETON)
 			{
 				$instance = call_user_func($className, "getInstance");
-				$function = array($instance, "bootstrap");
+				$function = array($instance, $bootstrapFunction);
 			}
 			elseif ($mode === Ajde_Object::OBJECT_PATTERN_STATIC)
 			{
-				$function = "$className::bootstrap";
+				$function = "$className::$bootstrapFunction";
 			}
 			elseif ($mode === null || $mode === Ajde_Object::OBJECT_PATTERN_UNDEFINED)
 			{
@@ -42,7 +44,7 @@ class Ajde_Core_Bootstrap
 						defined while it is configured for bootstrapping", 90001);
 			}
 			// Execute bootstrap() function on $className
-			if (!method_exists($className, "bootstrap"))
+			if (!method_exists($className, $bootstrapFunction))
 			{
 				throw new Ajde_Exception("Bootstrap method in
 						$className doesn't exist", 90002);

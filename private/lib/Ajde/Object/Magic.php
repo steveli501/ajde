@@ -38,11 +38,13 @@ abstract class Ajde_Object_Magic extends Ajde_Object
 	public final function set($key, $value)
 	{
 		$this->_data[$key] = $value;
+		Ajde_Event::trigger($this, 'afterSet', array($key, $value));
 		return true;
 	}
 
 	public final function get($key)
 	{
+		Ajde_Event::trigger($this, 'beforeGet', array($key));
 		if ($this->has($key))
 		{
 			return $this->_data[$key];
@@ -50,7 +52,7 @@ abstract class Ajde_Object_Magic extends Ajde_Object
 		else
 		{
 			throw new Ajde_Exception("Parameter '$key' not set in class ".get_class($this)." when calling get('$key')", 90007);
-		}
+		}		
 	}
 
 	public final function has($key)

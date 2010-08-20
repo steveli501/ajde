@@ -25,11 +25,11 @@ class Resource extends Ajde_Controller
 	protected function _getResource($className)
 	{
 		// get resource from request
-		$encoded = Ajde::app()->getRequest()->getParam('id');
+		$hash = Ajde::app()->getRequest()->getParam('id');
 		if (!Ajde_Core_Autoloader::exists($className)) {
 			throw new Ajde_Controller_Exception("Resource type could not be loaded");
 		}
-		$resource = $className::fromLinkUrl($encoded);
+		$resource = $className::fromHash($hash);
 		return $resource->getContents();
 	}
 

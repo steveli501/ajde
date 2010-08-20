@@ -10,14 +10,13 @@ class Ajde_Template_Resource_Local_Compressed extends Ajde_Template_Resource
 
 	/**
 	 *
-	 * @param string $encodedResource
+	 * @param string $hash
 	 * @return Ajde_Template_Resource
 	 */
-	public static function fromLinkUrl($encodedResource)
+	public static function fromHash($hash)
 	{
-		$resourceArray = unserialize(base64_decode($encodedResource));
-		$resource = new self($resourceArray['type'], $resourceArray['filename']);
-		return $resource;
+		$session = new Ajde_Session('_ajde');
+		return $session->get($hash);
 	}
 
 	public function getLinkCode()
@@ -40,10 +39,13 @@ class Ajde_Template_Resource_Local_Compressed extends Ajde_Template_Resource
 
 	public function getLinkUrl()
 	{
-		$url = 'resource/compressed/' . $this->getType() . '/';		
-		$url .= urlencode(base64_encode(serialize(
-				array('type' => $this->getType(), 'filename' => $this->getFilename()))));
-		$url .= '/';
+		
+		$hash = md5(serialize($this));
+		$session = new Ajde_Session('_ajde');
+		$session->set($hash, $this);
+		
+		$url = 'resource/compressed/' . $this->getType() . '/' . $hash . '/';
+		
 		if (Config::get('debug') === true)
 		{
 			$url .= '?file=' . str_replace('%2F', ':', urlencode($this->getFilename()));
