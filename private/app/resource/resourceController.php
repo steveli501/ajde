@@ -14,12 +14,12 @@ class Resource extends Ajde_Controller
 
 	protected function _getLocalResource()
 	{
-		return $this->_getResource('Ajde_Template_Resource_Local');
+		return $this->_getResource('Ajde_Resource_Local');
 	}
 
 	protected function _getCompressedResource()
 	{
-		return $this->_getResource('Ajde_Template_Resource_Local_Compressed');
+		return $this->_getResource('Ajde_Resource_Local_Compressed');
 	}
 
 	protected function _getResource($className)

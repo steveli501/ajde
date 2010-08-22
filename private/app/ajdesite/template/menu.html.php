@@ -1,0 +1,1 @@
+<a href="ajdesite.html">View guestbook</a> | <a href="ajdesite/sign.html">Sign guestbook</a>
