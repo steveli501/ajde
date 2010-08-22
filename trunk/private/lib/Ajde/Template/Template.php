@@ -110,8 +110,8 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 	 */
 	public function requireJsLibrary($name, $version)
 	{
-		$url = Ajde_Template_Resource_JsLibrary::getUrl($name, $version);
-		$resource = new Ajde_Template_Resource_Remote(Ajde_Template_Resource::TYPE_JAVASCRIPT, $url);
+		$url = Ajde_Resource_JsLibrary::getUrl($name, $version);
+		$resource = new Ajde_Resource_Remote(Ajde_Resource::TYPE_JAVASCRIPT, $url);
 		Ajde::app()->getDocument()->addResource($resource, Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
 	}
 

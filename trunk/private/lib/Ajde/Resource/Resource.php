@@ -1,6 +1,6 @@
 <?php
 
-abstract class Ajde_Template_Resource extends Ajde_Object_Standard
+abstract class Ajde_Resource extends Ajde_Object_Standard
 {
 
 	const TYPE_JAVASCRIPT	= 'js';
@@ -9,6 +9,11 @@ abstract class Ajde_Template_Resource extends Ajde_Object_Standard
 	public function  __construct($type)
 	{
 		$this->setType($type);
+	}
+	
+	public function __toString()
+	{
+		return implode(", ", $this->_data);
 	}
 	
 	abstract public function getFilename();

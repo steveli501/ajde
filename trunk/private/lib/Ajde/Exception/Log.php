@@ -2,18 +2,17 @@
 
 class Ajde_Exception_Log extends Ajde_Object_Static
 {
-	const LOG_DIR = 'private/shared/log/';
-
-	static private function _getFilename() {
-		return self::LOG_DIR . date("Ymd") . '.log';
+	static private function _getFilename()
+	{
+		return PRIVATE_DIR.LOG_DIR . date("Ymd") . '.log';
 	}
 	
 	static public function logException(Exception $exception)
 	{
 		$filename = self::_getFilename();
-		if (!is_writable(self::LOG_DIR))
+		if (!is_writable(PRIVATE_DIR.LOG_DIR))
 		{
-			throw new Ajde_Exception(sprintf("Directory %s is not writable", self::LOG_DIR), 90014);
+			throw new Ajde_Exception(sprintf("Directory %s is not writable", PRIVATE_DIR.LOG_DIR), 90014);
 		}
 		$fh = fopen($filename, 'a');
 		if (!$fh) {
