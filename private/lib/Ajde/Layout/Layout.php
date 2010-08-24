@@ -7,7 +7,7 @@ class Ajde_Layout extends Ajde_Template
 		$this->setName($name);
 		$this->setStyle($style);
 
-		$base = PRIVATE_DIR.'layout/'.$this->getName() . '/';
+		$base = PRIVATE_DIR.APP_DIR.'layout/'.$this->getName() . '/';
 		$action = $this->getStyle();
 		$format = $format;
 		parent::__construct($base, $action, $format);

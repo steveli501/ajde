@@ -1,6 +1,6 @@
 <?php
 
-class Ajde_Core_App extends Ajde_Object_Singleton
+class Ajde_Application extends Ajde_Object_Singleton
 {
 	/**
 	 *

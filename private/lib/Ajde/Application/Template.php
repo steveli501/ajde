@@ -1,17 +1,16 @@
 <?php
 
-class Ajde_Core_App_Template extends Ajde_Template
-{
-	public function  __construct($module, $action, $format = 'html')
-	{
-		$base = PRIVATE_DIR.APP_DIR.$module . '/';
+class Ajde_Application_Template extends Ajde_Template
+{	
+	public static function factory($module, $action, $format = 'html') {
+		$base = PRIVATE_DIR.APP_DIR.MODULE_DIR.$module . '/';
 		parent::__construct($base, $action, $format);
 	}
 
 	/**
 	 *
 	 * @param Ajde_Core_Route $route
-	 * @return Ajde_Core_App_Template
+	 * @return Ajde_Application_Template
 	 */
 	public static function fromRoute(Ajde_Core_Route $route)
 	{
