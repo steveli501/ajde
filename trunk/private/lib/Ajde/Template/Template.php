@@ -6,9 +6,14 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 	
 	public function  __construct($base, $action, $format = 'html')
 	{
+		// TODO: refactor into factory
 		$this->setBase($base);
 		$this->setAction($action);
 		$this->setFormat($format);
+		// Check for Ajde_Template_Xhtml template
+		if ($this->isXhtml()) {
+			return new Ajde_Template_Xhtml($base, $action);
+		}
 		$this->exist();
 	}
 
@@ -22,6 +27,15 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 					$this->_getDefaultFormatFilename()), 90010);
 			Ajde::routingError($exception);
 		}
+	}
+	
+	public function isXhtml()
+	{
+		if ($this->getFormat() != 'html') {
+			return false;
+		}
+		$xhtmlFilename = $this->_getXhtmlFilename();
+		return file_exists($xhtmlFilename);
 	}
 
 	public function setFilename()
@@ -38,6 +52,14 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 			$this->set("filename", $defaultFormatFilename);
 			return true;
 		}
+		if ($this->getFormat() == 'html') {
+			$phtmlFilename = $this->_getPhtmlFilename();
+			if (file_exists($phtmlFilename))
+			{
+				$this->set("filename", $phtmlFilename);
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -49,6 +71,16 @@ abstract class Ajde_Template extends Ajde_Object_Standard
 	protected function _getDefaultFormatFilename()
 	{
 		return $this->getBase() . 'template/' . $this->getAction() . '.default.php';
+	}
+	
+	protected function _getPhtmlFilename()
+	{
+		return $this->getBase() . 'template/' . $this->getAction() . '.phtml';
+	}
+	
+	protected function _getXhtmlFilename()
+	{
+		return $this->getBase() . 'template/' . $this->getAction() . '.xhtml';
 	}
 
 	public function getFilename()
