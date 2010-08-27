@@ -56,7 +56,7 @@ class Ajde_Controller extends Ajde_Object_Standard
 
 	public function loadTemplate()
 	{
-		$template = new Ajde_Application_Template($this->getModule(), $this->getAction(), $this->getFormat());
+		$template = Ajde_Template_Factory::fromController($this);
 		var_dump($template);
 		return $template->getContents();
 	}
