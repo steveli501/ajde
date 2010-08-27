@@ -4,18 +4,18 @@ class Ajde_Application extends Ajde_Object_Singleton
 {
 	/**
 	 *
-	 * @staticvar Ajde_Core_App $instance
-	 * @return Ajde_Core_App
+	 * @staticvar Ajde_Application $instance
+	 * @return Ajde_Application
 	 */
 	public static function getInstance()
-	{		
+	{
 		static $instance;
 		return $instance === null ? $instance = new self : $instance;
 	}
 
 	/**
 	 *
-	 * @return Ajde_Core_App
+	 * @return Ajde_Application
 	 */
 	public static function app()
 	{
@@ -24,7 +24,7 @@ class Ajde_Application extends Ajde_Object_Singleton
 
 	/**
 	 *
-	 * @return Ajde_Core_App
+	 * @return Ajde_Application
 	 */
 	public static function create()
 	{
@@ -33,8 +33,6 @@ class Ajde_Application extends Ajde_Object_Singleton
 
 	public function run()
 	{
-		$app = self::app();
-
 		// Bootstrap init
 		$bootstrap = new Ajde_Core_Bootstrap();
 		$bootstrap->run();
@@ -42,7 +40,7 @@ class Ajde_Application extends Ajde_Object_Singleton
 		// Get request
 		$request = Ajde_Http_Request::fromGlobal();
 		$this->setRequest($request);
-		
+
 		// Get route
 		$route = $request->getRoute();
 		$this->setRoute($route);
@@ -77,7 +75,7 @@ class Ajde_Application extends Ajde_Object_Singleton
 		$cache = Ajde_Cache::getInstance();
 		$cache->setContents($contents);
 		$cache->saveResponse();
-		
+
 		// Output the buffer
 		$response->send();
 	}
@@ -110,15 +108,15 @@ class Ajde_Application extends Ajde_Object_Singleton
 	public function getResponse() {
 		return $this->get("response");
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return Ajde_Core_Route
 	 */
 	public function getRoute() {
 		return $this->get("route");
 	}
-	
+
 	/**
 	 *
 	 * @return Ajde_Document

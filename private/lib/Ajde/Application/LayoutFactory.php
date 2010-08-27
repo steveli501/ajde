@@ -1,6 +1,6 @@
 <?php
 
-class Ajde_Layout extends Ajde_Template
+class Ajde_LayoutFactory extends Ajde_Object_Static
 {
 	public function __construct($name, $style = 'default', $format = 'html')
 	{
