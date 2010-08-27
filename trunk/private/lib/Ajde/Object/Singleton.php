@@ -27,7 +27,7 @@ implements Ajde_Object_Singleton_Interface
 	}
 
 	// Do not allow an explicit call of the constructor
-    protected final function __construct() {}
+    protected function __construct() {}
 
 	// Do not allow the clone operation
     private final function __clone() {}

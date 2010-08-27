@@ -33,7 +33,7 @@ abstract class Ajde_Resource extends Ajde_Object_Standard
 	{
 		$layout = Ajde::app()->getDocument()->getLayout();
 		$format = isset($format) ? $format : 'html';
-		return PRIVATE_DIR . LAYOUT_DIR . $layout->getName() . '/link/' . $type . '.' . $format . '.php';
+		return PRIVATE_DIR.APP_DIR.LAYOUT_DIR . $layout->getName() . '/link/' . $type . '.' . $format . '.php';
 	}
 
 	public function getLinkCode() {

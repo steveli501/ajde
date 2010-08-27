@@ -8,6 +8,12 @@ class Ajde_Core_Route extends Ajde_Object_Standard
 	{
 		$this->_route = $route;
 		$routeParts = $this->_extractRouteParts();
+		if (empty($routeParts)) {
+			// TODO: documentation
+			$exception = new Ajde_Exception(sprintf("Invalid route: %s",
+					$route), 90019);
+			Ajde::routingError($exception);
+		}
 		$defaultParts = Config::get('defaultRouteParts');
 		$parts = array_merge($defaultParts, $routeParts);
 		$request = Ajde::app()->getRequest();
@@ -33,15 +39,6 @@ class Ajde_Core_Route extends Ajde_Object_Standard
 	protected function _extractRouteParts()
 	{
 		$matches = array();
-		// Emulate these deprecated .htaccess rules
-		#RewriteRule ^([^/\.]+)/?$ index.php?module=$1 [QSA,L]
-		#RewriteRule ^([^\?/\.]+)/([^\?/\.]+)/?$ index.php?module=$1&action=$2 [QSA,L]
-		#RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ index.php?module=$1&action=$2&format=$3 [QSA,L]
-		#RewriteRule ^([^/\.]+)/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ index.php?module=$1&action=$2&format=$3&id=$4 [QSA,L]
-		
-		#RewriteRule ^([^/\.]+)\.([^/\.]+)$ index.php?module=$1&format=$2 [QSA,L]
-		#RewriteRule ^([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$ index.php?module=$1&action=$2&format=$3 [QSA,L]
-		
 		$rules = array(
 			array('%^([^/\.]+)/?$%' => array('module')),
 			array('%^([^\?/\.]+)/([^\?/\.]+)/?$%' => array('module', 'action')),
