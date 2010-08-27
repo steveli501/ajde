@@ -27,5 +27,18 @@ function desc() {
 	<h3>Unfortunately, something went wront.</h3>
 	<hr/>
 	<p><a href="http://code.google.com/p/ajde">Ajde open framework</a>
+	
+	<!--
+	Adding up to at least 512 bytes with some text from
+	http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+	
+	The server has not found anything matching the Request-URI. No
+	indication is given of whether the condition is temporary or permanent. The
+	410 (Gone) status code SHOULD be used if the server knows, through some
+	internally configurable mechanism, that an old resource is permanently
+	unavailable and has no forwarding address. This status code is commonly
+	used when the server does not wish to reveal exactly why the request has
+	been refused, or when no other response is applicable.
+	-->
 </body> 
 </html> 

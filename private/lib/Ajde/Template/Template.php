@@ -9,10 +9,57 @@ class Ajde_Template extends Ajde_Object_Standard
 		$this->setBase($base);
 		$this->setAction($action);
 		$this->setFormat($format);
+		
+		if (($fileInfo = $this->_getFileInfo()) === false) {
+			$exception = new Ajde_Exception(sprintf("Template file in %s,
+					for action %s with format %s not found",
+					$base, $action, $format), 90010);
+			Ajde::routingError($exception);
+		}		
+		$parser = call_user_func(array('Ajde_Template_Parser_' . $fileInfo['parser'], 'getInstance'));
+		
+		$this->setFilename($fileInfo['filename']);
+		$this->setParser($parser);
+	}
+	
+	protected function _getFileInfo()
+	{
+		// go see what templates are available
+		$fileNamePatterns = array(
+			$this->getAction() . '.' . $this->getFormat(), $this->getAction()
+		);
+		$fileTypes = array(
+			'phtml' => 'Phtml', 'xhtml' => 'Xhtml'
+		);
+		$fileName = null;
+		foreach($fileNamePatterns as $fileNamePattern) {
+			foreach($fileTypes as $fileType => $parserType) {
+				$filePattern = $fileNamePattern . '.' . $fileType;
+				if ($fileMatch = Ajde_FS_Find::findFile($this->getBase().TEMPLATE_DIR, $filePattern)) {
+					return array('filename' => $fileMatch, 'parser' => $parserType);
+				}				
+			}
+		}
+		return false;		
+	}
+	
+	public function setParser(Ajde_Template_Parser $parser)
+	{
+		$this->set('parser', $parser);
+	}
+	
+	/**
+	 * 
+	 * @return Ajde_Template_Parser 
+	 */
+	public function getParser()
+	{
+		return $this->get('parser');
 	}
 
 	public function exist()
 	{
+		// since files are checked in constructor, this is not needed anymore?
 		return file_exists($this->getFullPath());
 	}
 	
@@ -63,7 +110,9 @@ class Ajde_Template extends Ajde_Object_Standard
 		if (!isset($this->_contents))
 		{
 			Ajde_Event::trigger($this, 'beforeGetContents');
-			$this->setContents($this->includeContents());
+			Ajde_Cache::getInstance()->addFile($this->getFullPath());
+			$contents = $this->getParser()->parse($this);		
+			$this->setContents($contents);			
 			Ajde_Event::trigger($this, 'afterGetContents');
 		}
 		return $this->_contents;
@@ -72,52 +121,5 @@ class Ajde_Template extends Ajde_Object_Standard
 	public function setContents($contents)
 	{
 		$this->_contents = $contents;
-	}
-
-	public function includeContents()
-	{
-		ob_start();
-
-		Ajde_Cache::getInstance()->addFile($this->getFullPath());
-		include $this->getFullPath();
-		
-		$contents = ob_get_contents();
-		ob_end_clean();
-		return $contents;
-	}
-
-	/**
-	 * HELPER FUNCTIONS
-	 */
-
-	/**
-	 *
-	 * @param string $name
-	 * @param string $version
-	 */
-	public function requireJsLibrary($name, $version)
-	{
-		$url = Ajde_Resource_JsLibrary::getUrl($name, $version);
-		$resource = new Ajde_Resource_Remote(Ajde_Resource::TYPE_JAVASCRIPT, $url);
-		Ajde::app()->getDocument()->addResource($resource, Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
-	}
-
-	/**
-	 *
-	 * @param string $route
-	 */
-	public function includeModule($route)
-	{
-		echo $this->getModule($route)->invoke();
-	}
-
-	/**
-	 *
-	 * @param string $route
-	 * @return Ajde_Controller
-	 */
-	public function getModule($route)
-	{
-		return Ajde_Controller::fromRoute(new Ajde_Core_Route($route));
 	}
 }

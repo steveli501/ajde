@@ -9,7 +9,7 @@ if (version_compare(PHP_VERSION, '5.2.3') < 0) {
 error_reporting(E_ALL);
 
 // Comment to display uncatchable fatal errors
-ini_set('display_errors', 0);
+//ini_set('display_errors', 0);
 
 // Try to catch fatal errors
 function shutdown()
