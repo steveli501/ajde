@@ -1,5 +1,9 @@
-# Use in http.conf to reveal only the server name in header 
+# Optional directives for use in http.conf
+
+# Reveal only the server name in header 
 # ServerTokens Prod
+
+# Optional directives for use in php.ini
 
 # Force PHP errors
 
@@ -117,7 +121,7 @@ AddType text/cache-manifest           manifest
 </IfModule>
 
 
-# without -MultiViews, Apache will give a 404 for a rewrite if a folder of the same name does not exist (e.g. �/blog/hello�)
+# without -MultiViews, Apache will give a 404 for a rewrite if a folder of the same name does not exist (e.g. '/blog/hello')
 Options -MultiViews 
 # -Indexes will have Apache block users from browsing folders without a default document
 Options -Indexes

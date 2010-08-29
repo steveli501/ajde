@@ -29,7 +29,7 @@ class Ajde_Template_Parser_Xhtml extends Ajde_Template_Parser
 		/* @var $root DOMNode */
 		$root = $doc->documentElement;		
 		$this->_defaultNS = $root->lookupNamespaceURI(null);
-    	$this->_acNS = $root->lookupNamespaceURI(Ajde_Component::AC_XMLNS);
+		$this->_acNS = $root->lookupNamespaceURI(Ajde_Component::AC_XMLNS);
 		
 		// Ajde_Component processing
 		$processed = $this->_process($root);
