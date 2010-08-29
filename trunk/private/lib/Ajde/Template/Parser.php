@@ -1,7 +1,11 @@
 <?php 
 
-class Ajde_Template_Parser extends Ajde_Object_Singleton
+class Ajde_Template_Parser extends Ajde_Object_Standard
 {
+	/**
+	 * 
+	 * @return Ajde_Template_Parser
+	 */
 	public static function getInstance()
 	{
 		static $instance;
@@ -10,8 +14,13 @@ class Ajde_Template_Parser extends Ajde_Object_Singleton
 	
 	public function parse(Ajde_Template $template)
 	{
+		return $this->_getContents($template->getFullPath());
+	}
+	
+	protected function _getContents($fullPath)
+	{
 		ob_start();
-		include $template->getFullPath();
+		include $fullPath;
 		$contents = ob_get_contents();
 		ob_end_clean();
 		return $contents;

@@ -2,6 +2,10 @@
 
 class Ajde_Template_Parser_Phtml extends Ajde_Template_Parser
 {
+	/**
+	 * 
+	 * @return Ajde_Template_Parser_Phtml
+	 */
 	public static function getInstance()
 	{
 		static $instance;
@@ -9,37 +13,21 @@ class Ajde_Template_Parser_Phtml extends Ajde_Template_Parser
 	}
 	
 	/**
-	 * HELPER FUNCTIONS
+	 * 
+	 * @return Ajde_Template_Parser_Helper
 	 */
-
-	/**
-	 *
-	 * @param string $name
-	 * @param string $version
-	 */
-	public function requireJsLibrary($name, $version)
+	public function getHelper()
 	{
-		$url = Ajde_Resource_JsLibrary::getUrl($name, $version);
-		$resource = new Ajde_Resource_Remote(Ajde_Resource::TYPE_JAVASCRIPT, $url);
-		Ajde::app()->getDocument()->addResource($resource, Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
+		return Ajde_Template_Parser_Phtml_Helper::getInstance();
 	}
-
-	/**
-	 *
-	 * @param string $route
-	 */
-	public function includeModule($route)
+	
+	public function __fallback($method, $arguments)
 	{
-		echo $this->getModule($route)->invoke();
-	}
-
-	/**
-	 *
-	 * @param string $route
-	 * @return Ajde_Controller
-	 */
-	public function getModule($route)
-	{
-		return Ajde_Controller::fromRoute(new Ajde_Core_Route($route));
-	}
+		$helper = $this->getHelper();
+		if (method_exists($helper, $method)) {
+			return call_user_func_array(array($helper, $method), $arguments);
+		} else {
+			throw new Ajde_Exception("Call to undefined method ".get_class($this)."::$method()", 90006);
+		}
+    }
 }

@@ -6,7 +6,7 @@ class Ajde_FS_Find extends Ajde_Object_Static
 	{
 		// Escape for regex pattern
 		// TODO: this is way too simplistic
-		$regex = '/' . str_replace('.', '\.', $pattern) . '/';
+		$regex = '/^' . str_replace('.', '\.', $pattern) . '$/';
 		// Asterix wildcard
 		$regex = str_replace('*', '.+', $regex);
 		foreach (new DirectoryIterator($dir) as $file) {			

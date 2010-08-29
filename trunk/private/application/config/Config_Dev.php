@@ -6,7 +6,7 @@ class Config_Dev extends Config_Base {
 	public $compressResources	= false;
 	public $compressHtml		= false;
 	public $debug 				= true;
-	public $useCache			= true;
+	public $useCache			= false;
 
 	function __construct() {
 		parent::__construct();

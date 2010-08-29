@@ -28,8 +28,7 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 			}
 			else
 			{
-				Ajde_Exception_Log::logException($exception);
-				
+				Ajde_Exception_Log::logException($exception);				
 				Ajde_Http_Response::redirectServerError();
 			}
 		}
@@ -58,12 +57,17 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 			$type = "Uncaught exception " . $exception->getCode();
 		}
 
-		switch ($output)
-		{
+		switch ($output) {
 			case self::EXCEPTION_TRACE_HTML:
-				if (ob_get_level())
-				{
+				if (ob_get_level()) {
 					ob_clean();
+				}
+				$arguments = null;
+				if (!empty($item['args'])) {
+					ob_start();
+					var_dump($item['args']);
+					$dump = ob_get_clean();
+					$arguments = sprintf(' with arguments: %s', $dump);
 				}
 				$message = sprintf("<h3>%s:</h3><h2>%s</h2> in %s\n",
 						$type,
@@ -71,8 +75,9 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 						self::embedScript(
 								$exception->getFile(),
 								$exception->getLine(),
+								$arguments,
 								true
-						)
+						)						
 				);
 
 				if ($exception instanceof Ajde_Exception && $exception->getCode()) {
@@ -82,15 +87,27 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 					);
 				}
 
-				$message .= '<ol>';
-				foreach($exception->getTrace() as $item)
-					$message .= sprintf("<li> %s calling %s\n",
+				$message .= '<ol reversed="reversed">';
+				foreach($exception->getTrace() as $item) {
+					$arguments = null;
+					if (!empty($item['args'])) {
+						ob_start();
+						var_dump($item['args']);
+						$dump = ob_get_clean();
+						$arguments = sprintf(' with arguments: %s', $dump);
+					}
+					$message .= sprintf("<li><em>%s</em>%s<strong>%s</strong><br/>in %s<br/>&nbsp;\n",							
+							!empty($item['class']) ? $item['class'] : '&lt;unknown class&gt;',
+							!empty($item['type']) ? $item['type'] : '::',
+							!empty($item['function']) ? $item['function'] : '&lt;unknown function&gt;',
 							self::embedScript(
 									isset($item['file']) ? $item['file'] : null,
 									isset($item['line']) ? $item['line'] : null,
-									false
-							),
-							isset($item['function']) ? $item['function'] : '&lt;unknown function&gt;');
+									$arguments,
+									false									
+							));					
+					$message .= '</li>';
+				}
 				$message .= '</ol>';
 				break;
 			case self::EXCEPTION_TRACE_LOG:
@@ -128,7 +145,7 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 		}
 	}
 
-	protected static function embedScript($filename = null, $line = null, $expand = false)
+	protected static function embedScript($filename = null, $line = null, $arguments = null, $expand = false)
 	{
 		$lineOffset = 3;
 		$file = '';
@@ -153,11 +170,12 @@ class Ajde_Exception_Handler extends Ajde_Object_Static
 				"<a
 					onclick='document.getElementById(\"$id\").style.display = document.getElementById(\"$id\").style.display == \"block\" ? \"none\" : \"block\";'
 					href='javascript:void(0);'
-				><i>%s</i> on line <b>%s</b></a><pre style='border:1px solid gray;background-color:#eee;display:%s;' id='$id'>%s</pre>",
+				><i>%s</i> on line <b>%s</b></a><div id='$id' style='display:%s;'><pre style='border:1px solid gray;background-color:#eee;'>%s</pre>%s</div>",
 				$filename,
 				$line,
 				$expand ? "block" : "none",
-				$file
+				$file,
+				$arguments
 		);
 	}
 	
