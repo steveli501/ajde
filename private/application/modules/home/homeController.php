@@ -1,10 +1,24 @@
-<?php
+<?php 
 
 class Home extends Ajde_Controller
 {
+	function menuDefault()
+	{
+		return $this->loadTemplate();
+	}
+	
 	function viewDefault()
 	{
-		Ajde::app()->getResponse()->setRedirect("ajdesite.html");
-		return false;
+		return $this->loadTemplate();
+	}	
+
+	function contactDefault()
+	{
+		return $this->loadTemplate();
+	}
+	
+	function testDefault()
+	{
+		return $this->loadTemplate();
 	}
 }

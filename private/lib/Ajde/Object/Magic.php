@@ -25,6 +25,9 @@ abstract class Ajde_Object_Magic extends Ajde_Object
 			case "has":
 				return $this->has($key);
 		}
+		if (method_exists($this, '__fallback')) {
+			return call_user_func_array(array($this, '__fallback'), array($method, $arguments));
+		}
 		throw new Ajde_Exception("Call to undefined method ".get_class($this)."::$method()", 90006);
     }
 
