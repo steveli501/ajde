@@ -1,15 +1,34 @@
 <?php 
 
-class Ajde_Template_Parser_Phtml_Helper extends Ajde_Object_Singleton
+class Ajde_Template_Parser_Phtml_Helper extends Ajde_Object_Standard
 {
 	/**
-	 * @return Ajde_Template_Parser_Helper
+	 * 
+	 * @var Ajde_Template_Parser
 	 */
-	public static function getInstance()
+	protected $_parser = null;
+	
+	/**
+	 * 
+	 * @param Ajde_Template_Parser $parser
+	 */
+	public function __construct(Ajde_Template_Parser $parser)
 	{
-		static $instance;
-		return $instance === null ? $instance = new self : $instance;
+		$this->_parser = $parser;
 	}
+	
+	/**
+	 * 
+	 * @return Ajde_Template_Parser
+	 */
+	public function getParser()
+	{
+		return $this->_parser;
+	}
+	
+	/************************
+	 * Ajde_Component_Js
+	 ************************/
 	
 	/**
 	 *
@@ -19,8 +38,40 @@ class Ajde_Template_Parser_Phtml_Helper extends Ajde_Object_Singleton
 	 */
 	public function requireJsLibrary($name, $version)
 	{
-		return Ajde_Component_Js::processStatic(array('library' => $name, 'version' => $version));
+		return Ajde_Component_Js::processStatic($this->getParser(), array('library' => $name, 'version' => $version));
 	}
+	
+	/**
+	 * 
+	 * @param string $action
+	 * @param string $format
+	 * @param string $base
+	 * @return void
+	 */
+	public function requireJs($action, $format = 'html', $base = null)
+	{
+		return Ajde_Component_Js::processStatic($this->getParser(), array('action' => $action, 'format' => $format, 'base' => $base));
+	}
+	
+	/************************
+	 * Ajde_Component_Css
+	 ************************/
+	
+	/**
+	 * 
+	 * @param string $action
+	 * @param string $format
+	 * @param string $base
+	 * @return void
+	 */
+	public function requireCss($action, $format = 'html', $base = null)
+	{
+		return Ajde_Component_Css::processStatic($this->getParser(), array('action' => $action, 'format' => $format, 'base' => $base));
+	}
+	
+	/************************
+	 * Ajde_Component_Include
+	 ************************/
 
 	/**
 	 *
@@ -29,6 +80,6 @@ class Ajde_Template_Parser_Phtml_Helper extends Ajde_Object_Singleton
 	 */
 	public function includeModule($route)
 	{
-		return Ajde_Component_Include::processStatic(array('route' => $route));
+		return Ajde_Component_Include::processStatic($this->getParser(), array('route' => $route));
 	}
 }

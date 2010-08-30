@@ -4,21 +4,19 @@ class Ajde_Template_Parser_Phtml extends Ajde_Template_Parser
 {
 	/**
 	 * 
-	 * @return Ajde_Template_Parser_Phtml
+	 * @var Ajde_Template_Parser_Phtml_Helper
 	 */
-	public static function getInstance()
-	{
-		static $instance;
-		return $instance === null ? $instance = new self : $instance;
-	}
-	
+	protected $_helper = null;
 	/**
 	 * 
-	 * @return Ajde_Template_Parser_Helper
+	 * @return Ajde_Template_Parser_Phtml_Helper
 	 */
 	public function getHelper()
 	{
-		return Ajde_Template_Parser_Phtml_Helper::getInstance();
+		if (!isset($this->_helper)) {
+			$this->_helper = new Ajde_Template_Parser_Phtml_Helper($this); 
+		}
+		return $this->_helper;
 	}
 	
 	public function __fallback($method, $arguments)

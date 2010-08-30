@@ -2,9 +2,9 @@
 
 class Ajde_Component_Include extends Ajde_Component
 {
-	public static function processStatic($attributes)
+	public static function processStatic(Ajde_Template_Parser $parser, $attributes)
 	{
-		$instance = new self($attributes);
+		$instance = new self($parser, $attributes);
 		return $instance->process();
 	}
 	

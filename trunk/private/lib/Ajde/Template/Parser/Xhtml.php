@@ -5,20 +5,10 @@ class Ajde_Template_Parser_Xhtml extends Ajde_Template_Parser
 	protected $_defaultNS = null;
 	protected $_acNS = null;
 	
-	/**
-	 * 
-	 * @return Ajde_Template_Parser_Xhtml
-	 */
-	public static function getInstance()
-	{
-		static $instance;
-		return $instance === null ? $instance = new self : $instance;
-	}
-	
-	public function parse(Ajde_Template $template)
+	public function parse()
 	{
 		// Get the XHTML
-		$xhtml = $this->_getContents($template->getFullPath());
+		$xhtml = $this->_getContents();
 		$doc = new DOMDocument();
 		$doc->registerNodeClass('DOMElement', 'Ajde_Template_Parser_Xhtml_Element');
 		$doc->preserveWhiteSpace = false;
@@ -48,7 +38,7 @@ class Ajde_Template_Parser_Xhtml extends Ajde_Template_Parser
 		foreach($root->getElementsByTagNameNS($this->_acNS, '*') as $element) {
 			/* @var $element Ajde_Template_Parser_Xhtml_Element */
 			if ($element->inACNameSpace()) {
-				$element->processComponent();
+				$element->processComponent($this);
 			}
 		}
 		return $root;
