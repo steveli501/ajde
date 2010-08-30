@@ -1,9 +1,22 @@
 #wrapper { margin: 10px auto; width: 960px; }
 
-#mainMenu { margin: 10px 0; background-color: #bacbd6; }
+#mainMenu { background-color: #dae8f1; }
 	#mainMenu ul { list-style: none; margin: 0 0 0 30px; }
 	#mainMenu li { display: block; float: left; }
 	#mainMenu a { display: block; padding: 2px 20px; color: #005f9b; text-decoration: none; }
 	#mainMenu a:hover { background-color: #005f9b; color: white; }
+	
+#footer { margin: 20px 0; color: silver; }
 
-h2 { font-size: 20px; }
+.feature { float: right; width: 200px; border-left: 1px solid #e5b5e2; padding: 5px 5px 5px 20px; margin: 0 0 50px 20px; }
+	.feature h4 { color: #9b0092; font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif; font-size: 22px; margin: 5px 0 15px; }
+
+.button { text-align: right; margin: 0 0 10px 0; } 
+.button a { display: inline-block; width: 130px; text-align: center; color: #005f9b; font-weight: bold; font-size: 13px; margin: 10px 0; padding: 2px 10px; text-decoration: none;
+	-webkit-box-shadow: 0 0 3px #005f9b; -moz-box-shadow: 0 0 3px #005f9b; 
+	-webkit-border-radius: 5px; -moz-border-radius: 5px; -o-border-radius: 5px; }
+.button a:hover { background-color: #dae8f1; }	
+
+h2 { color: gray; font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif; font-size: 30px; margin: 15px 0 5px; }
+h3 { color: #005f9b; display: inline-block; font-size: 16px; margin: 15px 0 5px; } 
+h3:after { content: "."; color: #9b0092; }
