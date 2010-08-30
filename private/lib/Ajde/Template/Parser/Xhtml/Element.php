@@ -7,7 +7,7 @@ class Ajde_Template_Parser_Xhtml_Element extends DOMElement
 		return substr($this->nodeName, 0, 3) === Ajde_Component::AC_XMLNS . ':';	
 	}
 	
-	public function processComponent()
+	public function processComponent(Ajde_Template_Parser $parser)
 	{
 		$component = Ajde_Component::fromNode($this);
 		$contents = $component->process();
