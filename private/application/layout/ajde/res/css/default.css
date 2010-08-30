@@ -20,3 +20,8 @@
 h2 { color: gray; font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif; font-size: 30px; margin: 15px 0 5px; }
 h3 { color: #005f9b; display: inline-block; font-size: 16px; margin: 15px 0 5px; } 
 h3:after { content: "."; color: #9b0092; }
+
+/* SyntaxHighlighter fixes */
+.syntaxhighlighter {
+	width:inherit !important;
+}

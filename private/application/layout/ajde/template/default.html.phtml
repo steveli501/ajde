@@ -1,7 +1,15 @@
 <?php
 /* @var $this Ajde_Template_Parser_Phtml_Helper */
 $this->requireJsLibrary('jquery', '1.4');
-$this->requireJsPublic('lib/syntaxhighlighter/src/shCore.js');
+
+// Syntax Highlighting
+$this->requireJsPublic('lib/syntaxhighlighter/shCore.js');
+$this->requireJsPublic('shAutoloaderOnDOMReady.js');
+$this->requireJsPublic('syntaxhighlighter.js');
+$this->requireCssPublic('lib/syntaxhighlighter/shCore.css', Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
+$this->requireCssPublic('lib/syntaxhighlighter/shThemeDefault.css', Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST); 
+
+// HTML 5 Boilerplate
 $this->requireCssFirst('reset');
 ?>
 <!doctype html>
