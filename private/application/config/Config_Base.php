@@ -3,8 +3,8 @@
 class Config_Base
 {	
 	// Site parameters
-	public $ident				= "ajde";
-	public $sitename 			= "ajde open web framework";	
+	public $ident				= "project";
+	public $sitename 			= "Project Name";	
 	public $version 			= array(
 									"number" => "0",
 									"name" => "alpha"
@@ -26,9 +26,9 @@ class Config_Base
 	
 	// Database settings
 	public $db_host 			= "localhost";
-	public $db_user 			= "ajde";
-	public $db_password 		= "ajde";
-	public $db_db 				= "ajde";
+	public $db_user 			= "user";
+	public $db_password 		= "password";
+	public $db_db 				= "database";
 
 	// Which modules should we call on bootstrapping?
 	public $bootstrap			= array(
