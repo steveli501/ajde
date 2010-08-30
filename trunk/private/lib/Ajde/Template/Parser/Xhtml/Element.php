@@ -9,7 +9,7 @@ class Ajde_Template_Parser_Xhtml_Element extends DOMElement
 	
 	public function processComponent(Ajde_Template_Parser $parser)
 	{
-		$component = Ajde_Component::fromNode($this);
+		$component = Ajde_Component::fromNode($parser, $this);
 		$contents = $component->process();
 		/* @var $doc DOMDocument */
 		$doc = $this->ownerDocument;
