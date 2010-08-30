@@ -1,7 +1,7 @@
 <?php
 /* @var $this Ajde_Template_Parser_Phtml_Helper */
 $this->requireJsLibrary('jquery', '1.4');
-$this->requireCss('reset');
+$this->requireCssFirst('reset');
 ?>
 <!doctype html>
 <html lang="en">
@@ -23,6 +23,7 @@ $this->requireCss('reset');
 			<img src='public/images/logo.png' width='137' height='75' alt='Ajde'/>
 			<?php echo $this->includeModule('general/menu'); ?>
 			<?php echo Ajde::app()->getDocument()->getBody(); ?>
+			<?php echo $this->includeModule('general/footer'); ?>
 		</div>
 		<?php echo Ajde::app()->getDocument()->getScripts(); ?>
 	</body>
