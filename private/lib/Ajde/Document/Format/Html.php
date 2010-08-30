@@ -148,15 +148,16 @@ class Ajde_Document_Format_Html extends Ajde_Document
 
 	public function autoAddResources(Ajde_Template $template)
 	{
+		$position = $template->getDefaultResourcePosition();
 		foreach($this->getResourceTypes() as $resourceType) {
 			if ($defaultResource = Ajde_Resource_Local::lazyCreate($resourceType, $template->getBase(), 'default', $template->getFormat()))
 			{
-				$this->addResource($defaultResource);
+				$this->addResource($defaultResource, $position);
 			}
 			if ($template->getAction() != 'default' &&
 				$actionResource = Ajde_Resource_Local::lazyCreate($resourceType, $template->getBase(), $template->getAction(), $template->getFormat()))
 			{
-				$this->addResource($actionResource);
+				$this->addResource($actionResource, $position);
 			}
 		}
 	}
