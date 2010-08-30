@@ -16,7 +16,8 @@ class Ajde_Template extends Ajde_Object_Standard
 					$base, $action, $format), 90010);
 			Ajde::routingError($exception);
 		}		
-		$parser = call_user_func(array('Ajde_Template_Parser_' . $fileInfo['parser'], 'getInstance'));
+		$className = 'Ajde_Template_Parser_' . $fileInfo['parser'];
+		$parser = new $className($this);
 		
 		$this->setFilename($fileInfo['filename']);
 		$this->setParser($parser);
@@ -60,6 +61,7 @@ class Ajde_Template extends Ajde_Object_Standard
 	public function exist()
 	{
 		// since files are checked in constructor, this is not needed anymore?
+		throw new Ajde_Core_Exception_Deprecated();
 		return file_exists($this->getFullPath());
 	}
 	
@@ -67,11 +69,6 @@ class Ajde_Template extends Ajde_Object_Standard
 	{
 		$this->set('filename', $filename);
 		$this->setFullPath();
-		if (!$this->exist()) {
-			$exception = new Ajde_Exception(sprintf("Template file %s not found",
-					$this->getFullPath()), 90010);
-			Ajde::routingError($exception);
-		}
 	}
 	
 	public function setFullPath()

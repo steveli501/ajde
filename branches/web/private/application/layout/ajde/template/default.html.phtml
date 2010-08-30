@@ -1,6 +1,7 @@
 <?php
 /* @var $this Ajde_Template_Parser_Phtml_Helper */
 $this->requireJsLibrary('jquery', '1.4');
+$this->requireCss('reset');
 ?>
 <!doctype html>
 <html lang="en">
@@ -19,7 +20,8 @@ $this->requireJsLibrary('jquery', '1.4');
 	<!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
 	<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
 		<div id='wrapper'>
-			
+			<img src='public/images/logo.png' width='137' height='75' alt='Ajde'/>
+			<?php echo $this->includeModule('general/menu'); ?>
 			<?php echo Ajde::app()->getDocument()->getBody(); ?>
 		</div>
 		<?php echo Ajde::app()->getDocument()->getScripts(); ?>
