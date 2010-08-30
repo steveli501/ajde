@@ -119,4 +119,9 @@ class Ajde_Template extends Ajde_Object_Standard
 	{
 		$this->_contents = $contents;
 	}
+	
+	public function getDefaultResourcePosition()
+	{
+		return Ajde_Document_Format_Html::RESOURCE_POSITION_DEFAULT;
+	}
 }
