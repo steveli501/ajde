@@ -2,9 +2,9 @@
 
 class Ajde_Component_Js extends Ajde_Component_Resource
 {
-	public static function processStatic($attributes)
+	public static function processStatic(Ajde_Template_Parser $parser, $attributes)
 	{
-		$instance = new self($attributes);
+		$instance = new self($parser, $attributes);
 		return $instance->process();
 	}
 	
@@ -21,7 +21,8 @@ class Ajde_Component_Js extends Ajde_Component_Resource
 				Ajde_Resource_Local::TYPE_JAVASCRIPT,
 				$this->attributes['action'],
 				$this->attributes['format'],
-				$this->attributes['base']
+				$this->attributes['base'],
+				$this->attributes['position']
 			);
 		}
 	}

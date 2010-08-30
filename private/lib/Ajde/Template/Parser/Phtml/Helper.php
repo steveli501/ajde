@@ -46,11 +46,24 @@ class Ajde_Template_Parser_Phtml_Helper extends Ajde_Object_Standard
 	 * @param string $action
 	 * @param string $format
 	 * @param string $base
+	 * @param integer $position
 	 * @return void
 	 */
-	public function requireJs($action, $format = 'html', $base = null)
+	public function requireJs($action, $format = 'html', $base = null, $position = Ajde_Document_Format_Html::RESOURCE_POSITION_DEFAULT)
 	{
-		return Ajde_Component_Js::processStatic($this->getParser(), array('action' => $action, 'format' => $format, 'base' => $base));
+		return Ajde_Component_Js::processStatic($this->getParser(), array('action' => $action, 'format' => $format, 'base' => $base, 'position' => $position));
+	}
+	
+	/**
+	 * 
+	 * @param string $action
+	 * @param string $format
+	 * @param string $base
+	 * @return void
+	 */
+	public function requireJsFirst($action, $format = 'html', $base = null)
+	{
+		return $this->requireJs($action, $format, $base, Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
 	}
 	
 	/************************
@@ -62,11 +75,24 @@ class Ajde_Template_Parser_Phtml_Helper extends Ajde_Object_Standard
 	 * @param string $action
 	 * @param string $format
 	 * @param string $base
+	 * @param integer $position
 	 * @return void
 	 */
-	public function requireCss($action, $format = 'html', $base = null)
+	public function requireCss($action, $format = 'html', $base = null, $position = Ajde_Document_Format_Html::RESOURCE_POSITION_DEFAULT)
 	{
-		return Ajde_Component_Css::processStatic($this->getParser(), array('action' => $action, 'format' => $format, 'base' => $base));
+		return Ajde_Component_Css::processStatic($this->getParser(), array('action' => $action, 'format' => $format, 'base' => $base, 'position' => $position));
+	}
+
+	/**
+	 * 
+	 * @param string $action
+	 * @param string $format
+	 * @param string $base
+	 * @return void
+	 */
+	public function requireCssFirst($action, $format = 'html', $base = null)
+	{
+		return $this->requireCss($action, $format, $base, Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
 	}
 	
 	/************************
