@@ -37,4 +37,9 @@ class Ajde_Layout extends Ajde_Template
 	{
 		return $this->get('format');
 	}
+	
+	public function getDefaultResourcePosition()
+	{
+		return Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST;
+	}
 }
