@@ -13,12 +13,12 @@ class Ajde_Component_Resource extends Ajde_Component
 		return false;
 	}
 	
-	public function requireResource($type, $action, $format = 'html', $base = null)
+	public function requireResource($type, $action, $format = 'html', $base = null, $position = Ajde_Document_Format_Html::RESOURCE_POSITION_DEFAULT)
 	{
 		if (!isset($base)) {
 			$base = $this->getParser()->getTemplate()->getBase();			
 		}
 		$resource = new Ajde_Resource_Local($type, $base, $action, $format);
-		Ajde::app()->getDocument()->addResource($resource);
+		Ajde::app()->getDocument()->addResource($resource, $position);
 	}
 }

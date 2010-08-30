@@ -14,7 +14,8 @@ class Ajde_Component_Css extends Ajde_Component_Resource
 			Ajde_Resource_Local::TYPE_STYLESHEET,
 			$this->attributes['action'],
 			$this->attributes['format'],
-			$this->attributes['base']
+			$this->attributes['base'],
+			$this->attributes['position']
 		);
 	}
 }
