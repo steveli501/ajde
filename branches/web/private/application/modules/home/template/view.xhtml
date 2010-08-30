@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<template xmlns='http://www.w3.org/1999/xhtml' xmlns:ac='http://code.google.com/p/ajde/wiki/AC'>
+	
+	<h2>Ajde is a web framework with open standards in mind</h2>
+	<h3>A framework for designers</h3>
+	<div>
+		<div class='feature'>
+			<h4>Requirements</h4>
+			<ul>
+				<li>Open mind</li>
+				<li>Creative spirit</li>
+				<li>A web host running:</li>
+				<li>PHP > 5.2.3</li>
+				<li>.htaccess support</li>
+				<li>the more the better</li>
+			</ul>
+			<div class='button'>
+				<a href='download.html'>Download</a>
+			</div>
+			<h4>Features</h4>
+			<ul>
+				<li>Light-weight</li>
+				<li>PHP and XML templates</li>
+			</ul>
+			<div class='button'>
+				<a href='documentation.html'>Documentation</a>
+			</div>
+		</div>
+		<p>
+			A simple to use API and a straightforward templating system for your web
+			application. Ajde will automatically include your related JavaScript and
+			stylesheets if you follow the naming convention and you can write your
+			templates in native PHP or entirely in XML.
+		</p>
+		<p>
+			Writing your application logic and extending Ajde is easy and extensive
+			exception handling is turned on by default. Unless of course you switch from
+			the development stage to a live website.
+		</p>
+		<h3>A framework for Grade A performance</h3>
+		<p>
+			Ajde aims to be a framework for designers. Employing out-of-the box
+			minifiers, resource combining and caching of resources such as JavaScript
+			and stylesheet files, and taking care of all the right headers and .htaccess
+			settings for you, Ajde lifts the performance of your application to a whole
+			next level.
+		</p>
+		<h3>Examples</h3>
+		<p>
+			A fresh checkout of Ajde contains the <em>home</em> module by default.
+			Take a look at this template of the default <em>view</em> action for
+			this module: 
+			<script type='syntaxhighlighter' class='brush: html' title='file: ./modules/home/template/view.xhtml:'><![CDATA[
+				<?xml version="1.0" encoding="UTF-8" ?>
+				<template
+					xmlns="http://www.w3.org/1999/xhtml"
+					xmlns:ac="http://www.adje.org/doc/xhtml.html">
+					
+					<ac:js library='jquery' version='1.4' />
+					
+					<h1>My Website</h1>
+					<ac:include route='home/menu.html' />
+					
+					<p>You're viewing my homepage!</p>
+										
+				</template>			
+			]]></script>
+		</p>
+		<p>
+			The output will be wrapped in the default layout, which is based on
+			the excellent <a href='http://html5boilerplate.com/'>HTML 5 Boilerplate</a>.
+			Also, related stylesheets and JavaScript in combined and minified form are
+			included and the output is valid HTML 5.
+			<script type='syntaxhighlighter' class='brush: html' title='url: ./home.html'><![CDATA[
+				<!doctype html>
+				<html lang='en' id='project'>
+					<head>
+						<meta charset='utf-8'>
+						<!--[if IE]><![endif]-->
+						<title>Project Name</title>
+						<meta name='description' content=''>
+						<meta name='author' content=''>
+						<base href='http://ajde.local/' />
+						<link rel='stylesheet' type='text/css' href='resource/compressed/css/35833f856c20289132a2d486f71e9f68/' />
+					</head>
+					<!--[if lt IE 7 ]><body	class='ie6'> <![endif]-->
+					<!--[if IE 7 ]><body class='ie7'> <![endif]-->
+					<!--[if IE 8 ]><body class='ie8'> <![endif]-->
+					<!--[if IE 9 ]><body class='ie9'> <![endif]-->
+					<!--[if (gt IE 9)|!(IE)]><!--><body><!--<![endif]-->
+						<div id='wrapper'>
+							<h1>My Website</h1>
+							<ul>
+								<li><a href='home.html'>Homepage</a></li>
+								<li><a href='home/contact.html'>Contact</a></li>
+							</ul>
+							<p>
+								You're viewing my homepage!
+							</p>
+						</div>
+						<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js'>&lt;/script>
+						<script type='text/javascript' src='resource/compressed/js/4701f2652264022debb1697deda43d58/'>&lt;/script>
+					</body>
+				</html>
+			]]></script>
+			Page speed score? <strong>99/100</strong>. YSlow score? <strong>98</strong>.
+		</p>
+		
+		
+		
+	</div>
+
+</template>
