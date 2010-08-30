@@ -66,6 +66,17 @@ class Ajde_Template_Parser_Phtml_Helper extends Ajde_Object_Standard
 		return $this->requireJs($action, $format, $base, Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
 	}
 	
+	/**
+	 * 
+	 * @param string $filename
+	 * @param integer $position
+	 * @return void
+	 */
+	public function requireJsPublic($filename, $position = Ajde_Document_Format_Html::RESOURCE_POSITION_DEFAULT)
+	{
+		return Ajde_Component_Js::processStatic($this->getParser(), array('filename' => $filename, 'position' => $position));
+	}
+	
 	/************************
 	 * Ajde_Component_Css
 	 ************************/
@@ -93,6 +104,17 @@ class Ajde_Template_Parser_Phtml_Helper extends Ajde_Object_Standard
 	public function requireCssFirst($action, $format = 'html', $base = null)
 	{
 		return $this->requireCss($action, $format, $base, Ajde_Document_Format_Html::RESOURCE_POSITION_FIRST);
+	}
+	
+	/**
+	 * 
+	 * @param string $filename
+	 * @param integer $position
+	 * @return void
+	 */
+	public function requireCssPublic($filename, $position = Ajde_Document_Format_Html::RESOURCE_POSITION_DEFAULT)
+	{
+		return Ajde_Component_Css::processStatic($this->getParser(), array('filename' => $filename, 'position' => $position));
 	}
 	
 	/************************
