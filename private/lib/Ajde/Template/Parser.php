@@ -1,26 +1,40 @@
 <?php 
 
-class Ajde_Template_Parser extends Ajde_Object_Singleton
+class Ajde_Template_Parser extends Ajde_Object_Standard
 {
 	/**
 	 * 
-	 * @return Ajde_Template_Parser
+	 * @var Ajde_Template
 	 */
-	public static function getInstance()
+	protected $_template = null;
+	
+	/**
+	 * 
+	 * @param Ajde_Template $template
+	 */
+	public function __construct(Ajde_Template $template)
 	{
-		static $instance;
-		return $instance === null ? $instance = new self : $instance;
+		$this->_template = $template;
 	}
 	
-	public function parse(Ajde_Template $template)
+	/**
+	 * 
+	 * @return Ajde_Template
+	 */
+	public function getTemplate()
 	{
-		return $this->_getContents($template->getFullPath());
+		return $this->_template;
 	}
 	
-	protected function _getContents($fullPath)
+	public function parse()
+	{
+		return $this->_getContents();
+	}
+	
+	protected function _getContents()
 	{
 		ob_start();
-		include $fullPath;
+		include $this->getTemplate()->getFullPath();
 		$contents = ob_get_contents();
 		ob_end_clean();
 		return $contents;
