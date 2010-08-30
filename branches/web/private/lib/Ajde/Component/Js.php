@@ -21,7 +21,8 @@ class Ajde_Component_Js extends Ajde_Component_Resource
 				Ajde_Resource_Local::TYPE_JAVASCRIPT,
 				$this->attributes['action'],
 				$this->attributes['format'],
-				$this->attributes['base']
+				$this->attributes['base'],
+				$this->attributes['position']
 			);
 		}
 	}
