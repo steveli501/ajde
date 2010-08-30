@@ -24,6 +24,12 @@ class Ajde_Component_Js extends Ajde_Component_Resource
 				$this->attributes['base'],
 				$this->attributes['position']
 			);
+		} elseif (array_key_exists('filename', $this->attributes)) {
+			$this->requirePublicResource(
+				Ajde_Resource_Local::TYPE_JAVASCRIPT,
+				$this->attributes['filename'],
+				$this->attributes['position']
+			);
 		}
 	}
 	
