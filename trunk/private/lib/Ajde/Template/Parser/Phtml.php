@@ -19,6 +19,17 @@ class Ajde_Template_Parser_Phtml extends Ajde_Template_Parser
 		return $this->_helper;
 	}
 	
+	public function __get($name)
+	{
+		$template = $this->getTemplate();
+		if ($template->hasAssigned($name)) {
+			return $template->getAssigned($name);
+		} else {
+			// TODO: 
+			throw new Ajde_Exception("TODO ".$name);
+		}
+	}
+	
 	public function __fallback($method, $arguments)
 	{
 		$helper = $this->getHelper();

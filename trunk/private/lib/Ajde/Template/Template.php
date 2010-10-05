@@ -2,7 +2,8 @@
 
 class Ajde_Template extends Ajde_Object_Standard
 {
-	public $_contents = null;
+	protected $_contents = null;
+	protected $_table = null;
 	
 	public function  __construct($base, $action, $format = 'html')
 	{
@@ -102,6 +103,21 @@ class Ajde_Template extends Ajde_Object_Standard
 		return $this->get('format');
 	}
 
+	public function assign($key, $value)
+	{
+		$this->_table[$key] = $value;
+	}
+	
+	public function hasAssigned($key)
+	{
+		return isset($this->_table[$key]);	
+	}
+	
+	public function getAssigned($key)
+	{
+		return $this->_table[$key];
+	}
+
 	public function getContents()
 	{
 		if (!isset($this->_contents))
@@ -113,6 +129,15 @@ class Ajde_Template extends Ajde_Object_Standard
 			Ajde_Event::trigger($this, 'afterGetContents');
 		}
 		return $this->_contents;
+	}
+	
+	/**
+	 * Alias for $this->getContents()
+	 * @see self::getContents()
+	 */
+	public function render()
+	{
+		return $this->getContents();
 	}
 
 	public function setContents($contents)
