@@ -2,6 +2,12 @@
 
 class Ajde_Controller extends Ajde_Object_Standard
 {
+	/**
+	 * 
+	 * @var Ajde_View
+	 */
+	protected $_view = null;
+		
 	public function  __construct($action = null, $format = null)
 	{
 		$this->setModule(strtolower(get_class($this)));
@@ -54,8 +60,29 @@ class Ajde_Controller extends Ajde_Object_Standard
 
 	}
 
+	/**
+	 * 
+	 * @return Ajde_View
+	 */
+	public function getView()
+	{
+		if (!isset($this->_view)) {
+			$this->_view = Ajde_View::fromController($this);
+		}
+		return $this->_view;
+	}
+	
+	/**
+	 * Shorthand for $controller->getView()->getContents();
+	 */
+	public function render()
+	{
+		return $this->getView()->getContents();
+	}
+	
 	public function loadTemplate()
 	{
+		throw new Ajde_Core_Exception_Deprecated();
 		$view = Ajde_View::fromController($this);
 		return $view->getContents();
 	}
