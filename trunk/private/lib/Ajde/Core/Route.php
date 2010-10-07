@@ -9,9 +9,8 @@ class Ajde_Core_Route extends Ajde_Object_Standard
 		$this->_route = $route;
 		$routeParts = $this->_extractRouteParts();
 		if (empty($routeParts)) {
-			// TODO: documentation
 			$exception = new Ajde_Exception(sprintf("Invalid route: %s",
-					$route), 90019);
+					$route), 90021);
 			Ajde::routingError($exception);
 		}
 		$defaultParts = Config::get('defaultRouteParts');
@@ -60,8 +59,7 @@ class Ajde_Core_Route extends Ajde_Object_Standard
 				array_shift($matches);
 				if (count($parts) != count($matches))
 				{
-					// TODO: exception
-					throw new Ajde_Exception("TODO", 90018);	
+					throw new Ajde_Exception("Number of routeparts does not match regular expression", 90020);	
 				} 
 				return array_combine($parts, $matches);
 			}	

@@ -7,6 +7,7 @@ class Ajde_Template_Parser_Phtml extends Ajde_Template_Parser
 	 * @var Ajde_Template_Parser_Phtml_Helper
 	 */
 	protected $_helper = null;
+	
 	/**
 	 * 
 	 * @return Ajde_Template_Parser_Phtml_Helper
@@ -25,8 +26,7 @@ class Ajde_Template_Parser_Phtml extends Ajde_Template_Parser
 		if ($template->hasAssigned($name)) {
 			return $template->getAssigned($name);
 		} else {
-			// TODO: 
-			throw new Ajde_Exception("TODO ".$name);
+			throw new Ajde_Exception("No variable with name '" . $name . "' assigned to template.", 90019);
 		}
 	}
 	
