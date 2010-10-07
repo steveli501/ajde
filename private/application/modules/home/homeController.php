@@ -4,7 +4,7 @@ class Home extends Ajde_Controller
 {	
 	function viewDefault()
 	{
-		return $this->loadTemplate();
+		return $this->render();
 	}
 	
 	function zendDefault()

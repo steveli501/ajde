@@ -3,6 +3,7 @@
 abstract class Ajde_Component extends Ajde_Object_Standard
 {
 	const AC_XMLNS = 'ac';
+	const AV_XMLNS = 'av';
 	
 	public $attributes = array();
 	

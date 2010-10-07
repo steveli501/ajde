@@ -21,8 +21,7 @@ class Ajde_Core_Autoloader
 	public static function autoload($className)
 	{
 		if (in_array($className, self::getIncompatibleClasses())) {
-			// TODO: 
-			throw new Ajde_Exception('Could not create instance of incompatible class ' . $className . '.');
+			throw new Ajde_Exception('Could not create instance of incompatible class ' . $className . '.', 90018);
 		}
 		
 	    // Add libraries and config to include path
