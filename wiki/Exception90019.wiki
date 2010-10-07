@@ -10,12 +10,15 @@ In a template, assigned variables can be accessed with
 echo $this->variable_name;
 }}}
 
-for PHTML templates. This exception is thrown when a variable accessed in this way is not assigned to the template per
+for PHTML templates or 
+
+{{{
+<av:variable_name/>
+}}}
+
+for XHTML templates. This exception is thrown when a variable accessed in this way is not assigned to the template per
 
 {{{
 /* @var $template Ajde_Template */
 $template->assign('variable_name', 'value');
 }}}
-
-= TODO =
-XHTML template implementation
