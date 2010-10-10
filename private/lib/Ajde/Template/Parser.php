@@ -34,7 +34,7 @@ class Ajde_Template_Parser extends Ajde_Object_Standard
 	protected function _getContents()
 	{
 		ob_start();
-		include $this->getTemplate()->getFullPath();
+		include $this->getTemplate()->getFilename();
 		$contents = ob_get_contents();
 		ob_end_clean();
 		return $contents;

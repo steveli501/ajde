@@ -2,13 +2,28 @@
 
 class Ajde_Core_Autoloader
 {
-	public static function register() {
+	public static function register()
+	{
 		// Configure autoloading
 		spl_autoload_register(array("Ajde_Core_Autoloader", "autoload"));
 	}
+	
+	public static function getIncompatibleClasses()
+	{
+		// These (ZF) classes could pose problems to the Ajde MVC system
+		return array(
+			'Zend_Application',
+			'Zend_Loader_Autoloader',
+			'Zend_Application_Bootstrap_Bootstrap'
+		);	
+	} 
 
 	public static function autoload($className)
 	{
+		if (in_array($className, self::getIncompatibleClasses())) {
+			throw new Ajde_Exception('Could not create instance of incompatible class ' . $className . '.', 90018);
+		}
+		
 	    // Add libraries and config to include path
 		$dirs = array(
 			PRIVATE_DIR.LIB_DIR,

@@ -7,6 +7,7 @@ class Ajde_Template_Parser_Phtml extends Ajde_Template_Parser
 	 * @var Ajde_Template_Parser_Phtml_Helper
 	 */
 	protected $_helper = null;
+	
 	/**
 	 * 
 	 * @return Ajde_Template_Parser_Phtml_Helper
@@ -17,6 +18,16 @@ class Ajde_Template_Parser_Phtml extends Ajde_Template_Parser
 			$this->_helper = new Ajde_Template_Parser_Phtml_Helper($this); 
 		}
 		return $this->_helper;
+	}
+	
+	public function __get($name)
+	{
+		$template = $this->getTemplate();
+		if ($template->hasAssigned($name)) {
+			return $template->getAssigned($name);
+		} else {
+			throw new Ajde_Exception("No variable with name '" . $name . "' assigned to template.", 90019);
+		}
 	}
 	
 	public function __fallback($method, $arguments)

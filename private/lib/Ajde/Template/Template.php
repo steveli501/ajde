@@ -2,7 +2,8 @@
 
 class Ajde_Template extends Ajde_Object_Standard
 {
-	public $_contents = null;
+	protected $_contents = null;
+	protected $_table = null;
 	
 	public function  __construct($base, $action, $format = 'html')
 	{
@@ -68,20 +69,8 @@ class Ajde_Template extends Ajde_Object_Standard
 	public function setFilename($filename)
 	{
 		$this->set('filename', $filename);
-		$this->setFullPath();
 	}
 	
-	public function setFullPath()
-	{
-		$fullPath = $this->getBase() . TEMPLATE_DIR . $this->getFilename();
-		return $this->set("fullPath", $fullPath);
-	}
-	
-	public function getFullPath()
-	{
-		return $this->get("fullPath");
-	}
-
 	public function getFilename()
 	{
 		return $this->get("filename");
@@ -102,17 +91,41 @@ class Ajde_Template extends Ajde_Object_Standard
 		return $this->get('format');
 	}
 
+	public function assign($key, $value)
+	{
+		$this->_table[$key] = $value;
+	}
+	
+	public function hasAssigned($key)
+	{
+		return isset($this->_table[$key]);	
+	}
+	
+	public function getAssigned($key)
+	{
+		return $this->_table[$key];
+	}
+
 	public function getContents()
 	{
 		if (!isset($this->_contents))
 		{
 			Ajde_Event::trigger($this, 'beforeGetContents');
-			Ajde_Cache::getInstance()->addFile($this->getFullPath());
+			Ajde_Cache::getInstance()->addFile($this->getFilename());
 			$contents = $this->getParser()->parse($this);		
 			$this->setContents($contents);			
 			Ajde_Event::trigger($this, 'afterGetContents');
 		}
 		return $this->_contents;
+	}
+	
+	/**
+	 * Alias for $this->getContents()
+	 * @see self::getContents()
+	 */
+	public function render()
+	{
+		return $this->getContents();
 	}
 
 	public function setContents($contents)

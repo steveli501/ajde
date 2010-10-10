@@ -27,7 +27,8 @@ abstract class Ajde_Document extends Ajde_Object_Standard
 	/**
 	 * @return Ajde_Layout
 	 */
-	public function getLayout() {
+	public function getLayout()
+	{
 		return $this->get("layout");
 	}
 
