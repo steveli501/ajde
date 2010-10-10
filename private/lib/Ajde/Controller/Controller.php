@@ -73,6 +73,15 @@ class Ajde_Controller extends Ajde_Object_Standard
 	}
 	
 	/**
+	 * 
+	 * @param Ajde_View $view
+	 */
+	public function setView(Ajde_View $view)
+	{
+		$this->_view = $view;
+	}
+	
+	/**
 	 * Shorthand for $controller->getView()->getContents();
 	 */
 	public function render()
