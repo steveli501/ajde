@@ -16,8 +16,7 @@ class Ajde_Template_Parser_Xhtml_Element extends DOMElement
 	{
 		$variableName = str_replace(Ajde_Component::AV_XMLNS . ':', '', $this->nodeName);
 		if (!$parser->getTemplate()->hasAssigned($variableName)) {
-			// TODO:
-			throw new Ajde_Exception();
+			 throw new Ajde_Exception("No variable with name '" . $variableName . "' assigned to template.", 90019);
 		}
 		$contents = (string) $parser->getTemplate()->getAssigned($variableName);
 		/* @var $doc DOMDocument */
