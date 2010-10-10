@@ -24,17 +24,17 @@ function shutdown()
 register_shutdown_function('shutdown');
 
 // Define paths
-define('PRIVATE_DIR', 	'private/');
+define('PRIVATE_DIR', 		'private/');
 define('APP_DIR', 			'application/');
-define('CONFIG_DIR', 			'config/');
-define('LAYOUT_DIR', 			'layout/');
-define('TEMPLATE_DIR', 				'template/');
-define('MODULE_DIR', 			'modules/');
+define('CONFIG_DIR', 		'config/');
+define('LAYOUT_DIR', 		'layout/');
+define('TEMPLATE_DIR', 		'template/');
+define('MODULE_DIR', 		'modules/');
 define('LIB_DIR', 			'lib/');
 define('VAR_DIR', 			'var/');
-define('CACHE_DIR', 			'cache/');
-define('LOG_DIR', 				'log/');
-define('PUBLIC_DIR', 	'public/');
+define('CACHE_DIR', 		'cache/');
+define('LOG_DIR', 			'log/');
+define('PUBLIC_DIR', 		'public/');
 
 // Configure the autoloader
 require_once(PRIVATE_DIR.LIB_DIR."Ajde/Core/Autoloader.php");
@@ -42,4 +42,11 @@ Ajde_Core_Autoloader::register();
 
 // Run the main application
 $app = Ajde::create();
-$app->run();
+
+try {
+	$app->run();	
+} catch (Ajde_Core_Exception_Deprecated $e) {
+	// Uncomment to die on exceptions thrown by deprecated functions / methods
+	// (only in debug mode)
+	throw $e;
+}
