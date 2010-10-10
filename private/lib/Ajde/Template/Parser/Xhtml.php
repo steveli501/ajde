@@ -13,7 +13,12 @@ class Ajde_Template_Parser_Xhtml extends Ajde_Template_Parser
 		$doc->registerNodeClass('DOMElement', 'Ajde_Template_Parser_Xhtml_Element');
 		$doc->preserveWhiteSpace = false;
 		$doc->formatOutput = true;
-		$doc->loadXML($xhtml);
+		try {
+			$doc->loadXML($xhtml);
+		} catch (ErrorException $e) {
+			// TODO:
+			throw new Ajde_Exception('Xhtml Parser error: ' . $e->getMessage());
+		}
 		
 		// Get the root element
 		/* @var $root DOMNode */
