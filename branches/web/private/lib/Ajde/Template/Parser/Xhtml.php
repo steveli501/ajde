@@ -4,6 +4,7 @@ class Ajde_Template_Parser_Xhtml extends Ajde_Template_Parser
 {
 	protected $_defaultNS = null;
 	protected $_acNS = null;
+	protected $_avNS = null;
 	
 	public function parse()
 	{
@@ -25,6 +26,7 @@ class Ajde_Template_Parser_Xhtml extends Ajde_Template_Parser
 		$root = $doc->documentElement;		
 		$this->_defaultNS = $root->lookupNamespaceURI(null);
 		$this->_acNS = $root->lookupNamespaceURI(Ajde_Component::AC_XMLNS);
+		$this->_avNS = $root->lookupNamespaceURI(Ajde_Component::AV_XMLNS);
 		
 		// Ajde_Component processing
 		$processed = $this->_process($root);
@@ -44,6 +46,8 @@ class Ajde_Template_Parser_Xhtml extends Ajde_Template_Parser
 			/* @var $element Ajde_Template_Parser_Xhtml_Element */
 			if ($element->inACNameSpace()) {
 				$element->processComponent($this);
+			} elseif ($element->inAVNameSpace()) {
+				$element->processVariable($this);
 			}
 		}
 		return $root;
@@ -52,8 +56,8 @@ class Ajde_Template_Parser_Xhtml extends Ajde_Template_Parser
 	protected function _breakOutCdata($xml) 
 	{
 		$patterns = array(
-			'%<ac:.+<!\[CDATA\[%',
-			'%\]\]>.*</ac:.+>%'
+			'%<a[cv]:.+?<!\[CDATA\[%',
+			'%\]\]>.*</a[cv]:.+?>%'
 		);
 		$return = preg_replace($patterns, '', $xml);
 		return $return ;

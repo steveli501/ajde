@@ -2,6 +2,11 @@
 
 class Ajde_View extends Ajde_Template
 {	
+	/**
+	 * 
+	 * @param Ajde_Controller $controller
+	 * @return Ajde_View
+	 */
 	public static function fromController(Ajde_Controller $controller) {
 		$base = PRIVATE_DIR.APP_DIR.MODULE_DIR. $controller->getModule() . '/'; 
 		$action = $controller->getAction();
@@ -12,7 +17,7 @@ class Ajde_View extends Ajde_Template
 	/**
 	 *
 	 * @param Ajde_Core_Route $route
-	 * @return Ajde_Application_Template
+	 * @return Ajde_View
 	 */
 	public static function fromRoute(Ajde_Core_Route $route)
 	{
