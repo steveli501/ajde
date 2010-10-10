@@ -4,16 +4,16 @@ class General extends Ajde_Controller
 {
 	function viewDefault()
 	{
-		return $this->loadTemplate();
+		return $this->render();
 	}
 	
 	function footerDefault()
 	{
-		return $this->loadTemplate();
+		return $this->render();
 	}
 	
 	function menuDefault()
 	{
-		return $this->loadTemplate();
+		return $this->render();
 	}
 }
