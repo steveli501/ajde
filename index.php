@@ -46,7 +46,7 @@ $app = Ajde::create();
 try {
 	$app->run();	
 } catch (Ajde_Core_Exception_Deprecated $e) {
-	// Uncomment to die on exceptions thrown by deprecated functions / methods
+	// Throw $e to die on deprecated functions / methods
 	// (only in debug mode)
 	throw $e;
 }

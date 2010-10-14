@@ -6,6 +6,7 @@ abstract class Ajde_Component extends Ajde_Object_Standard
 	const AV_XMLNS = 'av';
 	
 	public $attributes = array();
+	protected $_parseRules = array();
 	
 	/**
 	 * 
@@ -20,8 +21,9 @@ abstract class Ajde_Component extends Ajde_Object_Standard
 	 */
 	public function __construct(Ajde_Template_Parser $parser, $attributes)
 	{
+		$this->attributes = $attributes;
 		$this->_parser = $parser;
-		$this->attributes = $attributes;	
+		$this->_parseRules = $this->_init();
 	} 
 	
 	/**
@@ -51,4 +53,18 @@ abstract class Ajde_Component extends Ajde_Object_Standard
 	}
 	
 	abstract public function process();
+	
+	protected function _init()
+	{
+		return array();
+	}
+	
+	protected function _attributeParse()
+	{
+		foreach($this->_parseRules as $attributeSet => $rule) {
+			if (array_key_exists($attributeSet, $this->attributes)) {
+				return $rule;
+			}
+		}	
+	}
 }

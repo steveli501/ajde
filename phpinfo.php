@@ -1,3 +1,6 @@
-<?php 
+<?php
+/**
+ * To be removed
+ */ 
 
 phpinfo();

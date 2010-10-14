@@ -1,4 +1,7 @@
 <?php
+/**
+ * To be removed
+ */
 
 if (isset($_GET['c'])) {
 	
@@ -33,7 +36,7 @@ if (isset($_GET['c'])) {
 		$mtime = $mtime[1] + $mtime[0];
 		$starttime = $mtime;
 		
-		$temp = file_get_contents('http://ajde.local/ajdesite.html');
+		$temp = file_get_contents('http://ajde.local/home.html');
 		
 		$mtime = microtime();
 		$mtime = explode(" ", $mtime);
