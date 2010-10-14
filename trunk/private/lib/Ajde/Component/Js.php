@@ -20,15 +20,15 @@ class Ajde_Component_Js extends Ajde_Component_Resource
 			$this->requireResource(
 				Ajde_Resource_Local::TYPE_JAVASCRIPT,
 				$this->attributes['action'],
-				$this->attributes['format'],
-				$this->attributes['base'],
-				$this->attributes['position']
+				isset($this->attributes['format']) ?: null,
+				isset($this->attributes['base']) ?: null,
+				isset($this->attributes['position']) ?: null
 			);
 		} elseif (array_key_exists('filename', $this->attributes)) {
 			$this->requirePublicResource(
 				Ajde_Resource_Local::TYPE_JAVASCRIPT,
 				$this->attributes['filename'],
-				$this->attributes['position']
+				isset($this->attributes['position']) ?: null
 			);
 		}
 	}

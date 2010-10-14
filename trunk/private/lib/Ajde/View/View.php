@@ -19,9 +19,11 @@ class Ajde_View extends Ajde_Template
 	 * @param Ajde_Core_Route $route
 	 * @return Ajde_View
 	 */
-	public static function fromRoute(Ajde_Core_Route $route)
+	public static function fromRoute($route)
 	{
-		throw new Ajde_Core_Exception_Deprecated();
+		if (!$route instanceof Ajde_Core_Route) {
+			$route = new Ajde_Core_Route($route);
+		}
 		$base = PRIVATE_DIR.APP_DIR.MODULE_DIR. $route->getModule() . '/';
 		$action = $route->getAction();
 		$format = $route->getFormat();

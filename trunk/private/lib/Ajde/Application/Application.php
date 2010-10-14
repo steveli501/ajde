@@ -28,7 +28,7 @@ class Ajde_Application extends Ajde_Object_Singleton
 	 */
 	public static function create()
 	{
-		return self::app();
+		return self::getInstance();
 	}
 
 	public function run()

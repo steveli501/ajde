@@ -10,7 +10,7 @@ class Ajde_Core_Autoloader
 	
 	public static function getIncompatibleClasses()
 	{
-		// These (ZF) classes could pose problems to the Ajde MVC system
+		// These (ZF) classes could pose problems to the Ajde MVC mechanisms (?)
 		return array(
 			'Zend_Application',
 			'Zend_Loader_Autoloader',
