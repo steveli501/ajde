@@ -2,8 +2,13 @@
 
 class Ajde_Core_Autoloader
 {
-	public static function register()
+	protected static $dirPrepend = null;
+	 
+	public static function register($dirPrepend = null)
 	{
+		// Dir prepend
+		self::$dirPrepend = $dirPrepend;
+		
 		// Configure autoloading
 		spl_autoload_register(array("Ajde_Core_Autoloader", "autoload"));
 	}
@@ -52,7 +57,7 @@ class Ajde_Core_Autoloader
 		{
 			foreach (array_unique($files) as $file)
 			{
-				$path = $dir.$file;
+				$path = self::$dirPrepend.$dir.$file;
 				if (file_exists($path)) {
 					if (class_exists('Ajde_Cache'))
 					{
@@ -69,7 +74,7 @@ class Ajde_Core_Autoloader
 		 * Throwing exceptions is only possible as of PHP 5.3.0
 		 * See: http://php.net/manual/en/language.oop5.autoload.php
 		 */
-		if (version_compare(PHP_VERSION, '5.3.0') >= 0)
+		if (self::exists('Ajde_Core_Autoloader_Exception') && version_compare(PHP_VERSION, '5.3.0') >= 0)
 		{
 			throw new Ajde_Core_Autoloader_Exception("Unable to load $className", 90005);
 		}
