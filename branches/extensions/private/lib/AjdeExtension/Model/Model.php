@@ -1,222 +1,85 @@
 <?php
 
-class AjdeExtension_Model extends AjdeExtension {
+class AjdeExtension_Model extends Ajde_Object_Standard {
 	
-	const TYPE_TEXT 	= 1;
-	const TYPE_INT 		= 2;
-	const TYPE_FLOAT 	= 3;
-	const TYPE_DATETIME = 4;
-	const TYPE_DATE 	= 5;
-	const TYPE_TIME 	= 6;
-	
-	protected $_name;
-	private $_structure;
-	
-	protected $_data = array();
-	private $_id;
-	
-	function __construct($id = null, $autocreate = true) {
-		$this->_name = get_class($this);
-		if (isset($id)) {
-			if ($this->loadById($id) === false && $autocreate === true) {
-				$this->insert(array("id" => $id));
-			}			
-		}
-		return $this;
-	}
+	protected $_connection;
+	protected $_table;
 	
 	public static function register(Ajde_Controller $controller)
 	{
-		// Register getModel($name) function on Controller
-		Ajde_Event::register('Ajde_Controller', 'call', 'AjdeExtension_Model::extendController');
+		// Extend Ajde_Controller
+		if (!Ajde_Event::has('Ajde_Controller', 'call', 'AjdeExtension_Model::extendController')) {
+			Ajde_Event::register('Ajde_Controller', 'call', 'AjdeExtension_Model::extendController');
+		}
 		// Extend autoloader
 		Ajde_Core_Autoloader::addDir(MODULE_DIR.$controller->getModule().'/model/');
 	}
 	
 	public static function extendController(Ajde_Controller $controller, $method, $arguments)
 	{
+		// Register getModel($name) function on Ajde_Controller
 		if ($method === 'getModel') {
 			return self::getModel($arguments[0]);
 		}
+		// TODO: if last triggered in event cueue, throw exception
+		// throw new Ajde_Exception("Call to undefined method ".get_class($controller)."::$method()", 90006);
+		// Now, we give other callbacks in event cueue chance to return
+		return null;  
 	}
 	
 	public static function getModel($name)
 	{
 		$modelName = ucfirst($name) . 'Model';
-		$model = new $modelName();
-		return $model;
+		return new $modelName();
 	}
 	
-	function save() {
-		$values = $this->getAll();
-		if (isset($values["id"])) {
-			unset($values["id"]);
-		}
-		return $res = $this->update($values);
+	public function __construct()
+	{
+		$tableName = strtolower(str_replace('Model', '', get_class($this)));
+		$this->_connection = AjdeExtension_Db::getInstance()->getConnection();	
+		$this->_table = AjdeExtension_Db::getInstance()->getTable($tableName);		
 	}
 	
-	/* those might locks magic getter ?? */
-	function getAll() {
-		return $this->_data; 
-	}
+	public function __set($name, $value) {
+        $this->set($name, $value);
+    }
 
-	private function setAll($array) {
-		foreach ($array as $key => $value) {
-			$this->set($key, $value);
-		}
-	}
+    public function __get($name) {
+        return $this->get($name);
+    }
 
-	function setId($id) {
-		$this->_id = $id;
-	}
+    public function __isset($name) {
+        return $this->has($name);
+    }
 	
-	function getId() {
-		return $this->_id;
-	}
-	
-	static public function getDbLink() {
-		return db::getInstance()->getLink();
+	/**
+	 * @return AjdeExtension_Db
+	 */
+	public function getConnection()
+	{
+		return $this->_connection;
 	}
 	
 	/**
-	 * @param integer $id
-	 * @return model
+	 * @return AjdeExtension_Db_Table
 	 */
-	function loadByField($field, $value) {
-		$db = db::getInstance();
-		$db->select("SELECT * FROM $this->_name WHERE $field = '".addslashes($value)."'");
-		$res = $db->get_row();
-		if ($res) {
-			$this->setAll($res);
-			$this->setId($res["id"]);
-			return $this;
-		} else {
-			return false;
-		}
+	public function getTable()
+	{
+		return $this->_table;
 	}
 	
-	function loadBySQLWhere($sqlWhere) {
-		$db = db::getInstance();
-		$db->select("SELECT * FROM $this->_name WHERE $sqlWhere");
-		$res = $db->get_row();
-		if ($res) {
-			$this->setAll($res);
-			$this->setId($res["id"]);
-			return $this;
-		} else {
-			return false;
-		}
+	public function populate($array)
+	{
+		$this->reset();
+		$this->_data = $array;
 	}
 	
-	/**
-	 * @param integer $id
-	 * @return model
-	 */
-	private function loadById($id) {
-		$db = db::getInstance();
-		$db->select("SELECT * FROM $this->_name WHERE id = '$id'");
-		$res = $db->get_obj();
-		if ($res) {
-			$this->setAll($res[0]);
-			$this->setId($id);
-			return $this;
-		} else {
-			return false;
-		}
+	public function loadByPK($value, $autoCreate = false) {
+		$pk = $this->getTable()->getPK();
+		$sql = 'SELECT * FROM '.$this->_table.' WHERE '.$pk.' = ? LIMIT 1';
+		$statement = $this->getConnection()->prepare($sql);
+		$statement->execute(array($value));
+		$result = $statement->fetch(PDO::FETCH_ASSOC);
+		$this->populate($result);		
 	}
-	
-	// blocks magic getter
-	/*function getName() {
-		return $this->_name;
-	}*/
-	
-	function sql($sql) {
-		$db = db::getInstance();
-		$db->select($sql);
-		return $db->get_obj();
-	}
-	
-	function sqlOne($sql) {
-		$db = db::getInstance();
-		return $db->select_one($sql);
-	}
-	
-	function sqlRow($sql) {
-		$db = db::getInstance();
-		$db->select_one($sql);
-		$obj = $db->get_obj();
-		return $obj[0];
-	}
-	
-	function query(query $query) {
-		$db = db::getInstance();
-		$db->select($query->render());
-		return $db->get_obj();
-	}
-	
-	// blocks magic getter
-	/*function getStructure() {
-		$db = db::getInstance();
-		$db->select("DESCRIBE $table");
-		$this->_structure = $db->get_obj();
-		return $this->_structure;	
-	}*/
-	
-	function insert($array = array(), $replace = false) {
-		$db = db::getInstance();
-		$id = $db->insert_array($this->_name, $array, $replace);
-		$this->setAll($array);
-		if ($id === true) {
-			$this->setId($array["id"]);
-		} else {
-			$this->setId($id);
-		}
-		return $id;
-	}
-
-	function replace($array = array()) {		
-		return $this->insert($array, true);
-	}
-	
-	function update($array) {
-		$db = db::getInstance();
-		$this->setAll($array);
-		return $db->update_array($this->_name, $array, "id = '".$this->getId()."'");
-	}
-	
-	function parse() {
-		return false;
-	}
-	
-	function delete() {
-		$db = db::getInstance();
-		$res = $db->update_sql("DELETE FROM $this->_name WHERE id = '".$this->getId()."'");
-		if ($res) {
-			$this->setId(null);
-			$this->_data = array();
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	function hit() {
-		if ($this->hasId() && $this->hasHit()) {
-			$db = db::getInstance();
-			$db->update_sql("UPDATE $this->_name SET hits = (hits +  1) WHERE id = ".(int) $this->getId());
-		} else {
-			return false;
-		}
-	}
-	
-	
-	// blocks magic getter
-	/* function getType($name) {
-		foreach($this->_structure as $column) {
-			if (strtolower($column->Field) == strtolower($name)) {
-				// do something
-			}
-		}
-	}*/
-	
 }
