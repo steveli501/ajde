@@ -53,6 +53,11 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 		return false;
 	}
 	
+	public function getFieldNames()
+	{
+		return array_keys($this->_fields);		 
+	}
+	
 	public function __toString()
 	{
 		return $this->_name;
