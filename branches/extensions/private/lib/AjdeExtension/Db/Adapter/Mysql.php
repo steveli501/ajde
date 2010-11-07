@@ -3,11 +3,15 @@
 class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 {
 	protected $_connection = null;
+	protected $_dbname = null;
 	
 	public function __construct($dsn, $user, $password)
 	{
 		$dsnString = 'mysql:';
 		foreach($dsn as $k => $v) {
+			if ($k === 'dbname') {
+				$this->_dbname = $v;
+			}
 			$dsnString .= $k . '=' . $v . ';'; 
 		}
 		parent::__construct(
@@ -35,4 +39,26 @@ class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 		$statement = $this->getConnection()->query('DESCRIBE '.$tableName);
 		return $statement->fetchAll();
 	}
+	
+	public function getForeignKey($childTable, $parentTable) {
+		$sql = sprintf("SELECT * FROM information_schema.KEY_COLUMN_USAGE WHERE
+			REFERENCED_TABLE_NAME = %s AND TABLE_NAME = %s AND TABLE_SCHEMA = %s",
+			$this->getConnection()->quote($parentTable),
+			$this->getConnection()->quote($childTable),
+			$this->getConnection()->quote($this->_dbname)
+		);
+		$statement = $this->getConnection()->query($sql);
+		return $statement->fetch();
+	}
+	
+	public function getParents($childTable) {
+		$sql = sprintf("SELECT * FROM information_schema.KEY_COLUMN_USAGE WHERE
+			TABLE_NAME = %s AND TABLE_SCHEMA = %s",
+			$this->getConnection()->quote($childTable),
+			$this->getConnection()->quote($this->_dbname)
+		);
+		$statement = $this->getConnection()->query($sql);
+		return $statement->fetchAll();
+	}
+	
 }

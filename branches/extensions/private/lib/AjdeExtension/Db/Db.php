@@ -5,6 +5,9 @@ class AjdeExtension_Db extends Ajde_Object_Singleton
 	protected $_adapter = null;
 	protected $_tables = null;
 	
+	/**
+	 * @return AjdeExtension_Db
+	 */
 	public static function getInstance()
 	{
     	static $instance;

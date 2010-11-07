@@ -53,6 +53,22 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 		return false;
 	}
 	
+	public function getFK(AjdeExtension_Db_Table $parent) {
+		$fk = AjdeExtension_Db::getInstance()->getAdapter()->getForeignKey((string) $this, (string) $parent);
+		return array('field' => $fk['COLUMN_NAME'], 'parent_field' => $fk['REFERENCED_COLUMN_NAME']);		
+	}
+	
+	public function getParents() {
+		$parents = AjdeExtension_Db::getInstance()->getAdapter()->getParents((string) $this);
+		$parentTables = array();
+		foreach($parents as $parent) {
+			if (isset($parent['REFERENCED_TABLE_NAME'])) {
+				$parentTables[] = $parent['REFERENCED_TABLE_NAME'];
+			}
+		}
+		return $parentTables;		
+	}
+	
 	public function getFieldNames()
 	{
 		return array_keys($this->_fields);		 
