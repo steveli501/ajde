@@ -87,6 +87,18 @@ class AjdeExtension_Model extends Ajde_Object_Standard {
 		$this->_data = $array;
 	}
 	
+	public function getValues() {
+		$return = array();
+		foreach($this->_data as $k => $v) {
+			if ($v instanceof AjdeExtension_Model) {
+				$return[$k] = $v->getValues();
+			} else {
+				$return[$k] = $v;
+			}
+		}
+		return $return;
+	}
+	
 	public function loadByPK($value) {
 		$pk = $this->getTable()->getPK();
 		$sql = 'SELECT * FROM '.$this->_table.' WHERE '.$pk.' = ? LIMIT 1';
