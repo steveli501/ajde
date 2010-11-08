@@ -4,8 +4,13 @@ abstract class AjdeExtension_Db_Adapter_Abstract
 {	
 	public function __construct($dsn, $user, $password, $options)
 	{
+		$options = $options + array(
+			// Not compatible with custom PDO::ATTR_STATEMENT_CLASS 
+		    //PDO::ATTR_PERSISTENT 			=> true,					// Fast, please
+		    PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION 	// Exceptions, please);
+		);
 		try {
-			$connection = new PDO($dsn, $user, $password, $options);
+			$connection = new AjdeExtension_Db_PDO($dsn, $user, $password, $options);
 		} catch (Exception $e) {
 			// Disable trace on this exception to prevent exposure of sensitive
 			// data

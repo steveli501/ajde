@@ -19,9 +19,7 @@ class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 			$user,
 			$password, 
 		    array(
-		    	PDO::MYSQL_ATTR_INIT_COMMAND 	=> "SET NAMES utf8", 	// Modern, please
-		    	PDO::ATTR_PERSISTENT 			=> true,				// Fast, please
-		    	PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION // Exceptions, please
+		    	PDO::MYSQL_ATTR_INIT_COMMAND 	=> "SET NAMES utf8"		// Modern, please		    	
 		    )
 		);
 	}
