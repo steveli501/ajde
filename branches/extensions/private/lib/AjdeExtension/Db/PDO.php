@@ -8,7 +8,7 @@
 * Extends PDO and logs all queries that are executed and how long 
 * they take, including queries issued via prepared statements 
 */  
-class AjdeExtension_Db_PDO extends PDO  
+class AjdeExtension_Db_PDO extends PDO
 {  
     public static $log = array();  
   
@@ -32,6 +32,6 @@ class AjdeExtension_Db_PDO extends PDO
   
     public static function getLog() {  
         return self::$log;  
-    }  
+    }
 }  
   

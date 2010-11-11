@@ -32,7 +32,7 @@ class AjdeExtension_Db extends Ajde_Object_Singleton
 	}
 	
 	/**
-	 * @return PDO
+	 * @return AjdeExtension_Db_PDO
 	 */
 	function getConnection()
 	{

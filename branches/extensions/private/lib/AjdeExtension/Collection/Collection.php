@@ -2,9 +2,6 @@
 
 class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator {
 	
-	const ORDER_ASC 	= 'ASC';
-	const ORDER_DESC 	= 'DESC';
-	
 	/**
 	 * @var string
 	 */
@@ -21,13 +18,19 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	protected $_statement;
 	
 	/**
+	 * @var AjdeExtension_Query
+	 */
+	protected $_query;
+	
+	protected $_link = array();
+	
+	/**
 	 * @var AjdeExtension_Db_Table
 	 */
 	protected $_table;
 	
 	protected $_filters = array();	
-	protected $_limit = array('start' => null, 'count' => null);
-	protected $_order = array('field' => null, 'direction' => self::ORDER_ASC);
+	protected $_filterValues = array();
 	
 	// For Iterator
 	protected $_items = null;
@@ -67,6 +70,16 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 		$this->_connection = AjdeExtension_Db::getInstance()->getConnection();
 		$tableName = strtolower(str_replace('Collection', '', get_class($this)));	
 		$this->_table = AjdeExtension_Db::getInstance()->getTable($tableName);
+		$this->_query = new AjdeExtension_Query();
+	}
+	
+	public function __sleep()
+	{
+		return array('_modelName', '_items');
+	}
+
+	public function __wakeup()
+	{
 	}
 	
 	function rewind() {
@@ -93,7 +106,7 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
     }
 	
 	/**
-	 * @return AjdeExtension_Db
+	 * @return AjdeExtension_Db_PDO
 	 */
 	public function getConnection()
 	{
@@ -115,6 +128,14 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	{
 		return $this->_statement;
 	}
+	
+	/**
+	 * @return AjdeExtension_Query
+	 */
+	public function getQuery()
+	{
+		return $this->_query;
+	}
 		
 	public function populate($array)
 	{
@@ -122,81 +143,77 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 		$this->_data = $array;
 	}
 	
+	public function getLink($modelName, $value)
+	{
+		if (!array_key_exists($modelName, $this->_link)) {
+			// TODO:
+			throw new AjdeExtension_Exception('Link not defined...');
+		}
+		return new AjdeExtension_Filter_Link($this, $modelName, $this->_link[$modelName], $value);
+	}
+	
 	// Chainable collection methods
-	public function addFilter(AjdeExtension_Collection_Filter $filter)
+	public function addFilter(AjdeExtension_Filter $filter)
 	{
 		$this->_filters[] = $filter;
 		return $this;		
 	}
 	
-	public function limit($count, $start = 0)
+	public function orderBy($field, $direction = self::ORDER_ASC)
 	{
-		$this->_limit = array('count' => (int) $count, 'start' => (int) $start);
+		$this->getQuery()->orderBy($field, $direction);
 		return $this;
 	}
 	
-	public function order($field, $direction = self::ORDER_ASC)
+	public function limit($count, $start = 0)
 	{
-		$direction = strtoupper($direction);
-		if (!in_array($direction, array(self::ORDER_ASC, self::ORDER_DESC))) {
-			// TODO: 
-			throw new AjdeExtension_Exception('Collection ordering direction "'.$direction.'" not valid');
-		}
-		if (!in_array($field, $this->getTable()->getFieldNames())) {
-			// TODO: 
-			throw new AjdeExtension_Exception('Collection ordering field "'.$field.'" not valid');
-		}
-		$this->_order = array('field' => $field, 'direction' => $direction);
+		$this->getQuery()->limit((int) $count, (int) $start);
 		return $this;
 	}
 	
 	public function getSql()
-	{
-		// SELECT all
-		$sqlSelect = 'SELECT * FROM '.$this->_table;
-		// WHERE from filters
-		$sqlWhere = '';
+	{		
+		$this->getQuery()->select = '*';
+		$this->getQuery()->from = $this->_table;
 		if (!empty($this->_filters)) {
-			$sqlWhere = ' WHERE ' . $this->getFilterSql();
+			$this->getQuery()->where = $this->getFilter('where');
 		}
-		// ORDER BY
-		$sqlOrderBy = '';
-		if (isset($this->_order['field'])) {
-			$sqlOrderBy = ' ORDER BY '.$this->_order['field'].' '.$this->_order['direction'];
-		}
-		// LIMIT
-		$sqlLimit = '';
-		if (isset($this->_order['count']) && !isset($this->_order['start'])) {
-			$sqlLimit = ' LIMIT '.$this->_limit['count'];
-		} elseif (isset($this->_order['count']) && isset($this->_order['start'])) {
-			$sqlLimit = ' LIMIT '.$this->_limit['start'].', '.$this->_limit['count'];	
+		if (!empty($this->_filters)) {
+			$this->getQuery()->join = $this->getFilter('join');
 		}		
-		// Build SQL
-		return $sqlSelect . $sqlWhere . $sqlOrderBy . $sqlLimit;
+		// ORDER BY field check
+		if (isset($this->getQuery()->orderBy['field'])) {
+			if (!in_array($this->getQuery()->orderBy['field'], $this->getTable()->getFieldNames())) {
+				// TODO: 
+				throw new AjdeExtension_Exception('Collection ordering field "'.$field.'" not valid');
+			}
+		}
+		return $this->getQuery()->getSql();
 	}
 	
-	public function getFilterSql()
+	public function getFilter($queryPart)
 	{
 		$sql = array();
 		foreach($this->_filters as $filter) {
-			$prepareFilter = $filter->prepare();
-			$sql[] = $prepareFilter['sql'];
+			$prepared = $filter->prepare();
+			if (isset($prepared[$queryPart])) {
+				$this->_filterValues = array_merge($this->_filterValues, $prepared[$queryPart]['value']);
+				$sql[] = $prepared[$queryPart]['sql'];
+			}			
 		}
-		return implode(' AND ', $sql);
-	}
+		return empty($sql) ? null : implode(' AND ', $sql);
+	}	
 	
 	public function getFilterValues()
 	{
-		$values = array();
-		foreach($this->_filters as $filter) {
-			$prepareFilter = $filter->prepare();
-			$values = array_merge($values, $prepareFilter['value']);
-		}
-		return $values;
+		return $this->_filterValues;
 	}
 	
 	// Load the collection
 	public function load() {
+		if (!$this->getConnection() instanceof AjdeExtension_Db_PDO) {
+			// return false;
+		}
 		$this->_statement = $this->getConnection()->prepare($this->getSql());
 		$this->_statement->execute($this->getFilterValues());
 		return $this->_items = $this->_statement->fetchAll(PDO::FETCH_CLASS, $this->_modelName);

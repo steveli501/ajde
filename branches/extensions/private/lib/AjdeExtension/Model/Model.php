@@ -1,7 +1,7 @@
 <?php
 
-class AjdeExtension_Model extends Ajde_Object_Standard {
-	
+class AjdeExtension_Model extends Ajde_Object_Standard
+{	
 	protected $_connection;
 	protected $_table;
 	
@@ -62,6 +62,15 @@ class AjdeExtension_Model extends Ajde_Object_Standard {
 		}
 		throw new AjdeExtension_Exception('Object of class '.get_class($this).' could not be converted to string');
 		return false;
+	}
+	
+	public function __sleep()
+	{
+		return array('_autoloadParents', '_data');
+	}
+
+	public function __wakeup()
+	{
 	}
 	
 	/**
@@ -132,6 +141,10 @@ class AjdeExtension_Model extends Ajde_Object_Standard {
 			throw new AjdeExtension_Exception('Field '.(string) $parent.' already exists when loading parent with the same name');
 		}
 		$fk = $this->getTable()->getFK($parent);
+		if (!$this->has($fk['field'])) {
+			// No value for FK field
+			return false;
+		}
 		$parentModelName = ucfirst((string) $parent) . 'Model';
 		$parentModel = new $parentModelName();
 		if ($parentModel->getTable()->getPK() != $fk['parent_field']) {
