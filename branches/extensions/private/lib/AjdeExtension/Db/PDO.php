@@ -19,14 +19,21 @@ class AjdeExtension_Db_PDO extends PDO
         parent::__construct($dsn, $username, $password, $options);  
     }  
   
-    public function query($query) {  
-        $start = microtime(true);  
-        $result = parent::query($query);  
-        $time = microtime(true) - $start;  
-        self::$log[] = array(
-        	'query' => $query,  
-            'time' => round($time * 1000, 0)
-		);  
+    public function query($query) {
+    	//$cache = AjdeExtension_Db_Cache::getInstance();
+		$log = array('query' => $query);
+		$start = microtime(true);
+		//if (!$cache->has($query)) {
+        	$result = parent::query($query);
+			//$cache->set($query, serialize($result));
+		//	$log['cache'] = false;			
+		//} else {
+		//	$result = $cache->get($query);
+		//	$log['cache'] = true;
+		//}  
+		$time = microtime(true) - $start;  
+		$log['time'] = round($time * 1000, 0);
+        self::$log[] = $log;
         return $result;  
     }  
   

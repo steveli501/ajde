@@ -23,7 +23,7 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 	
 	public function initTableStructure() 
 	{
-		$structure = AjdeExtension_Db::getInstance()->getAdapter()->getTableStructure($this->_name); 
+		$structure = AjdeExtension_Db::getInstance()->getAdapter()->getTableStructure($this->_name);
 		foreach($structure as $field) {
 			$fieldName = $field['Field'];
 			$fieldType = $field['Type'];
@@ -31,6 +31,7 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 			$fieldIsPK = $field['Key'] === 'PRI';
 			$fieldDefault = $field['Default'];
 			$fieldIsAutoIncrement = $field['Extra'] === 'auto_increment';
+			$fieldLabel= $field['Comment'];
 			
 			$this->_fields[$fieldName] = array(
 				'name' => $fieldName,
@@ -38,7 +39,8 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 				'isRequired' => $fieldIsRequired,
 				'isPK' => $fieldIsPK,
 				'default' => $fieldDefault,
-				'isAutoIncrement' => $fieldIsAutoIncrement
+				'isAutoIncrement' => $fieldIsAutoIncrement,
+				'label' => $fieldLabel
 			);
 		}
 	}
@@ -72,6 +74,16 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 	public function getFieldNames()
 	{
 		return array_keys($this->_fields);		 
+	}
+	
+	public function getFieldLabels()
+	{
+		$labels = array();
+		foreach($this->_fields as $field)
+		{
+			$labels[$field['name']] = $field['label'];
+		}		 
+		return $labels;
 	}
 	
 	public function __toString()

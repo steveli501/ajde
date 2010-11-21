@@ -210,12 +210,22 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	}
 	
 	// Load the collection
-	public function load() {
+	public function load()
+	{
 		if (!$this->getConnection() instanceof AjdeExtension_Db_PDO) {
 			// return false;
 		}
 		$this->_statement = $this->getConnection()->prepare($this->getSql());
 		$this->_statement->execute($this->getFilterValues());
 		return $this->_items = $this->_statement->fetchAll(PDO::FETCH_CLASS, $this->_modelName);
+	}
+	
+	public function loadParents()
+	{
+		if (count($this) > 0) {
+			foreach($this as $model) {
+				$model->loadParents();
+			}
+		}
 	}
 }

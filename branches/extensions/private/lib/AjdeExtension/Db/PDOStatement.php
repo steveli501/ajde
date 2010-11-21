@@ -25,13 +25,20 @@ class AjdeExtension_Db_PDOStatement extends PDOStatement {
     * @return PDO result set 
     */  
     public function execute($input_parameters = array()) {
-        $start = microtime(true);  
-        $result = parent::execute($input_parameters);  
+    	//$cache = AjdeExtension_Db_Cache::getInstance();
+		$log = array('query' => '[PS] ' . $this->queryString);
+		$start = microtime(true);
+		//if (!$cache->has($this->queryString . serialize($input_parameters))) {  
+        	$result = parent::execute($input_parameters);
+			//$cache->set($this->queryString . serialize($input_parameters), $result);
+		//	$log['cache'] = false;			
+		//} else {
+		//	$result = $cache->get($this->queryString . serialize($input_parameters));
+		//	$log['cache'] = true;
+		//}  
         $time = microtime(true) - $start;  
-        AjdeExtension_Db_PDO::$log[] = array(
-        	'query' => '[PS] ' . $this->queryString,  
-            'time' => round($time * 1000, 0)
-		);  
+		$log['time'] = round($time * 1000, 0);
+        AjdeExtension_Db_PDO::$log[] = $log;
         return $result;  
     }
 }  

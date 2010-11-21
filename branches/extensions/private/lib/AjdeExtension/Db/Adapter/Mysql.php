@@ -19,7 +19,8 @@ class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 			$user,
 			$password, 
 		    array(
-		    	PDO::MYSQL_ATTR_INIT_COMMAND 	=> "SET NAMES utf8"		// Modern, please		    	
+		    	PDO::MYSQL_ATTR_INIT_COMMAND 	=> "SET NAMES utf8",	// Modern, please
+		    	PDO::ATTR_EMULATE_PREPARES 		=> true					// Better caching		    	
 		    )
 		);
 	}
@@ -34,7 +35,8 @@ class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 	
 	public function getTableStructure($tableName)
 	{
-		$statement = $this->getConnection()->query('DESCRIBE '.$tableName);
+		//$statement = $this->getConnection()->query('DESCRIBE '.$tableName);
+		$statement = $this->getConnection()->query('SHOW FULL COLUMNS FROM '.$tableName);
 		return $statement->fetchAll();
 	}
 	

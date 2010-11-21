@@ -6,15 +6,30 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	protected $_table;
 	
 	protected $_autoloadParents = false;
+	protected $_displayField = null;
 	
-	public static function register(Ajde_Controller $controller)
+	public static function register($controller)
 	{
 		// Extend Ajde_Controller
 		if (!Ajde_Event::has('Ajde_Controller', 'call', 'AjdeExtension_Model::extendController')) {
 			Ajde_Event::register('Ajde_Controller', 'call', 'AjdeExtension_Model::extendController');
 		}
 		// Extend autoloader
-		Ajde_Core_Autoloader::addDir(MODULE_DIR.$controller->getModule().'/model/');
+		if ($controller instanceof Ajde_Controller) {
+			Ajde_Core_Autoloader::addDir(MODULE_DIR.$controller->getModule().'/model/');
+		} elseif ($controller === '*') {
+			self::registerAll();
+		} else {
+			Ajde_Core_Autoloader::addDir(MODULE_DIR.$controller.'/model/');
+		}		
+	}
+	
+	public static function registerAll()
+	{
+		$dirs = Ajde_FS_Find::findFiles(MODULE_DIR, '*/model');
+		foreach($dirs as $dir) {
+			Ajde_Core_Autoloader::addDir($dir . '/');
+		}		
 	}
 	
 	public static function extendController(Ajde_Controller $controller, $method, $arguments)
@@ -55,13 +70,7 @@ class AjdeExtension_Model extends Ajde_Object_Standard
     }
 	
 	public function __toString() {
-		foreach($this->_data as $value) {
-			if (is_string($value)) {
-				return $value;
-			}
-		}
-		throw new AjdeExtension_Exception('Object of class '.get_class($this).' could not be converted to string');
-		return false;
+		return $this->getPK();		
 	}
 	
 	public function __sleep()
@@ -71,6 +80,20 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 
 	public function __wakeup()
 	{
+	}
+	
+	public function getPK()
+	{
+		return $this->get($this->getTable()->getPK()); 
+	}
+	
+	public function getDisplayField()
+	{
+		if (isset($this->_displayField)) {
+			return $this->_displayField;
+		} else {
+			return current($this->getTable()->getFieldNames());
+		}
 	}
 	
 	/**
@@ -108,7 +131,8 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 		return $return;
 	}
 	
-	public function loadByPK($value) {
+	public function loadByPK($value)
+	{
 		$pk = $this->getTable()->getPK();
 		$sql = 'SELECT * FROM '.$this->_table.' WHERE '.$pk.' = ? LIMIT 1';
 		$statement = $this->getConnection()->prepare($sql);
@@ -116,17 +140,38 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 		$result = $statement->fetch(PDO::FETCH_ASSOC);
 		$this->populate($result);
 		if ($this->_autoloadParents === true) {
-			foreach($this->getParents() as $parentTableName) {
-				$this->loadParent($parentTableName);
-			}
+			$this->loadParents();
 		}
 	}
 	
-	public function getParents() {
+	public function save()
+	{
+		return false;
+	}
+	
+	public function delete()
+	{
+		$id = $this->getPK();
+		$pk = $this->getTable()->getPK();
+		$sql = 'DELETE FROM '.$this->_table.' WHERE '.$pk.' = ? LIMIT 1';
+		$statement = $this->getConnection()->prepare($sql);
+		return $statement->execute(array($id));
+	}
+	
+	public function getParents()
+	{
 		return $this->getTable()->getParents();
 	}
 	
-	public function loadParent($parent) {
+	public function loadParents()
+	{
+		foreach($this->getParents() as $parentTableName) {
+			$this->loadParent($parentTableName);
+		}
+	}
+	
+	public function loadParent($parent)
+	{
 		if (empty($this->_data)) {
 			// TODO:
 			throw new AjdeExtension_Exception('Model not loaded when loading parent');
@@ -135,10 +180,6 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 			$parent = $parent->getTable();
 		} elseif (!$parent instanceof AjdeExtension_Db_Table) {
 			$parent = new AjdeExtension_Db_Table($parent);
-		}
-		if ($this->has((string) $parent)) {
-			// TODO:
-			throw new AjdeExtension_Exception('Field '.(string) $parent.' already exists when loading parent with the same name');
 		}
 		$fk = $this->getTable()->getFK($parent);
 		if (!$this->has($fk['field'])) {
