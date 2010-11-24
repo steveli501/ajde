@@ -138,10 +138,14 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 		$statement = $this->getConnection()->prepare($sql);
 		$statement->execute(array($value));
 		$result = $statement->fetch(PDO::FETCH_ASSOC);
+		if (!$result) {
+			return false;
+		}
 		$this->populate($result);
 		if ($this->_autoloadParents === true) {
 			$this->loadParents();
 		}
+		return $result;
 	}
 	
 	public function save()
