@@ -5,66 +5,120 @@ class AjdeExtension_Query extends Ajde_Object_Standard
 	const ORDER_ASC 	= 'ASC';
 	const ORDER_DESC 	= 'DESC';
 	
-	public $select = '*';
-	public $from = null;
-	public $where = null;
-	public $join = null;	
-	public $orderBy = array('field' => null, 'direction' => self::ORDER_ASC);
+	const OP_AND		= 'AND';
+	const OP_OR			= 'OR';
+	
+	const JOIN_INNER	= 'INNER';
+	const JOIN_LEFT		= 'LEFT';
+	
+	public $select = array();
+	public $from = array();
+	public $where = array();
+	public $join = array();	
+	public $orderBy = array();
 	public $limit = array('start' => null, 'count' => null);
 	
-	public function select($select)
+	public function reset()
 	{
-		$this->_select = $select;		
+		$this->select = array();
+		$this->from = array();
+		$this->where = array();
+		$this->join = array();	
+		$this->orderBy = array();
+		$this->limit = array('start' => null, 'count' => null);	
 	}
 	
-	public function from($from)
+	public function addSelect($select)
 	{
-		$this->_from = $from;
+		$this->select[] = $select;		
 	}
 	
-	public function where($where)
+	public function addFrom($from)
 	{
-		$this->_where = $where;
+		$this->from[] = $from;
 	}
 	
-	public function join($join)
+	public function addWhere($where, $operator = self::OP_AND)
 	{
-		$this->_join = $join;
+		$this->where[] = array('sql' => $where, 'operator' => $operator);
 	}
 		
-	public function orderBy($field, $direction = self::ORDER_ASC)
+	public function addJoin($join, $type = self::JOIN_INNER)
+	{
+		$this->join[] = array('sql' => $join, 'type' => $type);
+	}
+		
+	public function addOrderBy($field, $direction = self::ORDER_ASC)
 	{
 		$direction = strtoupper($direction);
 		if (!in_array($direction, array(self::ORDER_ASC, self::ORDER_DESC))) {
 			// TODO: 
 			throw new AjdeExtension_Exception('Collection ordering direction "'.$direction.'" not valid');
 		}
-		$this->_order = array('field' => $field, 'direction' => $direction);
+		$this->orderBy[] = array('field' => $field, 'direction' => $direction);
 	}
 	
 	public function limit($count, $start = 0)
 	{
-		$this->_limit = array('count' => (int) $count, 'start' => (int) $start);
+		$this->limit = array('count' => (int) $count, 'start' => (int) $start);
 	}
 	
 	public function getSql()
 	{
-		$sql  		 =  'SELECT ' . $this->select;
-		$sql 		.= ' FROM ' . $this->from;
-		if (isset($this->where)) {
-			$sql	.= ' WHERE ' . $this->where;
+		$sql = '';
+		
+		// SELECT
+		if (empty($this->select)) {
+			$sql .= 'SELECT *';
+		} else {
+			$sql .= 'SELECT ' . implode(', ', $this->select);
 		}
-		if (isset($this->join)) {
-			$sql	.= ' INNER JOIN ' . $this->join;
-		}		
-		if (isset($this->orderBy['field'])) {
-			$sql 	.= ' ORDER BY '.$this->orderBy['field'].' '.$this->orderBy['direction'];
+		
+		// FROM
+		if (empty($this->from)) {
+			// TODO:
+			throw new AjdeExtension_Exception();
+		} else {
+			$sql .= ' FROM ' . implode(', ', $this->from);
 		}
+		
+		// JOIN
+		if (!empty($this->join)) {
+			foreach($this->join as $join) {
+				$sql .= ' ' . $join['type'] . ' JOIN ' . $join['sql'];
+			}
+		}
+		
+		// WHERE
+		if (!empty($this->where)) {
+			$first = true;
+			$sql .= ' WHERE';
+			foreach($this->where as $where) {
+				if ($first === false) {
+					$sql .= ' ' . $where['operator'];
+				}
+				$sql .= ' ' . $where['sql'];
+				$first = false;
+			}
+		}
+		
+		// ORDER BY
+		if (!empty($this->orderBy)) {
+			$sql .= ' ORDER BY';
+			$orderBySql = array();
+			foreach($this->orderBy as $orderBy) {
+				$orderBySql[] = $orderBy['field'] . ' ' . $orderBy['direction'];
+			}
+			$sql .= ' ' . implode(', ', $orderBySql);
+		}
+		
+		// LIMIT
 		if (isset($this->limit['count']) && !isset($this->limit['start'])) {
 			$sql 	.= ' LIMIT '.$this->limit['count'];
 		} elseif (isset($this->limit['count']) && isset($this->limit['start'])) {
 			$sql 	.= ' LIMIT '.$this->limit['start'].', '.$this->limit['count'];	
 		}		
+		
 		return $sql;
 	}
 }

@@ -15,7 +15,7 @@ class AjdeExtension_Filter_Link extends AjdeExtension_Filter
 		$this->_value = $value; 
 	}
 	
-	public function prepare()
+	public function prepare(AjdeExtension_Db_Table $table = null)
 	{
 		$sql  = $this->_meta['table'] . ' ON '; 
 		$sql .= (string) $this->_collection->getTable() . '.' . $this->_collection->getTable()->getPK();
@@ -28,8 +28,8 @@ class AjdeExtension_Filter_Link extends AjdeExtension_Filter
 		 
 		return array(
 			'join' => array(
-				'sql' => $sql,
-				'value' => array(spl_object_hash($this) => $this->_value)
+				'arguments' => array($sql),
+				'values' => array(spl_object_hash($this) => $this->_value)
 			)
 		);
 	}

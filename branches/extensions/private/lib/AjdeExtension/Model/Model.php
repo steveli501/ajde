@@ -75,11 +75,14 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	
 	public function __sleep()
 	{
-		return array('_autoloadParents', '_data');
+		return array('_autoloadParents', '_displayField', '_data');
 	}
 
 	public function __wakeup()
 	{
+		$tableName = strtolower(str_replace('Model', '', get_class($this)));
+		$this->_connection = AjdeExtension_Db::getInstance()->getConnection();	
+		$this->_table = AjdeExtension_Db::getInstance()->getTable($tableName);	
 	}
 	
 	public function getPK()
@@ -114,9 +117,8 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	
 	public function populate($array)
 	{
-		$this->reset();
 		// TODO: parse array and typecast to match fields settings
-		$this->_data = $array;
+		$this->_data = array_merge($this->_data, $array);
 	}
 	
 	public function getValues() {
@@ -131,26 +133,93 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 		return $return;
 	}
 	
+	// Load model values	
 	public function loadByPK($value)
 	{
 		$pk = $this->getTable()->getPK();
-		$sql = 'SELECT * FROM '.$this->_table.' WHERE '.$pk.' = ? LIMIT 1';
+		return $this->loadByFields(array($pk => $value));
+	}
+	
+	public function loadByField($field, $value)
+	{
+		return $this->loadByFields(array($field => $value));
+	}
+	
+	public function loadByFields($array)
+	{
+		$sqlWhere = array();
+		$values = array();
+		foreach($array as $field => $value) {
+			$sqlWhere[] = $field . ' = ?';
+			$values[] = $value;
+		} 
+		$sql = 'SELECT * FROM '.$this->_table.' WHERE ' . implode(' AND ', $sqlWhere) . ' LIMIT 1';
+		return $this->_load($sql, $values);
+	}
+	
+	protected function _load($sql, $values)
+	{
 		$statement = $this->getConnection()->prepare($sql);
-		$statement->execute(array($value));
-		$result = $statement->fetch(PDO::FETCH_ASSOC);
-		if (!$result) {
+		$statement->execute($values);
+		$result = $statement->fetch(PDO::FETCH_ASSOC);	
+		if ($result === false || empty($result)) {
 			return false;
+		} else {
+			$this->reset();
+			$this->populate($result);
+			if ($this->_autoloadParents === true) {
+				$this->loadParents();
+			}
+			return true;
 		}
-		$this->populate($result);
-		if ($this->_autoloadParents === true) {
-			$this->loadParents();
-		}
-		return $result;
 	}
 	
 	public function save()
 	{
-		return false;
+		$pk = $this->getTable()->getPK();
+
+		$sqlSet = array();
+		$values = array();
+		
+		foreach($this->getTable()->getFieldNames() as $field) {
+			if ($this->has($field)) {
+				$sqlSet[] = $field . ' = ?';
+				$values[] = $this->get($field);
+			}
+		} 
+		$values[] = $this->getPK();
+		$sql = 'UPDATE ' . $this->_table . ' SET ' . implode(', ', $sqlSet) . ' WHERE ' . $pk . ' = ?';
+		$statement = $this->getConnection()->prepare($sql);
+		return $statement->execute($values);
+	}
+	
+	public function insert($pkValue = null)
+	{
+		$pk = $this->getTable()->getPK();
+		if (isset($pkValue)) {
+			$this->set($pk, $pkValue);
+		} else {
+			$this->set($pk, null);
+		}
+		$sqlFields = array();
+		$sqlValues = array();
+		$values = array();
+		foreach($this->getTable()->getFieldNames() as $field) {
+			if ($this->has($field)) {
+				$sqlFields[] = $field;
+				$sqlValues[] = '?';
+				$values[] = $this->get($field);
+			} else {
+				$this->set($field, null);
+			}
+		} 
+		$sql = 'INSERT INTO ' . $this->_table . ' (' . implode(', ', $sqlFields) . ') VALUES (' . implode(', ', $sqlValues) . ')';
+		$statement = $this->getConnection()->prepare($sql);
+		$return = $statement->execute($values);
+		if (!isset($pkValue)) {
+			$this->set($pk, $this->getConnection()->lastInsertId());
+		}
+		return $return;
 	}
 	
 	public function delete()

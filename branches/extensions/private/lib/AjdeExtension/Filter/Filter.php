@@ -6,5 +6,5 @@ abstract class AjdeExtension_Filter extends Ajde_Object_Standard
 	const FILTER_NOT 	= ' != ';
 	const FILTER_LIKE 	= ' LIKE ';
 	
-	abstract public function prepare();
+	abstract public function prepare(AjdeExtension_Db_Table $table = null);
 }
