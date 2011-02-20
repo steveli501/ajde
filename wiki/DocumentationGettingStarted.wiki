@@ -1,0 +1,4 @@
+#summary Getting started guide
+#labels Documentation
+
+= Getting started with Ajde =
