@@ -1,4 +1,6 @@
+#summary Template file _FILENAME_ not found
 #labels Exception,NeedsUpdate
+
 = Exception 90010 =
 == Template file _FILENAME_ not found ==
 
