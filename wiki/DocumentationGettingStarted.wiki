@@ -2,3 +2,5 @@
 #labels Documentation
 
 = Getting started with Ajde =
+
+Grab a copy of the framework from our [http://code.google.com/p/ajde/downloads/list download page] or check-out the latest version from [http://code.google.com/p/ajde/source/checkout our svn repository].
