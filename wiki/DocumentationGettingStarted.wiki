@@ -3,4 +3,74 @@
 
 = Getting started with Ajde =
 
+<wiki:toc max_depth="2" />
+
+== Download ==
+
 Grab a copy of the framework from our [http://code.google.com/p/ajde/downloads/list download page] or check-out the latest version from [http://code.google.com/p/ajde/source/checkout our svn repository].
+
+== Install ==
+
+You need the following to run Ajde:
+
+ * Apache webserver
+ * PHP, version 5.2.3 or newer
+ * MySQL (optional)
+
+You might want to enable eAccelerator or APC in PHP to make Ajde even more faster, and mod_deflate and mod_expires in Apache. Those are not required though.
+
+_Note: Accessing Ajde from a non-webroot directory may cause problems (see [http://code.google.com/p/ajde/issues/detail?id=2])_
+
+== 'Hello world' ==
+
+A fresh install should look something like this:
+
+[http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/freshinstall.png]
+
+The code structure is straight-forward. All application logic and module specific assets (css/js) are kept within the {{{private/application/}}} directory, while publicly accessible assets such as images are stored in the {{{public/}}} directory. Let's have a closer look at the contents of the former directory.
+
+=== Change some basic Config parameters ===
+
+In the {{{private/application/config/}}} folder head over to the {{{Config_Base.php}}} file. All your application configuration is taking place here.
+
+Let's change the name of our application for now:
+
+{{{
+public $sitename = "Ajde Samples";
+}}}
+
+=== Create a new module ===
+
+We want our new application to guide us through the various aspects of the framework, and for this purpose we will be creating a new module which holds different pages (actions) which can be called through their own unique URL's (we'll come to that later in more detail).
+
+Create a new folder {{{samples/}}} in the {{{private/application/modules/}}} directory. Each module must have one controller, which we'll have to call {{{SamplesController.php}}}.
+
+_Note: Make sure to always follow this naming convention. This controller must at least contain the controller class and one or more actions._
+
+Each action can be handled differently for different requested formats (i.e. *JSON* for Ajax-requests, *XML* for REST services and of course the 'ordinary' *HTML* format). For now, we'll limit ourselves to one function, which handles all those formats:
+
+{{{
+<?php 
+
+class SamplesController extends Ajde_Controller
+{	
+	function helloworldDefault()
+	{
+		return '<h2>Hello world!</h2>';
+	}
+}
+}}}
+
+Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to get this page as JSON).
+
+[http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld1.png]
+
+== Add a template and some styling goodness ==
+
+=== Template ===
+
+Now, if you look at the source of the page, you'll see some stylesheets and javascripts already included in the page. They're not directly linked, but pre-processed through internal Ajde components, in order to make it possible to combine, compress and cache those assets in a live environment.
+
+Let's add some css to our newly created page. Create 
+
+
