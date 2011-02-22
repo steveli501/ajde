@@ -61,6 +61,8 @@ class SamplesController extends Ajde_Controller
 }
 }}}
 
+_Note: As of r196 you can call this function simply {{{helloworld()}}}._
+
 Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to grab this page as JSON).
 
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld1.png]
