@@ -61,7 +61,7 @@ class SamplesController extends Ajde_Controller
 }
 }}}
 
-Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to get this page as JSON).
+Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to grab this page as JSON).
 
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld1.png]
 
@@ -69,8 +69,57 @@ Now point your browser to: http://yourserver/samples/helloworld.html (If that wa
 
 === Template ===
 
-Now, if you look at the source of the page, you'll see some stylesheets and javascripts already included in the page. They're not directly linked, but pre-processed through internal Ajde components, in order to make it possible to combine, compress and cache those assets in a live environment.
+It's a good habit to seperate application logic and presentation so let's create a template. Create a subfolder {{{template/}}} in the samples module directory and a template named {{{helloworld.phtml}}}. 
 
-Let's add some css to our newly created page. Create 
+The template contains only this for now:
 
+{{{
+<h2>Hello world!</h2>
+}}}
 
+In order to display this template, a minor change has to be made to the controller:
+
+{{{
+function helloworldDefault()
+{
+	return $this->render();
+}
+}}}
+
+This will look for a template with the same name as the action (helloworld) so it's important to stick to the naming convention here as well.
+
+=== Assets ===
+
+Now, if you look at the source of the page, you'll see some stylesheets and javascripts already included in the page. They belong to the default layout and are not directly linked, but pre-processed through internal Ajde components, in order to make it possible to combine, compress and cache those assets in a live environment.
+
+Let's add some css to our newly created page. Create a subfolder {{{res/css/}}} and {{{res/js/}}} in the samples module directory and a stylesheet named {{{helloworld.css}}} in the css directory and a javascript file named {{{helloworld.js}}} in the js directory. 
+
+Add some styles to the stylesheet:
+
+{{{
+body { background-color: pink; }
+}}}
+
+It's still a little boring, let's add some rainbows and unicorns! Change the template to:
+
+{{{
+<?php
+	$this->requireJsLibrary('jquery', '1.4');
+	$this->requireJsRemote('http://www.cornify.com/js/cornify.js');	
+?>
+<h2>Hello world!</h2>
+}}}
+
+And add this to the javascript file: 
+
+{{{
+$(document).ready(function() {
+	setInterval(function() {
+		cornify_add();
+	}, 1000);
+});
+}}}
+
+Your _Hello world_ experience will never be the same!
+
+[http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld2.png]
