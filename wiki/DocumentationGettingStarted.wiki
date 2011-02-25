@@ -21,6 +21,8 @@ You might want to enable eAccelerator or APC in PHP to make Ajde even more faste
 
 _Note: Accessing Ajde from a non-webroot directory may cause problems (see [http://code.google.com/p/ajde/issues/detail?id=2])_
 
+→ More about [DocumentationInstallationRequirements installation & requirements]
+
 == 'Hello world' ==
 
 A fresh install should look something like this:
@@ -38,6 +40,8 @@ Let's change the name of our application for now:
 {{{
 public $sitename = "Ajde Samples";
 }}}
+
+→ Working with the [DocumentationConfig application configuration]
 
 === Create a new module ===
 
@@ -62,6 +66,8 @@ class SamplesController extends Ajde_Controller
 }}}
 
 _Note: As of r196 you can call this function simply {{{helloworld()}}}._
+
+→ Working with [DocumentationController modules]
 
 Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to grab this page as JSON).
 
@@ -90,7 +96,9 @@ function helloworldDefault()
 
 This will look for a template with the same name as the action (helloworld) so it's important to stick to the naming convention here as well.
 
-=== Assets ===
+→ Working with [DocumentationTemplate templates]
+
+=== Resources===
 
 Now, if you look at the source of the page, you'll see some stylesheets and javascripts already included in the page. They belong to the default layout and are not directly linked, but pre-processed through internal Ajde components, in order to make it possible to combine, compress and cache those assets in a live environment.
 
@@ -121,6 +129,8 @@ $(document).ready(function() {
 	}, 1000);
 });
 }}}
+
+→ Working with [DocumentationResources resources]
 
 Your _Hello world_ experience will never be the same!
 
