@@ -5,6 +5,8 @@ class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 	protected $_connection = null;
 	protected $_dbname = null;
 	
+	private $_cache = array();
+	
 	public function __construct($dsn, $user, $password)
 	{
 		$dsnString = 'mysql:';
@@ -33,11 +35,23 @@ class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 		return $this->_connection;
 	}
 	
+	private function getCache($sql)
+	{
+		return array_key_exists($sql, $this->_cache) ? $this->_cache[$sql] : false;
+	}
+	
+	private function saveCache($sql, $result)
+	{
+		$this->_cache[$sql] = $result;
+		return $result;
+	}
+	
 	public function getTableStructure($tableName)
 	{
-		//$statement = $this->getConnection()->query('DESCRIBE '.$tableName);
-		$statement = $this->getConnection()->query('SHOW FULL COLUMNS FROM '.$tableName);
-		return $statement->fetchAll();
+		$sql = 'SHOW FULL COLUMNS FROM '.$tableName;
+		if ($cache = $this->getCache($sql)) { return $cache; }
+		$statement = $this->getConnection()->query($sql);
+		return $this->saveCache($sql, $statement->fetchAll()); 
 	}
 	
 	public function getForeignKey($childTable, $parentTable) {
@@ -47,8 +61,9 @@ class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 			$this->getConnection()->quote($childTable),
 			$this->getConnection()->quote($this->_dbname)
 		);
+		if ($cache = $this->getCache($sql)) { return $cache; }
 		$statement = $this->getConnection()->query($sql);
-		return $statement->fetch();
+		return $this->saveCache($sql, $statement->fetch()); 
 	}
 	
 	public function getParents($childTable) {
@@ -57,8 +72,9 @@ class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
 			$this->getConnection()->quote($childTable),
 			$this->getConnection()->quote($this->_dbname)
 		);
+		if ($cache = $this->getCache($sql)) { return $cache; }
 		$statement = $this->getConnection()->query($sql);
-		return $statement->fetchAll();
+		return $this->saveCache($sql, $statement->fetchAll()); 
 	}
 	
 }
