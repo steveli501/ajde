@@ -1,0 +1,7 @@
+#summary More help with installation & server / client requirements
+
+= Installation & Requirements =
+
+<wiki:toc max_depth="2" />
+
+== Introduction ==
