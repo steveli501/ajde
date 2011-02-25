@@ -1,0 +1,28 @@
+#summary Starting point for the documentation
+#labels Documentation
+
+= Documentation =
+
+== Guides ==
+
+[DocumentationGettingStarted Getting started]
+
+=== Ajde Core ===
+
+ * [DocumentationInstallationRequirements Installation & Requirements]
+ * [DocumentationConfig Application configuration]
+ * [DocumentationController Controller]
+ * [DocumentationRouting Routing]
+ * [DocumentationTemplate Templates]
+ * [DocumentationResources Resources]
+
+=== Ajde extensions ===
+
+ * [DocumentationDb Database abstraction]
+ * [DocumentationModelCollection Model & Collections]
+ * [DocumentationCrud CRUD]
+
+== API ==
+
+   * [APICore Core]
+   * [APIExtensions Extensions]
