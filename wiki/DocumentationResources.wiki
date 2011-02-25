@@ -1,0 +1,8 @@
+#summary Working with resources
+#labels Documentation
+
+= Resources =
+
+<wiki:toc max_depth="2" />
+
+== Introduction ==
