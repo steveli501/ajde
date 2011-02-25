@@ -1,0 +1,8 @@
+#summary Working with the controller
+#labels Documentation
+
+= The Controller =
+
+<wiki:toc max_depth="2" />
+
+== Introduction ==
