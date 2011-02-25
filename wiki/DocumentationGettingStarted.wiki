@@ -45,7 +45,7 @@ public $sitename = "Ajde Samples";
 
 === Create a new module ===
 
-We want our new application to guide us through the various aspects of the framework, and for this purpose we will be creating a new module which holds different pages (actions) which can be called through their own unique URL's (we'll come to that later in more detail).
+We want our new application to guide us through the various aspects of the framework, and for this purpose we will be creating a new module which holds different pages (actions) which can be called through their own unique URL's ([DocumentationRouting more on this]).
 
 Create a new folder {{{samples/}}} in the {{{private/application/modules/}}} directory. Each module must have one controller, which we'll have to call {{{SamplesController.php}}}.
 
