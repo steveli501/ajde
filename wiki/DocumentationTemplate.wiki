@@ -1,0 +1,8 @@
+#summary Working with templates
+#labels Documentation
+
+= Templates =
+
+<wiki:toc max_depth="2" />
+
+== Introduction ==
