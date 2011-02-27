@@ -1,6 +1,6 @@
 <?php
 
-class AjdeX_Collection extends Ajde_Object_Standard implements Iterator {
+class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countable {
 	
 	/**
 	 * @var string
@@ -100,6 +100,14 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator {
     public function next() {
         $this->_position++;
     }
+	
+	public function count() 
+	{
+		if (!isset($this->_items)) {
+    		$this->load();
+    	}
+		return count($this->_items);
+	}
 	
 	public function find($field, $value) {
 		foreach($this as $item) {
