@@ -1,6 +1,6 @@
 <?php
 
-class AjdeExtension_Db_Adapter_MySql extends AjdeExtension_Db_Adapter_Abstract
+class AjdeX_Db_Adapter_MySql extends AjdeX_Db_Adapter_Abstract
 {
 	protected $_connection = null;
 	protected $_dbname = null;

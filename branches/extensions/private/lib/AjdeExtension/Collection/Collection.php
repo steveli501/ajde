@@ -1,6 +1,6 @@
 <?php
 
-class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator {
+class AjdeX_Collection extends Ajde_Object_Standard implements Iterator {
 	
 	/**
 	 * @var string
@@ -18,14 +18,14 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	protected $_statement;
 	
 	/**
-	 * @var AjdeExtension_Query
+	 * @var AjdeX_Query
 	 */
 	protected $_query;
 	
 	protected $_link = array();
 	
 	/**
-	 * @var AjdeExtension_Db_Table
+	 * @var AjdeX_Db_Table
 	 */
 	protected $_table;
 	
@@ -39,8 +39,8 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	public static function register(Ajde_Controller $controller)
 	{
 		// Extend Ajde_Controller
-		if (!Ajde_Event::has('Ajde_Controller', 'call', 'AjdeExtension_Collection::extendController')) {
-			Ajde_Event::register('Ajde_Controller', 'call', 'AjdeExtension_Collection::extendController');
+		if (!Ajde_Event::has('Ajde_Controller', 'call', 'AjdeX_Collection::extendController')) {
+			Ajde_Event::register('Ajde_Controller', 'call', 'AjdeX_Collection::extendController');
 		}
 		// Extend autoloader
 		Ajde_Core_Autoloader::addDir(MODULE_DIR.$controller->getModule().'/model/');
@@ -67,10 +67,10 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	public function __construct()
 	{
 		$this->_modelName = str_replace('Collection', '', get_class($this)) . 'Model';		
-		$this->_connection = AjdeExtension_Db::getInstance()->getConnection();
+		$this->_connection = AjdeX_Db::getInstance()->getConnection();
 		$tableName = strtolower(str_replace('Collection', '', get_class($this)));	
-		$this->_table = AjdeExtension_Db::getInstance()->getTable($tableName);
-		$this->_query = new AjdeExtension_Query();
+		$this->_table = AjdeX_Db::getInstance()->getTable($tableName);
+		$this->_query = new AjdeX_Query();
 	}
 	
 	public function __sleep()
@@ -115,7 +115,7 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
     }
 	
 	/**
-	 * @return AjdeExtension_Db_PDO
+	 * @return AjdeX_Db_PDO
 	 */
 	public function getConnection()
 	{
@@ -123,7 +123,7 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	}
 	
 	/**
-	 * @return AjdeExtension_Db_Table
+	 * @return AjdeX_Db_Table
 	 */
 	public function getTable()
 	{
@@ -139,7 +139,7 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	}
 	
 	/**
-	 * @return AjdeExtension_Query
+	 * @return AjdeX_Query
 	 */
 	public function getQuery()
 	{
@@ -156,19 +156,19 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	{
 		if (!array_key_exists($modelName, $this->_link)) {
 			// TODO:
-			throw new AjdeExtension_Exception('Link not defined...');
+			throw new AjdeX_Exception('Link not defined...');
 		}
-		return new AjdeExtension_Filter_Link($this, $modelName, $this->_link[$modelName], $value);
+		return new AjdeX_Filter_Link($this, $modelName, $this->_link[$modelName], $value);
 	}
 	
 	// Chainable collection methods
-	public function addFilter(AjdeExtension_Filter $filter)
+	public function addFilter(AjdeX_Filter $filter)
 	{
 		$this->_filters[] = $filter;
 		return $this;		
 	}
 	
-	public function orderBy($field, $direction = AjdeExtension_Query::ORDER_ASC)
+	public function orderBy($field, $direction = AjdeX_Query::ORDER_ASC)
 	{
 		$this->getQuery()->addOrderBy($field, $direction);
 		return $this;
@@ -227,7 +227,7 @@ class AjdeExtension_Collection extends Ajde_Object_Standard implements Iterator 
 	// Load the collection
 	public function load()
 	{
-		if (!$this->getConnection() instanceof AjdeExtension_Db_PDO) {
+		if (!$this->getConnection() instanceof AjdeX_Db_PDO) {
 			// return false;
 		}
 		$this->_statement = $this->getConnection()->prepare($this->getSql());

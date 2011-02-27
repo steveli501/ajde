@@ -1,12 +1,12 @@
 <?php
 
-class AjdeExtension_Db extends Ajde_Object_Singleton
+class AjdeX_Db extends Ajde_Object_Singleton
 {
 	protected $_adapter = null;
 	protected $_tables = null;
 	
 	/**
-	 * @return AjdeExtension_Db
+	 * @return AjdeX_Db
 	 */
 	public static function getInstance()
 	{
@@ -16,7 +16,7 @@ class AjdeExtension_Db extends Ajde_Object_Singleton
 		
 	public function __construct()
 	{
-		$adapterName = 'AjdeExtension_Db_Adapter_' . ucfirst(Config::get('dbAdapter'));
+		$adapterName = 'AjdeX_Db_Adapter_' . ucfirst(Config::get('dbAdapter'));
 		$dsn = Config::get('dbDsn');
 		$user = Config::get('dbUser');
 		$password = Config::get('dbPassword');
@@ -24,7 +24,7 @@ class AjdeExtension_Db extends Ajde_Object_Singleton
 	}
 	
 	/**
-	 * @return AjdeExtension_Db_Adapter_Abstract
+	 * @return AjdeX_Db_Adapter_Abstract
 	 */
 	public function getAdapter()
 	{
@@ -32,7 +32,7 @@ class AjdeExtension_Db extends Ajde_Object_Singleton
 	}
 	
 	/**
-	 * @return AjdeExtension_Db_PDO
+	 * @return AjdeX_Db_PDO
 	 */
 	function getConnection()
 	{
@@ -42,7 +42,7 @@ class AjdeExtension_Db extends Ajde_Object_Singleton
 	function getTable($tableName)
 	{
 		if (!isset($this->_tables[$tableName])) {
-			$this->_tables[$tableName] = new AjdeExtension_Db_Table($tableName);
+			$this->_tables[$tableName] = new AjdeX_Db_Table($tableName);
 		}
 		return $this->_tables[$tableName];
 	}

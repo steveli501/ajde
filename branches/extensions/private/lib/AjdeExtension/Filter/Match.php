@@ -1,13 +1,13 @@
 <?php
 
-class AjdeExtension_Filter_Match extends AjdeExtension_Filter
+class AjdeX_Filter_Match extends AjdeX_Filter
 {	
 	protected $_fields;
 	protected $_against;
 	protected $_operator;
 	protected $_table;
 	
-	public function __construct($fields, $against, $operator = AjdeExtension_Query::OP_AND, $table = null)
+	public function __construct($fields, $against, $operator = AjdeX_Query::OP_AND, $table = null)
 	{
 		$this->_fields = $fields;
 		$this->_against = $against;
@@ -15,7 +15,7 @@ class AjdeExtension_Filter_Match extends AjdeExtension_Filter
 		$this->_table = $table;
 	}
 	
-	public function prepare(AjdeExtension_Db_Table $table = null)
+	public function prepare(AjdeX_Db_Table $table = null)
 	{
 		$sql = 'MATCH (' . implode(', ', $this->_fields) . ') AGAINST (:' . spl_object_hash($this) . ')';
 		return array(

@@ -8,19 +8,19 @@
 * Extends PDO and logs all queries that are executed and how long 
 * they take, including queries issued via prepared statements 
 */  
-class AjdeExtension_Db_PDO extends PDO
+class AjdeX_Db_PDO extends PDO
 {  
     public static $log = array();  
   
     public function __construct($dsn, $username = null, $password = null, $options = array()) {
     	$options = $options + array(
-    		PDO::ATTR_STATEMENT_CLASS => array('AjdeExtension_Db_PDOStatement', array($this))
+    		PDO::ATTR_STATEMENT_CLASS => array('AjdeX_Db_PDOStatement', array($this))
 		);
         parent::__construct($dsn, $username, $password, $options);  
     }  
   
     public function query($query) {
-    	//$cache = AjdeExtension_Db_Cache::getInstance();
+    	//$cache = AjdeX_Db_Cache::getInstance();
 		$log = array('query' => $query);
 		$start = microtime(true);
 		//if (!$cache->has($query)) {

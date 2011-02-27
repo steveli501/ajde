@@ -8,7 +8,7 @@
 * executed, and the time it took to run 
 * @see LoggedPDO 
 */  
-class AjdeExtension_Db_PDOStatement extends PDOStatement {  
+class AjdeX_Db_PDOStatement extends PDOStatement {  
     
 	/**
 	 * @see http://www.php.net/manual/en/book.pdo.php#73568
@@ -25,7 +25,7 @@ class AjdeExtension_Db_PDOStatement extends PDOStatement {
     * @return PDO result set 
     */  
     public function execute($input_parameters = array()) {
-    	//$cache = AjdeExtension_Db_Cache::getInstance();
+    	//$cache = AjdeX_Db_Cache::getInstance();
 		$log = array('query' => '[PS] ' . $this->queryString);
 		$start = microtime(true);
 		//if (!$cache->has($this->queryString . serialize($input_parameters))) {  
@@ -38,7 +38,7 @@ class AjdeExtension_Db_PDOStatement extends PDOStatement {
 		//}  
         $time = microtime(true) - $start;  
 		$log['time'] = round($time * 1000, 0);
-        AjdeExtension_Db_PDO::$log[] = $log;
+        AjdeX_Db_PDO::$log[] = $log;
         return $result;  
     }
 }  

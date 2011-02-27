@@ -1,6 +1,6 @@
 <?php
 
-class AjdeExtension_Filter_LeftJoin extends AjdeExtension_Filter
+class AjdeX_Filter_LeftJoin extends AjdeX_Filter
 {	
 	protected $_table;
 	protected $_ownerField;
@@ -13,12 +13,12 @@ class AjdeExtension_Filter_LeftJoin extends AjdeExtension_Filter
 		$this->_childField = $childField;
 	}
 	
-	public function prepare(AjdeExtension_Db_Table $table = null)
+	public function prepare(AjdeX_Db_Table $table = null)
 	{
 		$sql = $this->_table . ' ON ' . $this->_ownerField . ' = ' . $this->_childField;
 		return array(
 			'join' => array(
-				'arguments' => array($sql, AjdeExtension_Query::JOIN_LEFT),
+				'arguments' => array($sql, AjdeX_Query::JOIN_LEFT),
 				'values' => array()
 			)
 		);

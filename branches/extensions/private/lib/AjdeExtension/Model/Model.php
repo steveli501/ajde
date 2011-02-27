@@ -1,6 +1,6 @@
 <?php
 
-class AjdeExtension_Model extends Ajde_Object_Standard
+class AjdeX_Model extends Ajde_Object_Standard
 {	
 	protected $_connection;
 	protected $_table;
@@ -11,8 +11,8 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	public static function register($controller)
 	{
 		// Extend Ajde_Controller
-		if (!Ajde_Event::has('Ajde_Controller', 'call', 'AjdeExtension_Model::extendController')) {
-			Ajde_Event::register('Ajde_Controller', 'call', 'AjdeExtension_Model::extendController');
+		if (!Ajde_Event::has('Ajde_Controller', 'call', 'AjdeX_Model::extendController')) {
+			Ajde_Event::register('Ajde_Controller', 'call', 'AjdeX_Model::extendController');
 		}
 		// Extend autoloader
 		if ($controller instanceof Ajde_Controller) {
@@ -53,8 +53,8 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	public function __construct()
 	{
 		$tableName = strtolower(str_replace('Model', '', get_class($this)));
-		$this->_connection = AjdeExtension_Db::getInstance()->getConnection();	
-		$this->_table = AjdeExtension_Db::getInstance()->getTable($tableName);		
+		$this->_connection = AjdeX_Db::getInstance()->getConnection();	
+		$this->_table = AjdeX_Db::getInstance()->getTable($tableName);		
 	}
 	
 	public function __set($name, $value) {
@@ -81,8 +81,8 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	public function __wakeup()
 	{
 		$tableName = strtolower(str_replace('Model', '', get_class($this)));
-		$this->_connection = AjdeExtension_Db::getInstance()->getConnection();	
-		$this->_table = AjdeExtension_Db::getInstance()->getTable($tableName);	
+		$this->_connection = AjdeX_Db::getInstance()->getConnection();	
+		$this->_table = AjdeX_Db::getInstance()->getTable($tableName);	
 	}
 	
 	public function getPK()
@@ -100,7 +100,7 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	}
 	
 	/**
-	 * @return AjdeExtension_Db
+	 * @return AjdeX_Db
 	 */
 	public function getConnection()
 	{
@@ -108,7 +108,7 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	}
 	
 	/**
-	 * @return AjdeExtension_Db_Table
+	 * @return AjdeX_Db_Table
 	 */
 	public function getTable()
 	{
@@ -124,7 +124,7 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	public function getValues() {
 		$return = array();
 		foreach($this->_data as $k => $v) {
-			if ($v instanceof AjdeExtension_Model) {
+			if ($v instanceof AjdeX_Model) {
 				$return[$k] = $v->getValues();
 			} else {
 				$return[$k] = $v;
@@ -247,12 +247,12 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 	{
 		if (empty($this->_data)) {
 			// TODO:
-			throw new AjdeExtension_Exception('Model not loaded when loading parent');
+			throw new AjdeX_Exception('Model not loaded when loading parent');
 		}
-		if ($parent instanceof AjdeExtension_Model) {
+		if ($parent instanceof AjdeX_Model) {
 			$parent = $parent->getTable();
-		} elseif (!$parent instanceof AjdeExtension_Db_Table) {
-			$parent = new AjdeExtension_Db_Table($parent);
+		} elseif (!$parent instanceof AjdeX_Db_Table) {
+			$parent = new AjdeX_Db_Table($parent);
 		}
 		$fk = $this->getTable()->getFK($parent);
 		if (!$this->has($fk['field'])) {
@@ -263,7 +263,7 @@ class AjdeExtension_Model extends Ajde_Object_Standard
 		$parentModel = new $parentModelName();
 		if ($parentModel->getTable()->getPK() != $fk['parent_field']) {
 			// TODO:
-			throw new AjdeExtension_Exception('Constraints on non primary key fields are currently not supported');
+			throw new AjdeX_Exception('Constraints on non primary key fields are currently not supported');
 		}
 		$parentModel->loadByPK($this->get($fk['field']));
 		$this->set((string) $parent, $parentModel);

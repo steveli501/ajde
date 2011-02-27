@@ -1,6 +1,6 @@
 <?php
 
-abstract class AjdeExtension_Db_Adapter_Abstract
+abstract class AjdeX_Db_Adapter_Abstract
 {	
 	public function __construct($dsn, $user, $password, $options)
 	{
@@ -10,7 +10,7 @@ abstract class AjdeExtension_Db_Adapter_Abstract
 		    PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION 	// Exceptions, please);
 		);
 		try {
-			$connection = new AjdeExtension_Db_PDO($dsn, $user, $password, $options);
+			$connection = new AjdeX_Db_PDO($dsn, $user, $password, $options);
 		} catch (Exception $e) {
 			// Disable trace on this exception to prevent exposure of sensitive
 			// data

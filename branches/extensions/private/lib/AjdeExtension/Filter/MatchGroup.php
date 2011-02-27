@@ -1,21 +1,21 @@
 <?php
 
-class AjdeExtension_Filter_MatchGroup extends AjdeExtension_Filter
+class AjdeX_Filter_MatchGroup extends AjdeX_Filter
 {		
 	protected $_filters;
 	protected $_operator;
 	
-	public function __construct($operator = AjdeExtension_Query::OP_AND)
+	public function __construct($operator = AjdeX_Query::OP_AND)
 	{
 		$this->_operator = $operator;
 	}
 	
-	public function addFilter(AjdeExtension_Filter_Match $filter)
+	public function addFilter(AjdeX_Filter_Match $filter)
 	{
 		$this->_filters[] = $filter;
 	}
 	
-	public function prepare(AjdeExtension_Db_Table $table = null)
+	public function prepare(AjdeX_Db_Table $table = null)
 	{
 		$sqlWhere = '';
 		$select = array();

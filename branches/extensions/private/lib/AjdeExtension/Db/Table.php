@@ -1,6 +1,6 @@
 <?php
 
-class AjdeExtension_Db_Table extends Ajde_Object_Standard
+class AjdeX_Db_Table extends Ajde_Object_Standard
 {
 	protected $_connection;
 	protected $_name;	
@@ -9,7 +9,7 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 	public function __construct($name)
 	{
 		$this->_name = $name;
-		$this->_connection = AjdeExtension_Db::getInstance()->getConnection();
+		$this->_connection = AjdeX_Db::getInstance()->getConnection();
 		$this->initTableStructure();
 	}
 	
@@ -23,7 +23,7 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 	
 	public function initTableStructure() 
 	{
-		$structure = AjdeExtension_Db::getInstance()->getAdapter()->getTableStructure($this->_name);
+		$structure = AjdeX_Db::getInstance()->getAdapter()->getTableStructure($this->_name);
 		foreach($structure as $field) {
 			$fieldName = $field['Field'];
 			$fieldType = $field['Type'];
@@ -55,13 +55,13 @@ class AjdeExtension_Db_Table extends Ajde_Object_Standard
 		return false;
 	}
 	
-	public function getFK(AjdeExtension_Db_Table $parent) {
-		$fk = AjdeExtension_Db::getInstance()->getAdapter()->getForeignKey((string) $this, (string) $parent);
+	public function getFK(AjdeX_Db_Table $parent) {
+		$fk = AjdeX_Db::getInstance()->getAdapter()->getForeignKey((string) $this, (string) $parent);
 		return array('field' => $fk['COLUMN_NAME'], 'parent_field' => $fk['REFERENCED_COLUMN_NAME']);		
 	}
 	
 	public function getParents() {
-		$parents = AjdeExtension_Db::getInstance()->getAdapter()->getParents((string) $this);
+		$parents = AjdeX_Db::getInstance()->getAdapter()->getParents((string) $this);
 		$parentTables = array();
 		foreach($parents as $parent) {
 			if (isset($parent['REFERENCED_TABLE_NAME'])) {

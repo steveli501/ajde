@@ -1,5 +1,5 @@
 <?php
 
-class AjdeExtension_Exception extends Ajde_Exception
+class AjdeX_Exception extends Ajde_Exception
 {	
 }

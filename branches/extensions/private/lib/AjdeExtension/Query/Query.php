@@ -1,6 +1,6 @@
 <?php
 
-class AjdeExtension_Query extends Ajde_Object_Standard
+class AjdeX_Query extends Ajde_Object_Standard
 {
 	const ORDER_ASC 	= 'ASC';
 	const ORDER_DESC 	= 'DESC';
@@ -53,7 +53,7 @@ class AjdeExtension_Query extends Ajde_Object_Standard
 		$direction = strtoupper($direction);
 		if (!in_array($direction, array(self::ORDER_ASC, self::ORDER_DESC))) {
 			// TODO: 
-			throw new AjdeExtension_Exception('Collection ordering direction "'.$direction.'" not valid');
+			throw new AjdeX_Exception('Collection ordering direction "'.$direction.'" not valid');
 		}
 		$this->orderBy[] = array('field' => $field, 'direction' => $direction);
 	}
@@ -77,7 +77,7 @@ class AjdeExtension_Query extends Ajde_Object_Standard
 		// FROM
 		if (empty($this->from)) {
 			// TODO:
-			throw new AjdeExtension_Exception();
+			throw new AjdeX_Exception();
 		} else {
 			$sql .= ' FROM ' . implode(', ', $this->from);
 		}

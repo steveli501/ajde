@@ -1,6 +1,6 @@
 <?php
 
-class AjdeExtension_Filter_Link extends AjdeExtension_Filter
+class AjdeX_Filter_Link extends AjdeX_Filter
 {
 	protected $_collection;	
 	protected $_link;
@@ -15,7 +15,7 @@ class AjdeExtension_Filter_Link extends AjdeExtension_Filter
 		$this->_value = $value; 
 	}
 	
-	public function prepare(AjdeExtension_Db_Table $table = null)
+	public function prepare(AjdeX_Db_Table $table = null)
 	{
 		$sql  = $this->_meta['table'] . ' ON '; 
 		$sql .= (string) $this->_collection->getTable() . '.' . $this->_collection->getTable()->getPK();

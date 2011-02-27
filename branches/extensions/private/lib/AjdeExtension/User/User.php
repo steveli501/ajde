@@ -1,6 +1,6 @@
 <?php
 
-class AjdeExtension_User extends AjdeExtension_Model
+class AjdeX_User extends AjdeX_Model
 {	
 	
 }

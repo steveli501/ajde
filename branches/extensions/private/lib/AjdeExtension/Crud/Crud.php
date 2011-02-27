@@ -1,12 +1,12 @@
 <?php
 
-class AjdeExtension_Crud extends Ajde_Object_Standard
+class AjdeX_Crud extends Ajde_Object_Standard
 {
 	protected $_model = null;
 	protected $_collection = null;
 	
 	public function __construct($model) {
-		if ($model instanceof AjdeExtension_Model) {
+		if ($model instanceof AjdeX_Model) {
 			$this->_model = $model;
 		} else {
 			$modelName = ucfirst($model) . 'Model';
@@ -15,7 +15,7 @@ class AjdeExtension_Crud extends Ajde_Object_Standard
 	}
 	
 	/**
-	 * @return AjdeExtension_Collection
+	 * @return AjdeX_Collection
 	 */
 	public function getCollection()
 	{
@@ -27,7 +27,7 @@ class AjdeExtension_Crud extends Ajde_Object_Standard
 	}
 	
 	/**
-	 * @return AjdeExtension_Model
+	 * @return AjdeX_Model
 	 */
 	public function getModel()
 	{

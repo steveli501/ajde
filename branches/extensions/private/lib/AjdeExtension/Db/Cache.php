@@ -1,11 +1,11 @@
 <?php
 
-class AjdeExtension_Db_Cache extends Ajde_Object_Singleton
+class AjdeX_Db_Cache extends Ajde_Object_Singleton
 {
 	protected $_cache = null;
 	
 	/**
-	 * @return AjdeExtension_Db_Cache
+	 * @return AjdeX_Db_Cache
 	 */
 	public static function getInstance()
 	{
