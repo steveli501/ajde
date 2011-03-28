@@ -19,7 +19,7 @@ You need the following to run Ajde:
 
 You might want to enable eAccelerator or APC in PHP to make Ajde even more faster, and mod_deflate and mod_expires in Apache. Those are not required though.
 
-_Note: Accessing Ajde from a non-webroot directory may cause problems (see [http://code.google.com/p/ajde/issues/detail?id=2])_
+_Note: Accessing Ajde from a non-webroot directory may cause problems (see Issue 2)_
 
 → More about [DocumentationInstallationRequirements installation & requirements]
 
