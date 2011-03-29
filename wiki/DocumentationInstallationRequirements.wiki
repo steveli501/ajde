@@ -1,5 +1,5 @@
 #summary More help with installation & server / client requirements
-#labels Documentation
+#labels Documentation,Featured
 
 = Installation & Requirements =
 
