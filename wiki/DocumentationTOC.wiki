@@ -3,11 +3,9 @@
 
 = Documentation =
 
-== Guides ==
+=== Ajde (Core) ===
 
-[DocumentationGettingStarted Getting started]
-
-=== Ajde Core ===
+→ *[DocumentationGettingStarted Getting started ('Hello World')]*
 
  * [DocumentationInstallationRequirements Installation & Requirements]
  * [DocumentationConfig Application configuration]
@@ -16,7 +14,9 @@
  * [DocumentationTemplate Templates]
  * [DocumentationResources Resources]
 
-=== Ajde extensions ===
+=== AjdeX (Extension) ===
+
+→ *[DocumentationDbIntroduction Connect to a database (MySQL)]*
 
  * [DocumentationDb Database abstraction]
  * [DocumentationModelCollection Model & Collections]
@@ -25,4 +25,4 @@
 == API ==
 
    * [APICore Core]
-   * [APIExtensions Extensions]
+   * [APIExtensions Extension]
