@@ -31,7 +31,8 @@ protected function _extractRouteParts()
 }
 }}}
 
-As you can see, you can add custom routes to your application by adding them to your [DocumentationConfig configuration].
+As you can see, you can add custom routes to your application by adding them to your [DocumentationConfig configuration]. These must have the same format, that is: an array of arrays with a regular expression as key and an array of route parts as value. 
+Routes defined in the configuration have precedence over the pre-defined ones.
 
 = Examples =
 
