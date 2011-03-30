@@ -62,7 +62,7 @@ class ArticleController extends Ajde_Controller
 }
 }}}
 
-Now, the following URLs correspond to the array with the build-in routes mentioned above: 
+Now, the following URLs all point to the *view* action of above controller (notice that the list correspond to the pre-defined routes): 
 
  * _localhost_/article/
  * _localhost_/article/*4*
