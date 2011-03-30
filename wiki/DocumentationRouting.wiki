@@ -27,7 +27,8 @@ protected function _extractRouteParts()
 		
 	$configRules = Config::get('routes');
 	$rules = array_merge($configRules, $defaultRules);
-[...]
+
+	[...]
 }
 }}}
 
