@@ -62,13 +62,20 @@ class ArticleController extends Ajde_Controller
 
 Now, the following URLs correspond to the array with the build-in routes mentioned above: 
 
- * http://localhost/article/
- * http://localhost/article/*4*
- * http://localhost/article/*view*/
- * http://localhost/article/*view*/*html*
- * http://localhost/article/*view*/*html*/*4*
+ * _localhost_/article/
+ * _localhost_/article/*4*
+ * _localhost_/article/*view*/
+ * _localhost_/article/*view*/*html*
+ * _localhost_/article/*view*/*html*/*4*
 
- * http://localhost/article/*view*.*html*
- * http://localhost/article/4.*html*
- * http://localhost/article/*view*.*html*
- * http://localhost/article/*view*/*4*.*html*
+ * _localhost_/article.*html*
+ * _localhost_/article/*4*.*html*
+ * _localhost_/article/*view*.*html*
+ * _localhost_/article/*view*/*4*.*html*
+
+Also, try out these URLs:
+
+ * _localhost_/article/*add*
+ * _localhost_/article/*add*.*json*
+ * _localhost_/article/*save*
+ * _localhost_/article/*save*.*json*
