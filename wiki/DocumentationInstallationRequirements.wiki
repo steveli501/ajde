@@ -30,7 +30,7 @@ This way you make sure the code you get is up to date, but you can still be cert
 You need the following to run Ajde:
 
  * Apache webserver with mod_rewrite enabled
- * PHP, version 5.2.3 or newer
+ * PHP, version 5.2.3 or newer (5.3 unleashes some extra debugging powers)
  * MySQL (optional)
 
 You might want to enable eAccelerator or APC in PHP to make Ajde even more faster, and mod_deflate and mod_expires in Apache. Those are not required though.
