@@ -6,4 +6,69 @@ More information about how URLs are parsed in Ajde.
 
 = Details =
 
+In `Ajde_Core_Route` all pre-defined routes can be found in the function `_extractRouteParts()`:
+
+{{{
+protected function _extractRouteParts()
+{
+	$matches = array();
+	$defaultRules = array(
+		array('%^([^/\.]+)/?$%' => array('module')),
+		array('%^([^\?/\.]+)/([0-9]+)/?$%' => array('module', 'id')),
+		array('%^([^\?/\.]+)/([^\?/\.]+)/?$%' => array('module', 'action')),			
+		array('%^([^/\.]+)/([^/\.]+)/([^/\.]+)/?$%' => array('module', 'action', 'format')),
+		array('%^([^/\.]+)/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$%' => array('module', 'action', 'format', 'id')),
+		
+		array('%^([^/\.]+)\.([^/\.]+)$%' => array('module', 'format')),
+		array('%^([^\?/\.]+)/([0-9]+)\.([^/\.]+)$%' => array('module', 'id', 'format')),
+		array('%^([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$%' => array('module', 'action', 'format')),
+		array('%^([^\?/\.]+)/([^\?/\.]+)/([^\?/\.]+)\.([^/\.]+)$%' => array('module', 'action', 'id', 'format')),
+	);
+		
+	$configRules = Config::get('routes');
+	$rules = array_merge($configRules, $defaultRules);
+[...]
+}
+}}}
+
+As you can see, you can add custom routes to your application by adding them to your [DocumentationConfig configuration].
+
 = Examples =
+
+To illustrate the default routes defined above, let's create a new module created `article` with the following controller:
+
+{{{
+<?php 
+
+class ArticleController extends Ajde_Controller
+{	
+	function view()
+	{
+		$id = $this->hasId() ? $this->getId() : 'Undefined';
+		return 'Id : ' . $id;
+	}
+
+	function addHtml()
+	{
+		return 'Add item';
+	}
+
+	function saveJson()
+	{
+		return array('status' => 'saved');
+	}
+}
+}}}
+
+Now, the following URLs correspond to the array with the build-in routes mentioned above: 
+
+ * http://localhost/article/
+ * http://localhost/article/*4*
+ * http://localhost/article/*view*/
+ * http://localhost/article/*view*/*html*
+ * http://localhost/article/*view*/*html*/*4*
+
+ * http://localhost/article/*view*.*html*
+ * http://localhost/article/4.*html*
+ * http://localhost/article/*view*.*html*
+ * http://localhost/article/*view*/*4*.*html*
