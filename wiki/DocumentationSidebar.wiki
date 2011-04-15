@@ -1,7 +1,7 @@
 #summary Sidebar for the documentation
 
+[DocumentationGettingStarted Getting started ('Hello World')]
  * *Ajde (Core)*
-   * *[DocumentationGettingStarted Getting started ('Hello World')]*
    * [DocumentationInstallationRequirements Installation & Requirements]
    * [DocumentationConfig Application configuration]
    * [DocumentationController Controller]
@@ -9,8 +9,8 @@
    * [DocumentationTemplate Templates]
    * [DocumentationResources Resources]
 
+[DocumentationDbIntroduction Connect to a database (MySQL)]
  * AjdeX (Extension)
-   * *[DocumentationDbIntroduction Connect to a database (MySQL)]*
    * [DocumentationDb Database abstraction]
    * [DocumentationModelCollection Model & Collections]
    * [DocumentationCrud CRUD]
