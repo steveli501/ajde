@@ -1,0 +1,27 @@
+#summary Sidebar for the documentation
+
+= Documentation =
+
+=== Ajde (Core) ===
+
+→ *[DocumentationGettingStarted Getting started ('Hello World')]*
+
+ * [DocumentationInstallationRequirements Installation & Requirements]
+ * [DocumentationConfig Application configuration]
+ * [DocumentationController Controller]
+ * [DocumentationRouting Routing]
+ * [DocumentationTemplate Templates]
+ * [DocumentationResources Resources]
+
+=== AjdeX (Extension) ===
+
+→ *[DocumentationDbIntroduction Connect to a database (MySQL)]*
+
+ * [DocumentationDb Database abstraction]
+ * [DocumentationModelCollection Model & Collections]
+ * [DocumentationCrud CRUD]
+
+== API ==
+
+   * [APICore Core]
+   * [APIExtensions Extension]
