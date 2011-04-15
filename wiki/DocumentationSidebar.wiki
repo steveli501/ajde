@@ -7,13 +7,11 @@
    * [DocumentationRouting Routing]
    * [DocumentationTemplate Templates]
    * [DocumentationResources Resources]
-
  * *AjdeX (Extension)*
    * [DocumentationDbIntroduction Connect to a database (MySQL)]
    * [DocumentationDb Database abstraction]
    * [DocumentationModelCollection Model & Collections]
    * [DocumentationCrud CRUD]
-
  * *API*
    * [APICore Core]
    * [APIExtensions Extension]
