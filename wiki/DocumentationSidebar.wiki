@@ -1,7 +1,5 @@
 #summary Sidebar for the documentation
 
- * [DocumentationGettingStarted Getting started with Ajde]
-
  * *Ajde (Core)*
    * [DocumentationInstallationRequirements Installation & Requirements]
    * [DocumentationConfig Application configuration]
