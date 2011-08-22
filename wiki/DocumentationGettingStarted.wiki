@@ -1,5 +1,5 @@
 #summary Getting started guide
-#labels Documentation,Featured
+#labels Documentation,Featured,NeedsUpdate
 
 = Getting started with Ajde =
 
@@ -32,6 +32,8 @@ A fresh install should look something like this:
 The code structure is straight-forward. All application logic and module specific assets (css/js) are kept within the {{{private/application/}}} directory, while publicly accessible assets such as images are stored in the {{{public/}}} directory. Let's have a closer look at the contents of the former directory.
 
 === Change some basic Config parameters ===
+
+*NOTE: Since r243 updating the application configuration is simplified, but changes are not yet reflected in this article*
 
 In the {{{private/application/config/}}} folder head over to the {{{Config_Base.php}}} file. All your application configuration is taking place here.
 
