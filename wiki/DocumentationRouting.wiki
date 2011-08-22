@@ -1,10 +1,12 @@
-#labels Documentation
+#labels Documentation,NeedsUpdate
 = Documentation Routing =
 
 More information about how URLs are parsed in Ajde.
 
 
 = Details =
+
+*NOTE: Since r239 routing logic has been updated but this is not yet reflected in this article.*
 
 In `Ajde_Core_Route` all pre-defined routes can be found in the function `_extractRouteParts()`:
 
