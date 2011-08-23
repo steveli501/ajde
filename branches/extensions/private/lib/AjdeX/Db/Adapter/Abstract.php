@@ -15,7 +15,7 @@ abstract class AjdeX_Db_Adapter_Abstract
 			// Disable trace on this exception to prevent exposure of sensitive
 			// data
 			// TODO: exception
-			throw new Ajde_Exception('Could not connect to database', 0, false);
+			throw new AjdeX_Exception('Could not connect to database', 0, false);
 		}
 		$this->_connection = $connection;
 	} 

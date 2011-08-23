@@ -6,7 +6,6 @@
 /** 
 * PDOStatement decorator that logs when a PDOStatement is 
 * executed, and the time it took to run 
-* @see LoggedPDO 
 */  
 class AjdeX_Db_PDOStatement extends PDOStatement {  
     

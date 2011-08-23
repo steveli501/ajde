@@ -34,10 +34,12 @@ class AjdeX_Crud extends Ajde_Object_Standard
 		return $this->_model;
 	}
 	
-	public function getItem($id)
+	public function getItem($id = null)
 	{
 		$model = $this->getModel();
-		$model->loadByPK($id);
+		if (isset($id)) {
+			$model->loadByPK($id);
+		}
 		return $model;
 	}
 	
