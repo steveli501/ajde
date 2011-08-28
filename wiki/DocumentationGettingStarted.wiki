@@ -63,7 +63,7 @@ class SamplesController extends Ajde_Controller
 }
 }}}
 
-Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to grab this page as JSON). Click the purple bar (or press [ESC]) to unveil the debugger console.
+Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to grab this page as JSON). Click the purple bar (or press ESC) to unveil the debugger console.
 
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld1.png]
 
