@@ -84,7 +84,7 @@ The template contains only this for now:
 In order to display this template, a minor change has to be made to the controller:
 
 {{{
-function helloworldDefault()
+function helloworld()
 {
 	return $this->render();
 }
