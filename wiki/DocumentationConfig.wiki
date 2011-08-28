@@ -1,4 +1,4 @@
-#labels Documentation,NeedsUpdate
+#labels Documentation
 = Documentation Config =
 
 More information about configuration settings in Ajde.
@@ -6,17 +6,15 @@ More information about configuration settings in Ajde.
 
 = Details =
 
-*NOTE: Since r243 updating the application configuration is simplified, but changes are not yet reflected in this article*
-
 Ajde provides configuration settings for several development stages. All configuration settings are saved in PHP classes in the `private/config` directory.
 
-The default package comes with pre-defined configuration file for the development stage (`Config_Dev`), which extends the settings from the base configuration (`Config_Base`).
+Your application configuration (`Config_Application`) inherits the default values from `Config_Default` and can be extended to suit your needs for various development stages. The default Ajde installation comes with pre-defined configuration files for the development stage (`Config_Dev`) and production stage (`Config_Live`).
 
 = Examples =
 
 == Getting configuration parameters ==
 
-If we want to refer to our configuration parameters, we call `Config::getInstance()` - which returns a subclass of the `Config_Base` class depending on the currently selected stage defined in `Config::$stage` - or `Config::get($param)` to get only one parameter.
+If we want to refer to our configuration parameters, we call `Config::getInstance()`. This returns an instance of the current configuration object depending on the selected stage, which is defined in `Config::$stage`. If only a single parameter is needed, you can call `Config::get($param)` statically.
 
 {{{
 // Multiple parameters
@@ -31,30 +29,19 @@ printf("Project identifier: %s<br/>", Config::get("ident"));
 
 == Defining configuration parameters ==
 
-If we want to define different configurations for - let's say - our database in the live and development stage, do the following.
-
-First, edit the `Config_Base` class and change the `$db_` parameters to null, because we will override them in the respective subclasses `Config_Live` and `Config_Dev`.
-
-{{{
-// Database settings
-public $db_host 			= null;
-public $db_user 			= null;
-public $db_password 			= null;
-public $db_db 				= null;
-}}}
-
-Now, make a new configuration file `Config_Live.php` in the `private/config` directory containing the following code.
+If we want to define different configurations for - let's say - our database in the live and development stage, edit the `Config_Live.php` and `Config_Dev.php` in the `private/config` directory to include this parameters. Example:
 
 {{{
 <?php
 
-class Config_Live extends Config_Base {
+class Config_Live extends Config_Application {
 	
-	// Database settings
-	public $db_host 			= "live.host";
-	public $db_user 			= "live_user";
-	public $db_password 			= "live_pw";
-	public $db_db 				= "live_db";
+	/* Other parameters... */
+
+	// Database settings for live environment
+	public $dbDsn = array("host" => "localhost", "dbname" => "db");
+	public $dbUser = "username";
+	public $dbPassword = "password";
 
 	function __construct() {
 		parent::__construct();
@@ -62,7 +49,5 @@ class Config_Live extends Config_Base {
 	
 }
 }}}
-
-And finally, edit the `Config_Dev` class to also contain the above database parameters.
 
 Now, when the `Config::$stage` setting changes between *dev* and *live*, the database parameters retrieved via the `Config` class will change accordingly.
