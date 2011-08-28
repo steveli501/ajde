@@ -27,6 +27,7 @@ class AjdeX_Db_Table extends Ajde_Object_Standard
 		foreach($structure as $field) {
 			$fieldName = $field['Field'];
 			$fieldType = $field['Type'];
+			$fieldParsedType = AjdeX_Db::getInstance()->getAdapter()->getFieldType($fieldType);
 			$fieldIsRequired = $field['Null'] === 'NO';
 			$fieldIsPK = $field['Key'] === 'PRI';
 			$fieldDefault = $field['Default'];
@@ -36,6 +37,7 @@ class AjdeX_Db_Table extends Ajde_Object_Standard
 			$this->_fields[$fieldName] = array(
 				'name' => $fieldName,
 				'type' => $fieldType,
+				'parsedType' => $fieldParsedType,
 				'isRequired' => $fieldIsRequired,
 				'isPK' => $fieldIsPK,
 				'default' => $fieldDefault,
@@ -69,6 +71,11 @@ class AjdeX_Db_Table extends Ajde_Object_Standard
 			}
 		}
 		return $parentTables;		
+	}
+	
+	public function getFieldProperties()
+	{
+		return $this->_fields;
 	}
 	
 	public function getFieldNames()

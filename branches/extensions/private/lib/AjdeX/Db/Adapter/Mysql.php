@@ -77,4 +77,38 @@ class AjdeX_Db_Adapter_MySql extends AjdeX_Db_Adapter_Abstract
 		return $this->saveCache($sql, $statement->fetchAll()); 
 	}
 	
+	public function getFieldType($type) {
+		// TODO: Quite naive, rough implementation
+		// @see http://dev.mysql.com/doc/refman/5.0/en/data-types.html
+		
+		$types = array(
+			AjdeX_Db::FIELD_TYPE_NUMERIC => "int tinyint bit float double real decimal numeric currency",
+			AjdeX_Db::FIELD_TYPE_STRING => "varchar timestamp time year",
+			AjdeX_Db::FIELD_TYPE_TEXT => "text blob",
+			AjdeX_Db::FIELD_TYPE_DATE => "date",
+			AjdeX_Db::FIELD_TYPE_ENUM => "enum set"
+        );
+
+		// Get normalized type
+		//$typeName = AjdeX_Db::FIELD_TYPE_STRING;
+		$typeName = $type;
+		$start = strpos($type, '(');	
+		$mysqlName = $start > 0 ? trim(substr($type, 0, $start)) : $type;
+		foreach($types as $typeKey => $haystack) {
+			if (substr_count($haystack, $mysqlName) > 0) {
+				$typeName = $typeKey;
+				break;
+			}
+		}
+		
+		// Get length/values
+		$length = strpos($type, ')') - $start;
+		$typeLength = $start > 0 ? trim(substr ($type, $start + 1, $length - 1)) : null; 
+				
+		return array(
+			'type' => $typeName,
+			'length' => $typeLength
+		);
+	}
+	
 }

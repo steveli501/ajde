@@ -54,6 +54,12 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	public function getFields()
 	{
 		$model = $this->getModel();
+		return $model->getTable()->getFieldProperties();		
+	}
+	
+	public function getFieldLabels()
+	{
+		$model = $this->getModel();
 		return $model->getTable()->getFieldLabels();
 	}
 }
