@@ -1,5 +1,5 @@
 #summary Getting started guide
-#labels Documentation,Featured,NeedsUpdate
+#labels Documentation,Featured
 
 = Getting started with Ajde =
 
@@ -31,9 +31,7 @@ The code structure is straight-forward. All application logic and module specifi
 
 === Change some basic Config parameters ===
 
-*NOTE: Since r243 updating the application configuration is simplified, but changes are not yet reflected in this article*
-
-In the {{{private/application/config/}}} folder head over to the {{{Config_Base.php}}} file. All your application configuration is taking place here.
+In the {{{private/application/config/}}} folder head over to the {{{Config_Application.php}}} file. All your application configuration should go here.
 
 Let's change the name of our application for now:
 
@@ -47,7 +45,7 @@ public $sitename = "Ajde Samples";
 
 We want our new application to guide us through the various aspects of the framework, and for this purpose we will be creating a new module which holds different pages (actions) which can be called through their own unique URL's ([DocumentationRouting more on this]).
 
-Create a new folder {{{samples/}}} in the {{{private/application/modules/}}} directory. Each module must have one controller, which we'll have to call {{{SamplesController.php}}}.
+Create a new folder {{{samples/}}} in the {{{private/application/modules/}}} directory. Each module must have a default controller, which in this case should be {{{SamplesController.php}}}.
 
 _Note: Make sure to always follow this naming convention. This controller must at least contain the controller class and one or more actions._
 
@@ -58,20 +56,18 @@ Each action can be handled differently for different requested formats (i.e. *JS
 
 class SamplesController extends Ajde_Controller
 {	
-	function helloworldDefault()
+	function helloworld()
 	{
 		return '<h2>Hello world!</h2>';
 	}
 }
 }}}
 
-_Note: As of r196 you can call this function simply {{{helloworld()}}}._
-
-→ Working with [DocumentationController modules]
-
-Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to grab this page as JSON).
+Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to grab this page as JSON). Click the purple bar (or press [ESC]) to unveil the debugger console.
 
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld1.png]
+
+→ Working with [DocumentationController modules]
 
 == Add a template and some unicorns ==
 
@@ -130,8 +126,8 @@ $(document).ready(function() {
 });
 }}}
 
-→ Working with [DocumentationResources resources]
-
 Your _Hello world_ experience will never be the same!
 
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld2.png]
+
+→ Working with [DocumentationResources resources]
