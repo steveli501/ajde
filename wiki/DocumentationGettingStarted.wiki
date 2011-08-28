@@ -17,10 +17,6 @@ You need the following to run Ajde:
  * PHP, version 5.2.3 or newer
  * MySQL (optional)
 
-You might want to enable eAccelerator or APC in PHP to make Ajde even more faster, and mod_deflate and mod_expires in Apache. Those are not required though.
-
-_Note: Accessing Ajde from a non-webroot directory may cause problems (see Issue 2)_
-
 → More about [DocumentationInstallationRequirements installation & requirements]
 
 == 'Hello world' ==
@@ -29,7 +25,9 @@ A fresh install should look something like this:
 
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/freshinstall.png]
 
-The code structure is straight-forward. All application logic and module specific assets (css/js) are kept within the {{{private/application/}}} directory, while publicly accessible assets such as images are stored in the {{{public/}}} directory. Let's have a closer look at the contents of the former directory.
+The code structure is straight-forward. All application logic and module specific assets (css/js) are kept within the {{{private/application/}}} directory, while publicly accessible assets such as images are stored in the {{{public/}}} directory.
+
+[http://ajde.googlecode.com/svn/misc/dir-schema.png]
 
 === Change some basic Config parameters ===
 
