@@ -1,6 +1,9 @@
 #summary Sidebar for the documentation
 
 
+==== Reference ====
+
+
  * *Ajde (Core)*
    * [DocumentationInstallationRequirements Installation & Requirements]
    * [DocumentationConfig Application configuration]
