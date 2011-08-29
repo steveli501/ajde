@@ -6,7 +6,7 @@
    * [DocumentationGettingStarted Getting started with Ajde]
    * [TutorialBlog Building a simple blog]
 
-==== Reference ====
+== Reference ==
 
  * *Ajde (Core)*
    * [DocumentationInstallationRequirements Installation & Requirements]
