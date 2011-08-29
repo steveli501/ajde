@@ -11,6 +11,7 @@
    * [DocumentationRouting Routing]
    * [DocumentationTemplate Templates]
    * [DocumentationResources Resources]
+   * [DocumentationLang Multi-language]
  * *AjdeX (Extension)*
    * [DocumentationDbIntroduction Connect to a database (MySQL)]
    * [DocumentationDb Database abstraction]
