@@ -1,6 +1,6 @@
 #summary Sidebar for the documentation
 
-==== Tutorials ====
+== Tutorials ==
 
  * *Introduction*
    * [DocumentationGettingStarted Getting started with Ajde]
