@@ -1,11 +1,5 @@
 #summary Sidebar for the documentation
 
-==== Tutorials ====
-
- * [DocumentationGettingStarted Getting started with Ajde]
- * [TutorialBlog Building a simple blog]
-
-==== Reference ====
 
  * *Ajde (Core)*
    * [DocumentationInstallationRequirements Installation & Requirements]
