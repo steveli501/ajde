@@ -1,8 +1,9 @@
 #summary Sidebar for the documentation
 
+==== Tutorials ====
+
 
 ==== Reference ====
-
 
  * *Ajde (Core)*
    * [DocumentationInstallationRequirements Installation & Requirements]
