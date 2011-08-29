@@ -52,11 +52,11 @@ Navigating to your newly created projects URL will bring up the default Ajde hom
 
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/freshinstall.png]
 
-Notice that Ajde is by default in developer mode, as the Ajde Debugger can be seen. (See [DocumentationConfig] for more details on this)
+Notice that Ajde is by default in developer mode, as the purple bar of the Ajde Debugger near the bottom of the screen can be seen. (See [DocumentationConfig] for more details on this)
 
 === Configuration ===
 
-Probably the first thing you want to do is make some changes to your projects main configuration settings in {{{private/application/config/Config_Base.php}}}.
+Probably the first thing you want to do is make some changes to your projects main configuration settings in {{{private/application/config/Config_Application.php}}}.
 
 → More about [DocumentationConfig project configuration]
 
@@ -68,6 +68,6 @@ The default layout can be found in the {{{private/application/layout/default/tem
 
 === Module ===
 
-The layout is the projects template in which the requested module will be loaded. These modules can be found in {{{private/application/modules}}} and in the default configuration, the {{{view}}} action of the `static` module is executed.
+The layout is the projects master template in which the requested module will be loaded. These modules can be found in {{{private/application/modules}}} and in the default configuration, the {{{view}}} action of the `main` module is executed.
 
 → More about [DocumentationModule modules]
