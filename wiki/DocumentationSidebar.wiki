@@ -2,8 +2,9 @@
 
 ==== Tutorials ====
 
- * [DocumentationGettingStarted Getting started with Ajde]
- * [TutorialBlog Building a simple blog]
+ * *Introduction*
+   * [DocumentationGettingStarted Getting started with Ajde]
+   * [TutorialBlog Building a simple blog]
 
 ==== Reference ====
 
