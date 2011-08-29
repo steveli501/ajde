@@ -1,9 +1,8 @@
 #summary Sidebar for the documentation
 
  * _TUTORIALS_
- * *Introduction*
-   * [DocumentationGettingStarted Getting started with Ajde]
-   * [TutorialBlog Building a simple blog]
+ * [DocumentationGettingStarted Getting started with Ajde]
+ * [TutorialBlog Building a simple blog]
  * _REFERENCE_
  * *Ajde (Core)*
    * [DocumentationInstallationRequirements Installation & Requirements]
