@@ -1,0 +1,8 @@
+#summary Building a simple blog
+#labels Tutorial,Featured
+
+= Building a simple blog =
+
+<wiki:toc max_depth="2" />
+
+== Module ==
