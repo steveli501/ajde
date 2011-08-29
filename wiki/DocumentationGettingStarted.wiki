@@ -110,7 +110,7 @@ It's still a little boring, let's add some rainbows and unicorns! Change the tem
 
 {{{
 <?php
-	$this->requireJsLibrary('jquery', '1.4');
+	$this->requireJsLibrary('jquery', '1');
 	$this->requireJsRemote('http://www.cornify.com/js/cornify.js');	
 ?>
 <h2>Hello world!</h2>
