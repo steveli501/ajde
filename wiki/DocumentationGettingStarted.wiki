@@ -131,3 +131,5 @@ Your _Hello world_ experience will never be the same!
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld2.png]
 
 → Working with [DocumentationResources resources]
+
+_*NEXT*_: [TutorialBlog Create a simple blog]
