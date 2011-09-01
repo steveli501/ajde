@@ -1,5 +1,5 @@
 #summary A quick-start guide about how to setup Ajde MVC framework in seconds, not minutes
-#labels Documentation,Featured,Tutorial
+#labels Featured,Tutorial
 
 = Getting started with Ajde =
 
