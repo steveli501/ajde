@@ -19,4 +19,10 @@
    * [DocumentationCrud CRUD]
  * *API*
    * [APICore Core]
+     * [APICoreApplication Ajde_Application]
+     * [APICoreCache Ajde_Cache]
+     * [APICoreComponent Ajde_Component]
+       * [APICoreComponentCrud Ajde_Component_Crud]
+       * [APICoreComponentCss Ajde_Component_Css]
+       * [APICoreComponentException Ajde_Component_Exception]
    * [APIExtensions Extension]
