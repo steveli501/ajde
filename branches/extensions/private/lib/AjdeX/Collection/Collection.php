@@ -36,14 +36,20 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 	protected $_items = null;
 	protected $_position = 0;
 	
-	public static function register(Ajde_Controller $controller)
+	public static function register($controller)
 	{
 		// Extend Ajde_Controller
 		if (!Ajde_Event::has('Ajde_Controller', 'call', 'AjdeX_Collection::extendController')) {
 			Ajde_Event::register('Ajde_Controller', 'call', 'AjdeX_Collection::extendController');
 		}
 		// Extend autoloader
-		Ajde_Core_Autoloader::addDir(MODULE_DIR.$controller->getModule().'/model/');
+		if ($controller instanceof Ajde_Controller) {
+			Ajde_Core_Autoloader::addDir(MODULE_DIR.$controller->getModule().'/model/');
+		} elseif ($controller === '*') {
+			self::registerAll();
+		} else {
+			Ajde_Core_Autoloader::addDir(MODULE_DIR.$controller.'/model/');
+		}		
 	}
 	
 	public static function extendController(Ajde_Controller $controller, $method, $arguments)

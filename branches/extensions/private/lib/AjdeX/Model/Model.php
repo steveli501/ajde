@@ -70,6 +70,9 @@ class AjdeX_Model extends Ajde_Object_Standard
     }
 	
 	public function __toString() {
+		if (empty($this->_data)) {
+			return null;
+		}
 		return $this->getPK();		
 	}
 	
@@ -84,9 +87,18 @@ class AjdeX_Model extends Ajde_Object_Standard
 		$this->_connection = AjdeX_Db::getInstance()->getConnection();	
 		$this->_table = AjdeX_Db::getInstance()->getTable($tableName);	
 	}
+
+	public function isEmpty($key)
+	{
+		$value = (string) $this->get($key);
+		return empty($value);
+	}
 	
 	public function getPK()
 	{
+		if (empty($this->_data)) {
+			return null;
+		}
 		return $this->get($this->getTable()->getPK()); 
 	}
 	
@@ -182,9 +194,10 @@ class AjdeX_Model extends Ajde_Object_Standard
 		$values = array();
 		
 		foreach($this->getTable()->getFieldNames() as $field) {
-			if ($this->has($field)) {
+			// Don't save a field is it's empty or not set
+			if ($this->has($field) && !$this->isEmpty($field)) {
 				$sqlSet[] = $field . ' = ?';
-				$values[] = $this->get($field);
+				$values[] = (string) $this->get($field);
 			}
 		} 
 		$values[] = $this->getPK();
@@ -205,10 +218,11 @@ class AjdeX_Model extends Ajde_Object_Standard
 		$sqlValues = array();
 		$values = array();
 		foreach($this->getTable()->getFieldNames() as $field) {
-			if ($this->has($field)) {
+			// Don't save a field is it's empty or not set
+			if ($this->has($field) && !$this->isEmpty($field)) {
 				$sqlFields[] = $field;
 				$sqlValues[] = '?';
-				$values[] = $this->get($field);
+				$values[] = (string) $this->get($field);
 			} else {
 				$this->set($field, null);
 			}
@@ -229,6 +243,16 @@ class AjdeX_Model extends Ajde_Object_Standard
 		$sql = 'DELETE FROM '.$this->_table.' WHERE '.$pk.' = ? LIMIT 1';
 		$statement = $this->getConnection()->prepare($sql);
 		return $statement->execute(array($id));
+	}
+	
+	public function hasParent($parent)
+	{
+		if (!$parent instanceof AjdeX_Db_Table) {
+			// throws error if no table can be found
+			$parent = new AjdeX_Db_Table($parent);
+		}
+		$fk = $this->getTable()->getFK($fieldName);
+		return $fk;
 	}
 	
 	public function getParents()
