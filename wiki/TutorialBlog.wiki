@@ -1,5 +1,5 @@
 #summary A tutorial about building a simple blog system
-#labels Tutorial,Featured
+#labels Tutorial,Featured,NeedsUpdate
 
 = Building a simple blog =
 
@@ -79,3 +79,5 @@ class BlogCollection extends AjdeX_Collection
 }}}
 
 Easy, huh?
+
+_WORK IN PROGRESS_
