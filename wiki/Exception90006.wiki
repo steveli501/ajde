@@ -4,11 +4,11 @@
 
 = Details =
 
-If a class extends a subclass of `Ajde_Core_Object_Magic` (i.e. `Ajde_Core_Object_Standard`, `Ajde_Core_Object_Singleton`) the magic method `__call()` is invoked when calling an undefined method on this class. This is used for the magic getters and setters. Calling an undefined method which is not one of `get{Parameter}()`, `set{Parameter}()` or `has{Parameter}()` results in this error.
+If a class extends a subclass of `Ajde_Object_Magic` (i.e. `Ajde_Object_Standard`, `Ajde_Object_Singleton`) the magic method `__call()` is invoked when calling an undefined method on this class. This is used for the magic getters and setters. Calling an undefined method which is not one of `get{Parameter}()`, `set{Parameter}()` or `has{Parameter}()` results in this error.
 
 Example:
 {{{
-class Test extends Ajde_Core_Object_Standard
+class Test extends Ajde_Object_Standard
 {
 }
 $foo = new Test();
