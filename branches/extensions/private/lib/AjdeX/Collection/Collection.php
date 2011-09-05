@@ -230,7 +230,11 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 				$arguments[] = $prepared[$queryPart]['arguments'];
 			}			
 		}
-		return empty($arguments) ? array() : $arguments;
+		if (empty($arguments)) {
+		 	return array();
+		} else {
+			return $arguments; 
+		}
 	}	
 	
 	public function getFilterValues()
@@ -260,6 +264,10 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 	
 	public function length()
 	{
-		return isset($this->_items) ? count($this->_items) : 0;
+		if (isset($this->_items)) {
+			return count($this->_items); 
+		} else {
+			return 0;
+		}
 	}
 }

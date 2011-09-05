@@ -17,6 +17,11 @@ class AjdeX_Filter_Match extends AjdeX_Filter
 	
 	public function prepare(AjdeX_Db_Table $table = null)
 	{
+		if (isset($this->_table)) {
+			$useTable = (string) $this->_table;
+		} else {
+			$useTable = (string) $table;
+		} 
 		$sql = 'MATCH (' . implode(', ', $this->_fields) . ') AGAINST (:' . spl_object_hash($this) . ')';
 		return array(
 			'where' => array(
@@ -24,7 +29,7 @@ class AjdeX_Filter_Match extends AjdeX_Filter
 				'values' => array(spl_object_hash($this) => $this->_against)
 			),
 			'select' => array(
-				'arguments' => array($sql . ' AS relevancy_' . (isset($this->_table) ? (string) $this->_table : (string) $table))
+				'arguments' => array($sql . ' AS relevancy_' . $useTable)
 			)
 		);
 	}
