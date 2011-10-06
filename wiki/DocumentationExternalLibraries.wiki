@@ -1,0 +1,12 @@
+#summary Description of external libraries ready for use with Ajde
+#labels Phase-Deploy,Documentation
+
+= Libraries ready for use with Ajde =
+
+<wiki:toc max_depth="2" />
+
+== HTMLPurifier ==
+
+Put the `library` folder of the Lite distribution of HTMLPurifier ([http://htmlpurifier.org/download download here]) in the `lib` folder of Ajde, and rename it to `HTMLPurifier`.
+
+== Zend ==
