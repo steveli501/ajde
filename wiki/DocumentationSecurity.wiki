@@ -1,0 +1,20 @@
+#summary Security features in Ajde
+#labels Documentation,Phase-Requirements
+
+= Security =
+
+<wiki:toc max_depth="2" />
+
+== Register Globals ==
+
+register_globals is turned off in the `.htaccess` file.
+
+== Error Reporting ==
+
+If debugging is turned off (with setting the configuration variable `$debug` to {{{false}}} in a production environment), errors and exceptions are never shown in the front-end. Instead, they are logged to `private/var/log` (make sure this directory is writable, otherwise Ajde will error out horrendously).
+
+== Cross-Site Scripting (XSS) ==
+
+== Cross-Site Request Forgery (CSRF) Prevention ==
+
+== Exposing Sensitive Information ==
