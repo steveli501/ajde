@@ -15,6 +15,12 @@ If debugging is turned off (with setting the configuration variable `$debug` to 
 
 == Cross-Site Scripting (XSS) ==
 
+Ajde aggressively filters out HTML from requests when using `Ajde_Http_Request`. It looks for the configuration variables `$autoEscapeString` and `$autoCleanHtml`, and when set to {{{true}}}, it applies [http://php.net/manual/en/function.htmlspecialchars.php htmlspecialchars] and [http://php.net/manual/en/function.strip-tags.php strip_tags] to request variables retrieved with `Ajde_Http_Request::get()|getParam()|getString()` and `Ajde_Http_Request::getHtml()` respectively.
+
+_Note:_ When using [DocumentationExternalLibraries HTMLPurifier], `Ajde_Http_Request::getHtml()` uses `HTMLPurifier::purify()` instead.
+
+_Note:_ Ajde doesn't prevent developers from using the raw `$_GET` and `$_POST` objects, which can contain unsafe data!
+
 == Cross-Site Request Forgery (CSRF) Prevention ==
 
 == Exposing Sensitive Information ==
