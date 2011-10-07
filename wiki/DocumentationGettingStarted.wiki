@@ -45,7 +45,7 @@ public $sitename = "Ajde Samples";
 
 We want our new application to guide us through the various aspects of the framework, and for this purpose we will be creating a new module which holds different pages (actions) which can be called through their own unique URL's ([DocumentationRouting more on this]).
 
-Create a new folder {{{samples/}}} in the {{{private/application/modules/}}} directory. Each module must have a default controller, which in this case should be {{{SamplesController.php}}}.
+Create a new folder {{{helloworld/}}} in the {{{private/application/modules/}}} directory. Each module must have a default controller, which in this case should be {{{HelloworldController.php}}}.
 
 _Note: Make sure to always follow this naming convention. This controller must at least contain the controller class and one or more actions._
 
@@ -54,16 +54,16 @@ Each action can be handled differently for different requested formats (i.e. *JS
 {{{
 <?php 
 
-class SamplesController extends Ajde_Controller
+class HelloworldController extends Ajde_Controller
 {	
-	function helloworld()
+	function view()
 	{
 		return '<h2>Hello world!</h2>';
 	}
 }
 }}}
 
-Now point your browser to: http://yourserver/samples/helloworld.html (If that was too easy, try to grab this page as JSON). Click the purple bar (or press ESC) to unveil the debugger console.
+Now point your browser to: http://yourserver/helloworld.html (If that was too easy, try to grab this page as JSON). Click the purple bar (or press ESC) to unveil the debugger console.
 
 [http://ajde.googlecode.com/svn/branches/samples/public/images/screenshots/helloworld1.png]
 
@@ -73,7 +73,7 @@ Now point your browser to: http://yourserver/samples/helloworld.html (If that wa
 
 === Template ===
 
-It's a good habit to seperate application logic and presentation so let's create a template. Create a subfolder {{{template/}}} in the samples module directory and a template named {{{helloworld.phtml}}}. 
+It's a good habit to seperate application logic and presentation so let's create a template. Create a subfolder {{{template/}}} in the samples module directory and a template named {{{view.phtml}}}. 
 
 The template contains only this for now:
 
@@ -84,7 +84,7 @@ The template contains only this for now:
 In order to display this template, a minor change has to be made to the controller:
 
 {{{
-function helloworld()
+function view()
 {
 	return $this->render();
 }
@@ -98,7 +98,7 @@ This will look for a template with the same name as the action (helloworld) so i
 
 Now, if you look at the source of the page, you'll see some stylesheets and javascripts already included in the page. They belong to the default layout and are not directly linked, but pre-processed through internal Ajde components, in order to make it possible to combine, compress and cache those assets in a live environment.
 
-Let's add some css to our newly created page. Create a subfolder {{{res/css/}}} and {{{res/js/}}} in the samples module directory and a stylesheet named {{{helloworld.css}}} in the css directory and a javascript file named {{{helloworld.js}}} in the js directory. 
+Let's add some css to our newly created page. Create a subfolder {{{res/css/}}} and {{{res/js/}}} in the samples module directory and a stylesheet named {{{view.css}}} in the css directory and a javascript file named {{{view.js}}} in the js directory. 
 
 Add some styles to the stylesheet:
 
