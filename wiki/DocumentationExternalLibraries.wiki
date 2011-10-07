@@ -7,7 +7,7 @@
 
 == HTMLPurifier ==
 
-Put the `library` folder of the Lite distribution of HTMLPurifier ([http://htmlpurifier.org/download download here]) in the `lib` folder of Ajde, and rename it to `HTMLPurifier`. The library is then used when calling the `escape` function in a template like so:
+Put the `library` folder of the Lite distribution of HTMLPurifier ([http://htmlpurifier.org/download download here]) in the `lib` folder of Ajde, and rename it to `HTMLPurifier`. The library is then used when calling the `clean` function in a template like so:
 
 {{{
 $this->clean('<script>alert(0);</script>Unsafe element!');
