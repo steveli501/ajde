@@ -7,6 +7,12 @@
 
 == HTMLPurifier ==
 
-Put the `library` folder of the Lite distribution of HTMLPurifier ([http://htmlpurifier.org/download download here]) in the `lib` folder of Ajde, and rename it to `HTMLPurifier`.
+Put the `library` folder of the Lite distribution of HTMLPurifier ([http://htmlpurifier.org/download download here]) in the `lib` folder of Ajde, and rename it to `HTMLPurifier`. The library is then used when calling the `escape` function in a template like so:
+
+{{{
+$this->escape('<script>alert(0);</script>Unsafe element!');
+}}}
 
 == Zend ==
+
+Put the `Zend` library folder of the [http://framework.zend.com/ Zend Framework] in the `lib` folder of Ajde, and use it directly in your project.
