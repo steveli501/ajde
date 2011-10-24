@@ -50,6 +50,14 @@ foreach($results as $item) {
 }		
 }}}
 
-Most of this code can be simplified by using the `AjdeX_Model` and AjdeX_Collection` database abstraction classes.
+Most of this code can be simplified by using the `AjdeX_Model` and `AjdeX_Collection` database abstraction classes:
+
+{{{
+$users = new UserCollection();
+$users->load();
+foreach($users as $user)
+	echo $user->email . "<br/>";
+}
+}}}
 
 → More about the [DocumentationModelCollection AjdeX database abstraction]
