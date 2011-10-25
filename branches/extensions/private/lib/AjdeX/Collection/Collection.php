@@ -79,6 +79,14 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 		$this->_query = new AjdeX_Query();
 	}
 	
+	public function reset()
+	{
+		parent::reset();
+		$this->_query = new AjdeX_Query();
+		$this->_filters = array();	
+		$this->_filterValues = array();
+	}
+	
 	public function __sleep()
 	{
 		return array('_modelName', '_items');
@@ -195,7 +203,8 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 	}
 	
 	public function getSql()
-	{		
+	{
+		$this->getQuery()->reset();
 		foreach($this->getTable()->getFieldNames() as $field) {
 			$this->getQuery()->addSelect((string) $this->getTable() . '.' . $field);
 		}
@@ -216,6 +225,29 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 			}
 		}
 		return $this->getQuery()->getSql();
+	}
+	
+	public function getEmulatedSql()
+	{
+		// @see http://stackoverflow.com/questions/210564/pdo-prepared-statements/1376838#1376838
+		$keys = array();
+		$values = array();
+		foreach ($this->getFilterValues() as $key => $value) {
+			if (is_string($key)) {
+				$keys[] = '/:'.$key.'/';
+			} else {
+				$keys[] = '/[?]/';
+			}
+			if (is_null($value)) {
+				$values[] = "NULL";
+			} elseif (is_numeric($value)) {
+				$values[] = intval($value);
+			} else {
+				$values[] = '"'.$value .'"';
+			}
+		}
+		$query = preg_replace($keys, $values, $this->getSql(), -1, $count);
+		return $query;
 	}
 	
 	public function getFilter($queryPart)
@@ -249,7 +281,14 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 			// return false;
 		}
 		$this->_statement = $this->getConnection()->prepare($this->getSql());
-		$this->_statement->execute($this->getFilterValues());
+		foreach($this->getFilterValues() as $key => $value) {
+			if (is_null($value)) {
+				$this->_statement->bindValue(":$key", null, PDO::PARAM_NULL);
+			} else {
+				$this->_statement->bindValue(":$key", $value, PDO::PARAM_STR);
+			}
+		}
+		$this->_statement->execute();
 		return $this->_items = $this->_statement->fetchAll(PDO::FETCH_CLASS, $this->_modelName);
 	}
 	

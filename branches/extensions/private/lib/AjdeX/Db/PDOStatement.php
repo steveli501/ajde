@@ -23,18 +23,27 @@ class AjdeX_Db_PDOStatement extends PDOStatement {
     * then log the query 
     * @return PDO result set 
     */  
-    public function execute($input_parameters = array()) {
+    public function execute($input_parameters = null) {
     	//$cache = AjdeX_Db_Cache::getInstance();
 		$log = array('query' => '[PS] ' . $this->queryString);
 		$start = microtime(true);
+		try {
 		//if (!$cache->has($this->queryString . serialize($input_parameters))) {  
-        	$result = parent::execute($input_parameters);
+			$result = parent::execute($input_parameters);
 			//$cache->set($this->queryString . serialize($input_parameters), $result);
 		//	$log['cache'] = false;			
 		//} else {
 		//	$result = $cache->get($this->queryString . serialize($input_parameters));
 		//	$log['cache'] = true;
 		//}  
+		} catch (Exception $e) {
+			if (Config::get('debug') === true) {
+				throw $e;
+			} else {
+				Ajde_Exception_Log::logException($e);
+				return false;
+			}			
+		}
         $time = microtime(true) - $start;  
 		$log['time'] = round($time * 1000, 0);
         AjdeX_Db_PDO::$log[] = $log;

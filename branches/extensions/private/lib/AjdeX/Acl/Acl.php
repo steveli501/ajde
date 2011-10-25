@@ -1,0 +1,18 @@
+<?php
+
+class AjdeX_Acl extends AjdeX_Model
+{
+	public static $log = array(); 
+	public static $access = false;
+	
+	protected $_autoloadParents = false;
+		
+    public static function getLog() {  
+        return self::$log;  
+    }	
+	
+	public function addPermission($user = 0, $usergroup = 0, $module = '*', $permission = '*')
+	{
+		// TODO: implement
+	}
+}
