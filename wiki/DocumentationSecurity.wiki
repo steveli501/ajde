@@ -17,7 +17,9 @@ If debugging is turned off (with setting the configuration variable `$debug` to 
 
 Ajde aggressively filters out HTML from requests when using `Ajde_Http_Request`.
 
-Ajde looks for the configuration variables `$autoEscapeString` and `$autoCleanHtml`, and when set to {{{true}}}, it applies [http://php.net/manual/en/function.htmlspecialchars.php htmlspecialchars] and [http://php.net/manual/en/function.strip-tags.php strip_tags] to request variables retrieved with `Ajde_Http_Request::get()|getParam()|getString()` and `Ajde_Http_Request::getHtml()` respectively.
+Ajde looks for the configuration variables `$autoEscapeString` and `$autoCleanHtml`, and when set to {{{true}}}, it applies [http://php.net/manual/en/function.htmlspecialchars.php htmlspecialchars] and [http://php.net/manual/en/function.strip-tags.php strip_tags] - with only a limited set of allowed tags - to request variables retrieved with `Ajde_Http_Request::get()|getParam()|getString()` and `Ajde_Http_Request::getHtml()` respectively.
+
+*However, it is always the responsibility of the developer to filter user input!*
 
 _Note:_ When using [DocumentationExternalLibraries HTMLPurifier], `Ajde_Http_Request::getHtml()` uses `HTMLPurifier::purify()` instead.
 
@@ -27,8 +29,16 @@ _Note:_ Ajde doesn't prevent developers from using the raw `$_GET` and `$_POST` 
 
 When using `Ajde_Component_Form` helper functions (`$this->form()` or `$this->ajaxForm()`) in a template, and the configuration variables `$requirePostToken` is set to {{{true}}}, Ajde will validate form token and timestamp to prevent CSRF attacks.
 
+== Session hijacking ==
+
+Sessions are strengthened with the client user agent and IP address. On each request, the session is validated, eliminating session several session hijacking attack vectors.
+
 == Exposing Sensitive Information ==
 
 All scripts are located in the `private/` folder, which is prevented from being accessed from outside. Server-side scripts in the `public/` folder are never executed.
 
 Only the `private/var/*` directories should be writable by the webserver.
+
+== User authentication ==
+
+When using the `AjdeX_User` extension, user cookies are hashed with the client IP address, a unique user secret and application secret, making it virtually impossible to use a stolen user authentication cookie.
