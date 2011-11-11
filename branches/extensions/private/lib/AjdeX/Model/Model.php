@@ -8,6 +8,8 @@ class AjdeX_Model extends Ajde_Object_Standard
 	protected $_autoloadParents = false;
 	protected $_displayField = null;
 	
+	protected $_validators = array();
+	
 	public static function register($controller)
 	{
 		// Extend Ajde_Controller
@@ -260,6 +262,11 @@ class AjdeX_Model extends Ajde_Object_Standard
 		return $this->getTable()->getParents();
 	}
 	
+	public function hasLoaded()
+	{
+		return !empty($this->_data);
+	}
+	
 	public function loadParents()
 	{
 		foreach($this->getParents() as $parentTableName) {
@@ -291,5 +298,61 @@ class AjdeX_Model extends Ajde_Object_Standard
 		}
 		$parentModel->loadByPK($this->get($fk['field']));
 		$this->set((string) $parent, $parentModel);
+	}
+	
+	public function getAutoloadParents() 
+	{
+		return $this->_autoloadParents;
+	}
+	
+	public function addValidator($fieldName, AjdeX_Model_ValidatorAbstract $validator)
+	{
+		if (!isset($this->_validators[$fieldName])) {
+			$this->_validators[$fieldName] = array();
+		}
+		$this->_validators[$fieldName][] = $validator;
+	}
+	
+	public function getValidators()
+	{
+		return $this->_validators;
+	}
+	
+	public function getValidatorsFor($fieldName)
+	{
+		if (!isset($this->_validators[$fieldname])) {
+			$this->_validators[$fieldName] = array();
+		}
+		return $this->_validators[$fieldName];
+	}
+	
+	public function validate($fieldOptions = array())
+	{
+		if (!$this->hasLoaded()) {
+			return false;
+		}
+		$errors		= array();
+		$validator	= $this->_getValidator();
+		
+		$valid = $validator->validate($fieldOptions);
+		if (!$valid) {
+			$errors = $validator->getErrors();
+		}		
+		$this->setValidationErrors($errors);
+		return $valid;
+	}
+	
+	public function getValidationErrors()
+	{
+		return parent::getValidationErrors();
+	}
+	
+	/**
+	 *
+	 * @return AjdeX_Model_Validator
+	 */
+	private function _getValidator()
+	{
+		return new AjdeX_Model_Validator($this);
 	}
 }

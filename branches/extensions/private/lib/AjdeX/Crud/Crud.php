@@ -5,13 +5,91 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	protected $_model = null;
 	protected $_collection = null;
 	
-	public function __construct($model) {
+	protected $_fields = null;
+	
+	public function __construct($model, $options = array()) {
 		if ($model instanceof AjdeX_Model) {
 			$this->_model = $model;
 		} else {
 			$modelName = ucfirst($model) . 'Model';
 			$this->_model = new $modelName();
 		}
+		$this->setOptions($options);
+	}
+	
+	public function __toString()
+	{
+		try {
+			$output = $this->output();
+		} catch (Exception $e) {
+			$output = Ajde_Exception_Handler::handler($e);
+		}
+		return $output;
+	}
+	
+	public function output()
+	{
+		$controller = Ajde_Controller::fromRoute(new Ajde_Core_Route('_core/crud:' . $this->getAction()));
+		$controller->setCrudInstance($this);
+		return $controller->invoke();
+	}
+	
+	/**
+	 * GETTERS & SETTERS 
+	 */
+	
+	/**
+	 *
+	 * @return string
+	 */
+	public function getAction()
+	{
+		if (!$this->hasAction()) {
+			$this->setAction('list');
+		}
+		return parent::getAction();
+	}
+	
+	public function setAction($value)
+	{
+		parent::setAction($value);
+	}
+	
+	/**
+	 *
+	 * @return array
+	 */
+	public function getOptions($key = null)
+	{
+		if (isset($key)) {
+			$options = parent::getOptions();	
+			return issetor($options[$key], array());
+		} else {
+			return parent::getOptions();
+		}
+	}
+	
+	public function setOptions($value)
+	{
+		parent::setOptions($value);
+	}
+	
+	public function setItem($value)
+	{
+		parent::setItem($value);
+	}
+	
+	public function setCustomTemplateModule($value)
+	{
+		parent::setCustomTemplateModule($value);
+	}
+	
+	public function getCustomTemplateModule()
+	{
+		if (parent::hasCustomTemplateModule()) {
+			return parent::getCustomTemplateModule();
+		}
+		return (string) $this->getModel()->getTable();		
 	}
 	
 	/**
@@ -34,32 +112,141 @@ class AjdeX_Crud extends Ajde_Object_Standard
 		return $this->_model;
 	}
 	
-	public function getItem($id = null)
+	/**
+	 *
+	 * @return string
+	 */
+	public function getHash()
+	{
+		return spl_object_hash($this);
+	}	
+	
+	/**
+	 * HELPERS
+	 */
+	
+	public function loadItem($id = null)
 	{
 		$model = $this->getModel();
 		if (isset($id)) {
 			$model->loadByPK($id);
 		}
-		return $model;
+		$this->setItem($model);
+		return $this->getItem();
+	}
+
+	/**
+	 *
+	 * @return AjdeX_Model 
+	 */
+	public function getItem()
+	{
+		if (!$this->hasId() || $this->getId() === false) {
+			return $this->getModel();
+		}
+		if (!$this->getModel()->getPK()) {
+			$model = $this->getModel();
+			$model->loadByPK($this->getId());
+			if (!$model->getAutoloadParents()) {
+				$model->loadParents();
+			}
+		}
+		return $this->getModel();
 	}
 	
+	/**
+	 *
+	 * @return AjdeX_Collection
+	 */
 	public function getItems()
 	{
 		$collection = $this->getCollection();
 		$collection->reset();
 		$collection->load();
+		$collection->loadParents();
 		return $collection;
 	}
 	
 	public function getFields()
 	{
-		$model = $this->getModel();
-		return $model->getTable()->getFieldProperties();		
+		if (!isset($this->_fields)) {
+			$model = $this->getModel();
+			$item = $this->getItem();
+			$fields = array();
+
+			$fieldsArray = $model->getTable()->getFieldProperties();		
+			$parents = $item->getTable()->getParents();
+
+			foreach($fieldsArray as $fieldProperties) {
+				$fieldOptions = $this->getFieldOptions($fieldProperties['name'], $fieldProperties);
+				
+				if (in_array($fieldOptions['name'], $parents)) {
+					$fieldOptions['type'] = 'fk';
+				}
+				
+				$fieldClass = "AjdeX_Crud_Field_" . ucfirst($fieldOptions['type']);
+				$field = new $fieldClass($this, $fieldOptions);
+				
+				if ($this->getAction() === 'edit') {
+					if (!empty($fieldOptions['default']) && Ajde::app()->getRequest()->has('new')) {
+						$field->setValue($fieldOptions['default']);
+					} elseif (!Ajde::app()->getRequest()->has('new')) {
+						$field->setValue($item->get($field->getName()));
+					} else {
+						$field->setValue(false);
+					}
+				}
+				
+				$fields[] = $field;
+			}
+			$this->_fields = $fields;
+		}
+		return $this->_fields;
+	}
+	
+	public function getFieldOptions($fieldName, $fieldProperties = array())
+	{
+		$fieldsOptions = $this->getOptions('fields');
+		$fieldOptions = issetor($fieldsOptions[$fieldName], array());
+		return array_merge($fieldProperties, $fieldOptions);
 	}
 	
 	public function getFieldLabels()
 	{
 		$model = $this->getModel();
 		return $model->getTable()->getFieldLabels();
+	}
+	
+	/**
+	 * RENDERING
+	 */
+	
+	public function getTemplate()
+	{
+		$defaultTemplate = new Ajde_Template(MODULE_DIR . '_core/', 'crud/' . $this->getAction());
+		Ajde::app()->getDocument()->autoAddResources($defaultTemplate);
+		if ($this->_hasCustomTemplate()) {			
+			$base = $this->_getCustomTemplateBase();
+			$action = $this->_getCustomTemplateAction();
+			return new Ajde_Template($base, $action);
+		}
+		return $defaultTemplate;
+	}
+		
+	private function _hasCustomTemplate()
+	{
+		$base = $this->_getCustomTemplateBase();
+		$action = $this->_getCustomTemplateAction();
+		return Ajde_Template::exist($base, $action) !== false;
+	}
+	
+	private function _getCustomTemplateBase()
+	{
+		return MODULE_DIR . $this->getCustomTemplateModule() . '/';
+	}
+	
+	private function _getCustomTemplateAction()
+	{
+		return 'crud/' . (string) $this->getModel()->getTable() . '/' . $this->getAction();
 	}
 }

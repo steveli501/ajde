@@ -32,12 +32,13 @@ class AjdeX_Db_Table extends Ajde_Object_Standard
 			$fieldIsPK = $field['Key'] === 'PRI';
 			$fieldDefault = $field['Default'];
 			$fieldIsAutoIncrement = $field['Extra'] === 'auto_increment';
-			$fieldLabel= $field['Comment'];
+			$fieldLabel= !empty($field['Comment']) ? $field['Comment'] : $field['Field'];
 			
 			$this->_fields[$fieldName] = array(
 				'name' => $fieldName,
-				'type' => $fieldType,
-				'parsedType' => $fieldParsedType,
+				'dbtype' => $fieldType,
+				'type' => $fieldParsedType['type'],
+				'length' => $fieldParsedType['length'],
 				'isRequired' => $fieldIsRequired,
 				'isPK' => $fieldIsPK,
 				'default' => $fieldDefault,

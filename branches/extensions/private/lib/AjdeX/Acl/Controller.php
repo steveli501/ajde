@@ -25,7 +25,10 @@ abstract class AjdeX_Acl_Controller extends AjdeX_User_Controller
 		}
 	}
 	
-	abstract protected function getOwnerId();
+	protected function getOwnerId()
+	{
+		return false;
+	}
 	
 	/**
 	 * @return AclCollection
@@ -53,8 +56,13 @@ abstract class AjdeX_Acl_Controller extends AjdeX_User_Controller
 	public function validateAccess()
 	{
 		$user = $this->getUser();
-		$uid = $user->getPK();
-		$usergroup = $user->getUsergroup();
+		if ($user !== false) {
+			$uid = $user->getPK();
+			$usergroup = $user->getUsergroup();	
+		} else {
+			$uid = null;
+			$usergroup = null;
+		}
 		$module = $this->getModule();
 		$action = $this->getAction();
 		

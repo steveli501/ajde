@@ -77,16 +77,16 @@ class AjdeX_Db_Adapter_MySql extends AjdeX_Db_Adapter_Abstract
 		return $this->saveCache($sql, $statement->fetchAll()); 
 	}
 	
-	public function getFieldType($type) {
+	public static function getFieldType($type) {
 		// TODO: Quite naive, rough implementation
 		// @see http://dev.mysql.com/doc/refman/5.0/en/data-types.html
 		
 		$types = array(
-			AjdeX_Db::FIELD_TYPE_NUMERIC => "int tinyint bit float double real decimal numeric currency",
-			AjdeX_Db::FIELD_TYPE_STRING => "varchar timestamp time year",
-			AjdeX_Db::FIELD_TYPE_TEXT => "text blob",
-			AjdeX_Db::FIELD_TYPE_DATE => "date",
-			AjdeX_Db::FIELD_TYPE_ENUM => "enum set"
+			AjdeX_Db::FIELD_TYPE_NUMERIC => "tinyint smallint mediumint int bigint decimal float double real bit boolean serial",
+			AjdeX_Db::FIELD_TYPE_TEXT => "char varchar tinytext mediumtext text longtext binary varbinary tinyblob mediumblob blob longblob",
+			AjdeX_Db::FIELD_TYPE_DATE => "date datetime timestamp time year",
+			AjdeX_Db::FIELD_TYPE_ENUM => "enum set",
+			AjdeX_Db::FIELD_TYPE_SPATIAL => "geometry point linestring polygon multipoint multilinestring multipolygon geometrycollection"
         );
 
 		// Get normalized type
@@ -104,7 +104,8 @@ class AjdeX_Db_Adapter_MySql extends AjdeX_Db_Adapter_Abstract
 		// Get length/values
 		$length = strpos($type, ')') - $start;
 		$typeLength = $start > 0 ? trim(substr ($type, $start + 1, $length - 1)) : null; 
-				
+		
+		// TODO: precision and limits
 		return array(
 			'type' => $typeName,
 			'length' => $typeLength
