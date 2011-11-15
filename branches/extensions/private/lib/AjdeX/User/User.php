@@ -82,7 +82,7 @@ class AjdeX_User extends AjdeX_Model
 		session_regenerate_id();
 		$session = new Ajde_Session('user');
 		$session->destroy();
-		$cookie = new Ajde_Cookie('user');
+		$cookie = new Ajde_Cookie(Config::get('ident') . '_user');
 		$cookie->destroy();
 	}
 	
@@ -111,7 +111,7 @@ class AjdeX_User extends AjdeX_Model
 	{
 		$hash = $this->getCookieHash();		
 		$cookieValue = $this->getPK() . ':' . $hash;
-		$cookie = new Ajde_Cookie('user');
+		$cookie = new Ajde_Cookie(Config::get('ident') . '_user');
 		$cookie->setLifetime($this->cookieLifetime);
 		$cookie->set('auth', $cookieValue);
 		return true;
@@ -139,7 +139,7 @@ class AjdeX_User extends AjdeX_Model
 	
 	public function verifyCookie()
 	{
-		$cookie = new Ajde_Cookie('user');
+		$cookie = new Ajde_Cookie(Config::get('ident') . '_user');
 		if (!$cookie->has('auth')) {
 			return false;
 		}

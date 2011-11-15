@@ -10,7 +10,7 @@ class AjdeX_Filter_WhereGroup extends AjdeX_Filter
 		$this->_operator = $operator;
 	}
 	
-	public function addFilter(AjdeX_Filter_Where $filter)
+	public function addFilter(AjdeX_Filter $filter)
 	{
 		$this->_filters[] = $filter;
 	}
