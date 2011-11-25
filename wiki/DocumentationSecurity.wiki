@@ -31,7 +31,7 @@ When using `Ajde_Component_Form` helper functions (`$this->ACForm()` or `$this->
 
 == Session hijacking ==
 
-Sessions are strengthened with the client user agent and IP address. On each request, the session is validated, eliminating session several session hijacking attack vectors.
+Sessions are strengthened with the client user agent and IP address. On each request, the session is validated, eliminating several session hijacking attack vectors.
 
 == Exposing Sensitive Information ==
 
