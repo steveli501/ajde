@@ -27,7 +27,7 @@ _Note:_ Ajde doesn't prevent developers from using the raw `$_GET` and `$_POST` 
 
 == Cross-Site Request Forgery (CSRF) Prevention ==
 
-When using `Ajde_Component_Form` helper functions (`$this->form()` or `$this->ajaxForm()`) in a template, and the configuration variables `$requirePostToken` is set to {{{true}}}, Ajde will validate form token and timestamp to prevent CSRF attacks.
+When using `Ajde_Component_Form` helper functions (`$this->ACForm()` or `$this->ACAjaxForm()`) in a template, and the configuration variables `$requirePostToken` is set to {{{true}}}, Ajde will validate form token and timestamp to prevent CSRF attacks.
 
 == Session hijacking ==
 
