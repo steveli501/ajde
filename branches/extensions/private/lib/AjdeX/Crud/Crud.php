@@ -7,6 +7,8 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	
 	protected $_fields = null;
 	
+	protected $_operation = 'list';
+
 	public function __construct($model, $options = array()) {
 		if ($model instanceof AjdeX_Model) {
 			$this->_model = $model;
@@ -29,7 +31,7 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	
 	public function output()
 	{
-		$controller = Ajde_Controller::fromRoute(new Ajde_Core_Route('_core/crud:' . $this->getAction()));
+		$controller = Ajde_Controller::fromRoute(new Ajde_Core_Route('_core/crud:' . $this->getOperation()));
 		$controller->setCrudInstance($this);
 		return $controller->invoke();
 	}
@@ -52,7 +54,20 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	
 	public function setAction($value)
 	{
+		if (substr($value, 0, 4) === 'edit' || substr($value, 0, 4) === 'list') {
+			$this->setOperation(substr($value, 0, 4));
+		} 
 		parent::setAction($value);
+	}
+	
+	public function setOperation($operation)
+	{
+		$this->_operation = $operation;
+	}
+	
+	public function getOperation()
+	{
+		return $this->_operation;
 	}
 	
 	/**
@@ -141,7 +156,7 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	 */
 	public function getItem()
 	{
-		if (!$this->hasId() || $this->getId() === false) {
+		if ($this->isNew()) {
 			return $this->getModel();
 		}
 		if (!$this->getModel()->getPK()) {
@@ -152,6 +167,11 @@ class AjdeX_Crud extends Ajde_Object_Standard
 			}
 		}
 		return $this->getModel();
+	}
+	
+	public function isNew()
+	{
+		return (!$this->hasId() || $this->getId() === false || is_null($this->getId()));
 	}
 	
 	/**
@@ -184,24 +204,41 @@ class AjdeX_Crud extends Ajde_Object_Standard
 					$fieldOptions['type'] = 'fk';
 				}
 				
-				$fieldClass = "AjdeX_Crud_Field_" . ucfirst($fieldOptions['type']);
+				$fieldClass = Ajde_Core_ExternalLibs::getClassname("AjdeX_Crud_Field_" . ucfirst($fieldOptions['type']));				
 				$field = new $fieldClass($this, $fieldOptions);
 				
-				if ($this->getAction() === 'edit') {
-					if (!empty($fieldOptions['default']) && Ajde::app()->getRequest()->has('new')) {
-						$field->setValue($fieldOptions['default']);
-					} elseif (!Ajde::app()->getRequest()->has('new')) {
-						$field->setValue($item->get($field->getName()));
+				if ($this->getOperation() === 'edit') {
+					if (empty($fieldOptions['value'])) {
+						if (!empty($fieldOptions['default']) && $this->isNew()) {
+							$field->setValue($fieldOptions['default']);
+						} elseif (!$this->isNew()) {
+							$field->setValue($item->get($field->getName()));
+						} else {
+							$field->setValue(false);
+						}
 					} else {
-						$field->setValue(false);
+						$field->setValue($fieldOptions['value']);
 					}
 				}
 				
-				$fields[] = $field;
+				$fields[$field->getName()] = $field;
 			}
 			$this->_fields = $fields;
 		}
 		return $this->_fields;
+	}
+	
+	public function getField($fieldName)
+	{
+		if (!isset($this->_fields)) {
+			$this->getFields();
+		}
+		if (isset($this->_fields[$fieldName])) {
+			return $this->_fields[$fieldName];
+		} else {
+			// TODO:
+			throw new AjdeX_Exception($fieldName . ' is not a field in ' . (string) $this->getModel()->getTable());
+		}
 	}
 	
 	public function getFieldOptions($fieldName, $fieldProperties = array())
@@ -223,7 +260,7 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	
 	public function getTemplate()
 	{
-		$defaultTemplate = new Ajde_Template(MODULE_DIR . '_core/', 'crud/' . $this->getAction());
+		$defaultTemplate = new Ajde_Template(MODULE_DIR . '_core/', 'crud/' . $this->getOperation());
 		Ajde::app()->getDocument()->autoAddResources($defaultTemplate);
 		if ($this->_hasCustomTemplate()) {			
 			$base = $this->_getCustomTemplateBase();

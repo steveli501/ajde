@@ -17,11 +17,17 @@ class AjdeX_Filter_Where extends AjdeX_Filter
 	
 	public function prepare(AjdeX_Db_Table $table = null)
 	{
-		$sql = $this->_field . $this->_comparison . ':' . spl_object_hash($this);
+		$values = array();
+		if ($this->_value instanceof AjdeX_Db_Function) {
+			$sql = $this->_field . $this->_comparison . (string) $this->_value;
+		} else {
+			$sql = $this->_field . $this->_comparison . ':' . spl_object_hash($this);
+			$values = array(spl_object_hash($this) => $this->_value);
+		}
 		return array(
 			'where' => array(
 				'arguments' => array($sql, $this->_operator),
-				'values' => array(spl_object_hash($this) => $this->_value)
+				'values' => $values
 			)
 		);
 	}

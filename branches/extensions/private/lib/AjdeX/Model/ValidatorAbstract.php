@@ -3,10 +3,23 @@
 abstract class AjdeX_Model_ValidatorAbstract extends Ajde_Object_Standard
 {	
 	protected $_value = null;
+	protected $_model = null;
+	
+	public function __construct(AjdeX_Model $model = null)
+	{
+		$this->_model = $model;
+	}
 		
 	/**
 	 * Getters and setters
 	 */
+	
+	/**
+	 *
+	 * @return AjdeX_Model
+	 */
+	public function getModel()			{ return $this->_model; }
+	public function setModel($model)	{ $this->_model = $model; }
 	
 	public function getName()			{ return parent::getName(); }
 	public function getDbType()			{ return parent::getDbType(); }

@@ -15,6 +15,7 @@ class AjdeX_Query extends Ajde_Object_Standard
 	public $from = array();
 	public $where = array();
 	public $join = array();	
+	public $groupBy = array();
 	public $orderBy = array();
 	public $limit = array('start' => null, 'count' => null);
 	
@@ -24,6 +25,7 @@ class AjdeX_Query extends Ajde_Object_Standard
 		$this->from = array();
 		$this->where = array();
 		$this->join = array();	
+		$this->groupBy = array();
 		$this->orderBy = array();
 		$this->limit = array('start' => null, 'count' => null);	
 	}
@@ -58,6 +60,11 @@ class AjdeX_Query extends Ajde_Object_Standard
 		$this->orderBy[] = array('field' => $field, 'direction' => $direction);
 	}
 	
+	public function addGroupBy($field)
+	{
+		$this->groupBy[] = $field;
+	}
+	
 	public function limit($count, $start = 0)
 	{
 		$this->limit = array('count' => (int) $count, 'start' => (int) $start);
@@ -77,7 +84,7 @@ class AjdeX_Query extends Ajde_Object_Standard
 		// FROM
 		if (empty($this->from)) {
 			// TODO:
-			throw new AjdeX_Exception();
+			throw new AjdeX_Exception('FROM clause can not be empty in query');
 		} else {
 			$sql .= ' FROM ' . implode(', ', $this->from);
 		}
@@ -100,6 +107,12 @@ class AjdeX_Query extends Ajde_Object_Standard
 				$sql .= ' ' . $where['sql'];
 				$first = false;
 			}
+		}
+		
+		// GROUP BY
+		if (!empty($this->groupBy)) {
+			$sql .= ' GROUP BY';			
+			$sql .= ' ' . implode(', ', $this->groupBy);
 		}
 		
 		// ORDER BY

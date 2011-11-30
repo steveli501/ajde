@@ -6,9 +6,11 @@ abstract class AjdeX_Crud_Field extends Ajde_Object_Standard
 	private $_type;
 	
 	public function __construct(AjdeX_Crud $crud, $fieldOptions) {
-		$this->_type = strtolower(str_replace('AjdeX_Crud_Field_', '', get_class($this)));
+		$explode = explode('_', get_class($this));
+		end($explode);
+		$this->_type = strtolower(current($explode));
 		$this->_crud = $crud;
-		
+
 		/* options */
 		foreach($fieldOptions as $key => $value) {
 			$this->set($key, $value);
@@ -39,10 +41,11 @@ abstract class AjdeX_Crud_Field extends Ajde_Object_Standard
 		return $template->render();
 	}
 	
-	public function getInput()
+	public function getInput($id = null)
 	{
 		$template = $this->_getInputTemplate();
 		$template->assign('field', $this);
+		$template->assign('id', $id);
 		return $template->render();
 	}
 	
@@ -58,14 +61,22 @@ abstract class AjdeX_Crud_Field extends Ajde_Object_Standard
 	
 	private function _getTemplate($action)
 	{
-		$defaultTemplate = new Ajde_Template(MODULE_DIR . '_core/', 'crud/' . $action);
-		Ajde::app()->getDocument()->autoAddResources($defaultTemplate);
+		$template = null;
+		if (Ajde_Template::exist(MODULE_DIR . '_core/', 'crud/' . $action) !== false) {
+			$template = new Ajde_Template(MODULE_DIR . '_core/', 'crud/' . $action);
+			Ajde::app()->getDocument()->autoAddResources($template);
+		}
 		if ($this->_hasCustomTemplate($action)) {			
 			$base = $this->_getCustomTemplateBase();
 			$action = $this->_getCustomTemplateAction($action);
-			return new Ajde_Template($base, $action);
+			$template = new Ajde_Template($base, $action);
 		}
-		return $defaultTemplate;
+		if ($template instanceof Ajde_Template) {
+			return $template;
+		} else {
+			// TODO:
+			throw new AjdeX_Exception('No crud template found for field ' . $action);
+		}		
 	}
 		
 	private function _hasCustomTemplate($action)

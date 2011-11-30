@@ -36,6 +36,8 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 	protected $_items = null;
 	protected $_position = 0;
 	
+	private $_sqlInitialized = false;
+	
 	public static function register($controller)
 	{
 		// Extend Ajde_Controller
@@ -85,6 +87,7 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 		$this->_query = new AjdeX_Query();
 		$this->_filters = array();	
 		$this->_filterValues = array();
+		$this->_sqlInitialized = false;
 	}
 	
 	public function __sleep()
@@ -204,26 +207,28 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 	
 	public function getSql()
 	{
-		$this->getQuery()->reset();
-		foreach($this->getTable()->getFieldNames() as $field) {
-			$this->getQuery()->addSelect((string) $this->getTable() . '.' . $field);
-		}
-		if (!empty($this->_filters)) {
-			foreach($this->getFilter('select') as $select) {
-				call_user_func_array(array($this->getQuery(), 'addSelect'), $select);
+		if (!$this->_sqlInitialized) {
+			foreach($this->getTable()->getFieldNames() as $field) {
+				$this->getQuery()->addSelect((string) $this->getTable() . '.' . $field);
+			}
+			if (!empty($this->_filters)) {
+				foreach($this->getFilter('select') as $select) {
+					call_user_func_array(array($this->getQuery(), 'addSelect'), $select);
+				}
+			}
+			$this->getQuery()->addFrom($this->_table);
+			if (!empty($this->_filters)) {
+				foreach($this->getFilter('join') as $join) {
+					call_user_func_array(array($this->getQuery(), 'addJoin'), $join);
+				}
+			}
+			if (!empty($this->_filters)) {
+				foreach($this->getFilter('where') as $where) {
+					call_user_func_array(array($this->getQuery(), 'addWhere'), $where);
+				}
 			}
 		}
-		$this->getQuery()->addFrom($this->_table);
-		if (!empty($this->_filters)) {
-			foreach($this->getFilter('join') as $join) {
-				call_user_func_array(array($this->getQuery(), 'addJoin'), $join);
-			}
-		}
-		if (!empty($this->_filters)) {
-			foreach($this->getFilter('where') as $where) {
-				call_user_func_array(array($this->getQuery(), 'addWhere'), $where);
-			}
-		}
+		$this->_sqlInitialized = true;
 		return $this->getQuery()->getSql();
 	}
 	
@@ -242,6 +247,8 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 				$values[] = "NULL";
 			} elseif (is_numeric($value)) {
 				$values[] = intval($value);
+			} elseif ($value instanceof AjdeX_Db_Function) {
+				$values[] = (string) $value;
 			} else {
 				$values[] = '"'.$value .'"';
 			}

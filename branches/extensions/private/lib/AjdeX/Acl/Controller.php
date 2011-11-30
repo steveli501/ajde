@@ -17,7 +17,7 @@ abstract class AjdeX_Acl_Controller extends AjdeX_User_Controller
 		foreach($this->_registerAclModels as $model) {
 			AjdeX_Model::register($model);
 		}
-		if ($this->hasAccess() === false) {
+		if (!in_array($this->getAction(), $this->_allowedActions) && $this->hasAccess() === false) {
 			Ajde::app()->getRequest()->set('message', __('No access'));
 			Ajde::app()->getResponse()->dieOnCode(401);
 		} else {			
@@ -153,7 +153,7 @@ abstract class AjdeX_Acl_Controller extends AjdeX_User_Controller
 		$rules->load();
 		
 		/**
-		 * Oempfff... now let's travers and set the order
+		 * Oempfff... now let's traverse and set the order
 		 */
 		
 		$orderedRules = array();
@@ -163,7 +163,7 @@ abstract class AjdeX_Acl_Controller extends AjdeX_User_Controller
 			foreach($moduleAction as $moduleActionPart) {
 				$module = $moduleActionPart['module'];
 				$action = $moduleActionPart['action'];
-				$rule = $rules->find($type, $ugId, $module, $action);
+				$rule = $rules->findRule($type, $ugId, $module, $action);
 				if ($rule !== false) {
 					$orderedRules[] = $rule;
 				}
@@ -173,25 +173,25 @@ abstract class AjdeX_Acl_Controller extends AjdeX_User_Controller
 		/**
 		 * Finally, determine access
 		 */
-				
+
 		foreach($orderedRules as $rule) {
 			switch ($rule->permission) {
 				case "deny":
-					AjdeX_Acl::$log[] = 'ACL rule id ' . $rule->getPK() . ' denies access';
+					AjdeX_Acl::$log[] = 'ACL rule id ' . $rule->getPK() . ' denies access for '.$module.'/'.$action;
 					$access = false;
 					break;
 				case "own":
 					if ((int) $this->getOwnerId() === (int) $uid) {
-						AjdeX_Acl::$log[] = 'ACL rule id ' . $rule->getPK() . ' allows access (owner)';
+						AjdeX_Acl::$log[] = 'ACL rule id ' . $rule->getPK() . ' allows access for '.$module.'/'.$action.' (owner)';
 						$access = true;
 					} else {
-						AjdeX_Acl::$log[] = 'ACL rule id ' . $rule->getPK() . ' denies access (owner)';
+						AjdeX_Acl::$log[] = 'ACL rule id ' . $rule->getPK() . ' denies access for '.$module.'/'.$action.' (owner)';
 						// TODO: or inherit?
 						$access = false;
 					}
 					break;
 				case "allow":
-					AjdeX_Acl::$log[] = 'ACL rule id ' . $rule->getPK() . ' allows access';
+					AjdeX_Acl::$log[] = 'ACL rule id ' . $rule->getPK() . ' allows access for '.$module.'/'.$action;
 					$access = true;
 					break;
 			}

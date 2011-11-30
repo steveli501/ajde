@@ -190,6 +190,9 @@ class AjdeX_Model extends Ajde_Object_Standard
 	
 	public function save()
 	{
+		if (method_exists($this, 'beforeSave')) {
+			$this->beforeSave();
+		}
 		$pk = $this->getTable()->getPK();
 
 		$sqlSet = array();
@@ -198,18 +201,29 @@ class AjdeX_Model extends Ajde_Object_Standard
 		foreach($this->getTable()->getFieldNames() as $field) {
 			// Don't save a field is it's empty or not set
 			if ($this->has($field) && !$this->isEmpty($field)) {
-				$sqlSet[] = $field . ' = ?';
-				$values[] = (string) $this->get($field);
+				if ($this->get($field) instanceof AjdeX_Db_Function) {
+					$sqlSet[] = $field . ' = ' . (string) $this->get($field);
+				} else {
+					$sqlSet[] = $field . ' = ?';
+					$values[] = (string) $this->get($field);
+				}				
 			}
 		} 
 		$values[] = $this->getPK();
 		$sql = 'UPDATE ' . $this->_table . ' SET ' . implode(', ', $sqlSet) . ' WHERE ' . $pk . ' = ?';
 		$statement = $this->getConnection()->prepare($sql);
-		return $statement->execute($values);
+		$return = $statement->execute($values);
+		if (method_exists($this, 'afterSave')) {
+			$this->afterSave();
+		}
+		return $return;
 	}
 	
 	public function insert($pkValue = null)
 	{
+		if (method_exists($this, 'beforeInsert')) {
+			$this->beforeInsert();
+		}
 		$pk = $this->getTable()->getPK();
 		if (isset($pkValue)) {
 			$this->set($pk, $pkValue);
@@ -222,9 +236,14 @@ class AjdeX_Model extends Ajde_Object_Standard
 		foreach($this->getTable()->getFieldNames() as $field) {
 			// Don't save a field is it's empty or not set
 			if ($this->has($field) && !$this->isEmpty($field)) {
-				$sqlFields[] = $field;
-				$sqlValues[] = '?';
-				$values[] = (string) $this->get($field);
+				if ($this->get($field) instanceof AjdeX_Db_Function) {
+					$sqlFields[] = $field;
+					$sqlValues[] = (string) $this->get($field);
+				} else {
+					$sqlFields[] = $field;
+					$sqlValues[] = '?';
+					$values[] = (string) $this->get($field);
+				}
 			} else {
 				$this->set($field, null);
 			}
@@ -234,6 +253,9 @@ class AjdeX_Model extends Ajde_Object_Standard
 		$return = $statement->execute($values);
 		if (!isset($pkValue)) {
 			$this->set($pk, $this->getConnection()->lastInsertId());
+		}
+		if (method_exists($this, 'afterInsert')) {
+			$this->afterInsert();
 		}
 		return $return;
 	}
@@ -278,7 +300,7 @@ class AjdeX_Model extends Ajde_Object_Standard
 	{
 		if (empty($this->_data)) {
 			// TODO:
-			throw new AjdeX_Exception('Model not loaded when loading parent');
+			throw new AjdeX_Exception('Model ' . (string) $this->getTable() . ' not loaded when loading parent');
 		}
 		if ($parent instanceof AjdeX_Model) {
 			$parent = $parent->getTable();
@@ -307,6 +329,7 @@ class AjdeX_Model extends Ajde_Object_Standard
 	
 	public function addValidator($fieldName, AjdeX_Model_ValidatorAbstract $validator)
 	{
+		$validator->setModel($this);
 		if (!isset($this->_validators[$fieldName])) {
 			$this->_validators[$fieldName] = array();
 		}
@@ -328,6 +351,17 @@ class AjdeX_Model extends Ajde_Object_Standard
 	
 	public function validate($fieldOptions = array())
 	{
+		if (method_exists($this, 'beforeValidate')) {
+			$return = $this->beforeValidate();
+			if ($return !== true && $return !== false) {
+				// TODO:
+				throw new AjdeX_Exception(sprintf("beforeValidate() must return either TRUE or FALSE"));
+			}
+			if ($return = false) {
+				return false;
+			}
+		}	
+		
 		if (!$this->hasLoaded()) {
 			return false;
 		}
@@ -339,6 +373,10 @@ class AjdeX_Model extends Ajde_Object_Standard
 			$errors = $validator->getErrors();
 		}		
 		$this->setValidationErrors($errors);
+		
+		if (method_exists($this, 'afterValidate')) {
+			$this->afterValidate();
+		}	
 		return $valid;
 	}
 	
