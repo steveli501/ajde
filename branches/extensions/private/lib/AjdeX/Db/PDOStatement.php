@@ -49,4 +49,28 @@ class AjdeX_Db_PDOStatement extends PDOStatement {
         AjdeX_Db_PDO::$log[] = $log;
         return $result;  
     }
+	
+	public static function getEmulatedSql($sql, $PDOValues) {
+		// @see http://stackoverflow.com/questions/210564/pdo-prepared-statements/1376838#1376838
+		$keys = array();
+		$values = array();
+		foreach ($PDOValues as $key => $value) {
+			if (is_string($key)) {
+				$keys[] = '/:'.$key.'/';
+			} else {
+				$keys[] = '/[?]/';
+			}
+			if (is_null($value)) {
+				$values[] = "NULL";
+			} elseif (is_numeric($value)) {
+				$values[] = intval($value);
+			} elseif ($value instanceof AjdeX_Db_Function) {
+				$values[] = (string) $value;
+			} else {
+				$values[] = '"'.$value .'"';
+			}
+		}
+		$query = preg_replace($keys, $values, $sql, -1, $count);
+		return $query;
+	}
 }  

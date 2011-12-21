@@ -234,27 +234,7 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 	
 	public function getEmulatedSql()
 	{
-		// @see http://stackoverflow.com/questions/210564/pdo-prepared-statements/1376838#1376838
-		$keys = array();
-		$values = array();
-		foreach ($this->getFilterValues() as $key => $value) {
-			if (is_string($key)) {
-				$keys[] = '/:'.$key.'/';
-			} else {
-				$keys[] = '/[?]/';
-			}
-			if (is_null($value)) {
-				$values[] = "NULL";
-			} elseif (is_numeric($value)) {
-				$values[] = intval($value);
-			} elseif ($value instanceof AjdeX_Db_Function) {
-				$values[] = (string) $value;
-			} else {
-				$values[] = '"'.$value .'"';
-			}
-		}
-		$query = preg_replace($keys, $values, $this->getSql(), -1, $count);
-		return $query;
+		return AjdeX_Db_PDOStatement::getEmulatedSql($this->getSql(), $this->getFilterValues());
 	}
 	
 	public function getFilter($queryPart)

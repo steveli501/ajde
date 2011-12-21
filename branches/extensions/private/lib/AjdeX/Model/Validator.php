@@ -37,7 +37,7 @@ class AjdeX_Model_Validator extends Ajde_Object_Standard
 					break;
 			}
 			
-			if ($fieldProperties['isRequired'] === true) {
+			if ($fieldProperties['isRequired'] === true && empty($fieldProperties['default'])) {
 				$this->_model->addValidator($fieldName, new AjdeX_Model_Validator_Required());
 			}
 		}

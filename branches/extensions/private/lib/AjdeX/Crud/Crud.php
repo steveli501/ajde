@@ -181,7 +181,6 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	public function getItems()
 	{
 		$collection = $this->getCollection();
-		$collection->reset();
 		$collection->load();
 		$collection->loadParents();
 		return $collection;

@@ -15,6 +15,10 @@ class AjdeX_User extends AjdeX_Model
 	
 	protected $cookieLifetime = 30;
 	
+	/**
+	 *
+	 * @return UserModel 
+	 */
 	public static function getLoggedIn()
 	{
 		$session = new Ajde_Session('user');
