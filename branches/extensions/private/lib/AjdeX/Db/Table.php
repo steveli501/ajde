@@ -74,9 +74,21 @@ class AjdeX_Db_Table extends Ajde_Object_Standard
 		return $parentTables;		
 	}
 	
-	public function getFieldProperties()
+	public function getFieldProperties($fieldName = null, $property = null)
 	{
-		return $this->_fields;
+		if (isset($fieldName)) {
+			if (isset($this->_fields[$fieldName])) {
+				if (isset($property)) {
+					if (isset($this->_fields[$fieldName][$property])) {
+						return $this->_fields[$fieldName][$property];
+					}					
+				} else {
+					return $this->_fields[$fieldName];
+				}
+			}
+		} else {
+			return $this->_fields;
+		}
 	}
 	
 	public function getFieldNames()

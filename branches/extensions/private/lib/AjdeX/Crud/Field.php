@@ -102,7 +102,8 @@ abstract class AjdeX_Crud_Field extends Ajde_Object_Standard
 	
 	public function getHtmlRequired()
 	{
-		return '<span class="required">*</span>';
+		//return '<span class="required">*</span>';
+		return '';
 	}
 	
 	public function getHtmlPK()

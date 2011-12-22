@@ -200,13 +200,21 @@ class AjdeX_Model extends Ajde_Object_Standard
 		
 		foreach($this->getTable()->getFieldNames() as $field) {
 			// Don't save a field is it's empty or not set
-			if ($this->has($field) && !$this->isEmpty($field)) {
-				if ($this->get($field) instanceof AjdeX_Db_Function) {
-					$sqlSet[] = $field . ' = ' . (string) $this->get($field);
+			if ($this->has($field)) {
+				if ($this->isEmpty($field) && !$this->getTable()->getFieldProperties($field, 'isRequired')) {
+					$sqlSet[] = $field . ' = NULL';
+				} elseif(!$this->isEmpty($field)) {
+					if ($this->get($field) instanceof AjdeX_Db_Function) {
+						$sqlSet[] = $field . ' = ' . (string) $this->get($field);
+					} else {
+						$sqlSet[] = $field . ' = ?';
+						$values[] = (string) $this->get($field);
+					}
 				} else {
-					$sqlSet[] = $field . ' = ?';
-					$values[] = (string) $this->get($field);
-				}				
+					// Field is required but has an empty value..
+					// (shouldn't have passed validation)
+					// TODO: set to empty string or ignore?
+				}
 			}
 		} 
 		$values[] = $this->getPK();
