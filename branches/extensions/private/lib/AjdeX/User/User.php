@@ -46,15 +46,21 @@ class AjdeX_User extends AjdeX_Model
 		// @see http://net.tutsplus.com/tutorials/php/understanding-hash-functions-and-keeping-passwords-safe/
 		if (CRYPT_BLOWFISH !== 1) {
 			// TODO:
-			throw new AjdeX_Exception('BLOWFISH algorithm not available for hashing');
-		}
-		$algo = '$2a';
-		$cost = '$10';
-		$unique_salt = $this->generateSecret(22);
+			//throw new AjdeX_Exception('BLOWFISH algorithm not available for hashing');
+			// Use MD5
+			$algo = '$1';
+			$cost = '';
+			$unique_salt = $this->generateSecret(12);
+		} else {
+			// Use BLOWFISH
+			$algo = '$2a';
+			$cost = '$10';
+			$unique_salt = $this->generateSecret(22);
+		}		
 		$hash = crypt($password, $algo . $cost . '$' . $unique_salt);
 		if (empty($hash)) {
 			// TODO:
-			throw new AjdeX_Exception('BLOWFISH algorithm failed');
+			throw new AjdeX_Exception('crypt() algorithm failed');
 		}
 		return $hash;
 	}
@@ -65,7 +71,13 @@ class AjdeX_User extends AjdeX_Model
 		if (empty($hash)) {
 			return false;
 		}
-		$full_salt = substr($hash, 0, 29);
+		if (CRYPT_BLOWFISH !== 1) {
+			// Use MD5
+			$full_salt = substr($hash, 0, 15);
+		} else {
+			// Use BLOWFISH
+			$full_salt = substr($hash, 0, 29);
+		}
 		$new_hash = crypt($password, $full_salt);
 		return ($hash == $new_hash);
 	}
