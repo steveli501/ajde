@@ -114,7 +114,7 @@ class AjdeX_Model extends Ajde_Object_Standard
 	}
 	
 	/**
-	 * @return AjdeX_Db
+	 * @return AjdeX_Db_Adapter_Abstract
 	 */
 	public function getConnection()
 	{

@@ -6,6 +6,7 @@ class AjdeX_Crud_Field_Numeric extends AjdeX_Crud_Field
 	{
 		$attributes = '';
 		$attributes .= ' type="number" ';
+		$attributes .= ' step="any" ';
 		$attributes .= ' value="' . Ajde_Component_String::escape($this->getValue()) . '" ';
 		$attributes .= ' maxlength="' . $this->getLength() . '" ';
 		if ($this->getIsAutoIncrement() === true) {

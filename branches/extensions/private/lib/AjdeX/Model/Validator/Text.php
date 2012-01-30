@@ -14,7 +14,7 @@ class AjdeX_Model_Validator_Text extends AjdeX_Model_ValidatorAbstract
 			}
 		}
 		$strippedHtml = strip_tags($this->_value);
-		if ($this->getIsRequired() && empty($strippedHtml)) {
+		if ($this->getIsRequired() && empty($strippedHtml) && $this->getDefault() == '') {
 			return array('valid' => false, 'error' => __('Required field'));
 		}
 		return array('valid' => true);
