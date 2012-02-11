@@ -7,6 +7,7 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	
 	protected $_fields = null;
 	
+	//protected $_operation = null;
 	protected $_operation = 'list';
 
 	public function __construct($model, $options = array()) {
@@ -67,9 +68,51 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	
 	public function getOperation()
 	{
+//		if (!isset($this->_operation)) {
+//			if (Ajde::app()->getRequest()->has('new')) {
+//				$this->setOperation('new'); 
+//			} else if (Ajde::app()->getRequest()->has('edit')) {
+//				$this->setOperation('edit'); 
+//			} else {
+//				$this->setOperation('list'); 
+//			}
+//		}
 		return $this->_operation;
 	}
 	
+	/**
+	 * OPTIONS
+	 */
+	
+	public function getOption($name, $default = false)
+	{
+		$path = explode('.', $name);
+		$options = $this->getOptions();
+		foreach($path as $key) {
+			if (isset($options[$key])) {
+				$options = $options[$key];
+			} else {
+				return $default;
+			}
+		}
+		return $options;
+	}
+	
+	public function setOption($name, $value)
+	{
+		$path = explode('.', $name);
+		$options = $this->getOptions();
+		$wc = &$options;
+		foreach($path as $key) {
+			if (!isset($wc[$key])) {
+				$wc[$key] = array();
+			}
+			$wc = &$wc[$key];
+		}
+		$wc = $value;
+		$this->setOptions($options);
+	}
+		
 	/**
 	 *
 	 * @return array
@@ -88,6 +131,10 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	{
 		parent::setOptions($value);
 	}
+	
+	/**
+	 * MISC 
+	 */
 	
 	public function setItem($value)
 	{
@@ -181,6 +228,12 @@ class AjdeX_Crud extends Ajde_Object_Standard
 	public function getItems()
 	{
 		$collection = $this->getCollection();
+		
+		// Collection view
+		if ($collection->hasView()) {
+			$collection->applyView();
+		}
+		
 		$collection->load();
 		$collection->loadParents();
 		return $collection;
@@ -252,7 +305,7 @@ class AjdeX_Crud extends Ajde_Object_Standard
 		$model = $this->getModel();
 		return $model->getTable()->getFieldLabels();
 	}
-	
+		
 	/**
 	 * RENDERING
 	 */

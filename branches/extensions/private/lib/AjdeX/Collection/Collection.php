@@ -32,11 +32,17 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 	protected $_filters = array();	
 	public $_filterValues = array();
 	
+	/**
+	 * @var AjdeX_Collection_View
+	 */
+	protected $_view;
+	
 	// For Iterator
 	protected $_items = null;
 	protected $_position = 0;
 	
 	private $_sqlInitialized = false;
+	private $_queryCount;
 	
 	public static function register($controller)
 	{
@@ -118,12 +124,29 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
         $this->_position++;
     }
 	
-	public function count() 
+	public function count($query = false) 
 	{
-		if (!isset($this->_items)) {
-    		$this->load();
-    	}
-		return count($this->_items);
+		if ($query == true) {
+			if (!isset($this->_queryCount)) {				
+				$this->_statement = $this->getConnection()->prepare($this->getCountSql());
+				foreach($this->getFilterValues() as $key => $value) {
+					if (is_null($value)) {
+						$this->_statement->bindValue(":$key", null, PDO::PARAM_NULL);
+					} else {
+						$this->_statement->bindValue(":$key", $value, PDO::PARAM_STR);
+					}
+				}
+				$this->_statement->execute();
+				$result = $this->_statement->fetch(PDO::FETCH_ASSOC);
+				$this->_queryCount = $result['count'];
+			}
+			return $this->_queryCount;
+		} else {
+			if (!isset($this->_items)) {
+				$this->load();
+			}
+			return count($this->_items);
+		}
 	}
 	
 	public function find($field, $value) {
@@ -205,6 +228,57 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 		return $this;
 	}
 	
+	public function setView(AjdeX_Collection_View $view)
+	{
+		$this->_view = $view;
+	}
+		
+	/**
+	 * @return AjdeX_Collection_View
+	 */
+	public function getView()
+	{
+		return $this->_view;
+	}
+	
+	/**
+	 * @return boolean
+	 */
+	public function hasView()
+	{
+		return isset($this->_view) && $this->_view instanceof AjdeX_Collection_View;
+	}
+	
+	
+	public function applyView()
+	{
+		if (!$this->hasView()) {
+			// TODO:
+			throw new AjdeX_Exception();
+		}
+		
+		$view = $this->getView();
+		$this->limit($view->getPageSize(), $view->getRowStart());
+		if (!$view->isEmpty('orderBy')) {
+			$this->orderBy($view->getOrderBy(), $view->getOrderDir());
+		}
+		if (!$view->isEmpty('search')) {
+			$searchFilter = new AjdeX_Filter_WhereGroup;
+			$fieldOptions = $this->getTable()->getFieldProperties();			
+			foreach($fieldOptions as $fieldName => $fieldProperties) {
+				switch ($fieldProperties['type']) {
+					case AjdeX_Db::FIELD_TYPE_TEXT:						
+					case AjdeX_Db::FIELD_TYPE_ENUM:
+						$searchFilter->addFilter(new AjdeX_Filter_Where($fieldName, AjdeX_Filter::FILTER_LIKE, '%' . $view->getSearch() . '%', AjdeX_Query::OP_OR));						
+						break;					
+					default:
+						break;
+				}
+			}
+			$this->addFilter($searchFilter);			
+		}
+	}
+	
 	public function getSql()
 	{
 		if (!$this->_sqlInitialized) {
@@ -230,6 +304,18 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 		}
 		$this->_sqlInitialized = true;
 		return $this->getQuery()->getSql();
+	}
+	
+	public function getCountSql()
+	{
+		// Make sure to load the filters
+		$this->getSql();
+		$query = clone $this->getQuery();
+		/* @var $query AjdeX_Query */
+		$query->select = array();
+		$query->limit = array('start' => null, 'count' => null);	
+		$query->addSelect('COUNT(*) AS count');
+		return $query->getSql();
 	}
 	
 	public function getEmulatedSql()
