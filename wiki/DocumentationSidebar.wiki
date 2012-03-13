@@ -4,7 +4,7 @@
  * [DocumentationGettingStarted Getting started with Ajde]
  * [TutorialBlog Building a simple blog]
  * _REFERENCE_
- * *Ajde (Core)*
+ * *Core*
    * [DocumentationInstallationRequirements Installation & Requirements]
    * [DocumentationConfig Application configuration]
    * [DocumentationController Controller]
