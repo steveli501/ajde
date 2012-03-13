@@ -13,7 +13,6 @@
    * [DocumentationResources Resources]
    * [DocumentationLang Multi-language]
    * [DocumentationSecurity Security]
- * *AjdeX (Extension)*
    * [DocumentationDbIntroduction Connect to a database (MySQL)]
    * [DocumentationDb Database abstraction]
    * [DocumentationModelCollection Model & Collections]
