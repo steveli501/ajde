@@ -258,10 +258,21 @@ class AjdeX_Collection extends Ajde_Object_Standard implements Iterator, Countab
 		}
 		
 		$view = $this->getView();
+		
+		//LIMIT
 		$this->limit($view->getPageSize(), $view->getRowStart());
+		
+		// ORDER BY
 		if (!$view->isEmpty('orderBy')) {
+			$oldOrderBy = $this->getQuery()->orderBy;
+			$this->getQuery()->orderBy = array();
 			$this->orderBy($view->getOrderBy(), $view->getOrderDir());
+			foreach($oldOrderBy as $orderBy) {
+				$this->orderBy($orderBy['field'], $orderBy['direction']);
+			}
 		}
+		
+		// FILTER
 		if (!$view->isEmpty('search')) {
 			$searchFilter = new AjdeX_Filter_WhereGroup;
 			$fieldOptions = $this->getTable()->getFieldProperties();			
