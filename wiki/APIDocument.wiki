@@ -1,7 +1,7 @@
 #summary Ajde_Document
 #labels API
 
-= Ajde_Document =
+= !Ajde_Document =
 
 An abstract class from which all document formats are derived from. Holds the metadata of a document (i.e. title and description), the resources (i.e. js and css files) and is used to render output to the screen.
 
