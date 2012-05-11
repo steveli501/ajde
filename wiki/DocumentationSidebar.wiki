@@ -25,5 +25,7 @@
      * [APIComponentCss Ajde_Component_Css]
      * [APIComponentException Ajde_Component_Exception]
    * [APIDocument Ajde_Document]
-     * [APIDocumentFormat Ajde_Document_Format]
+     * Ajde_Document_Format
+       * [APIDocumentFormatHtml Ajde_Document_Format_Html]
+       * [APIDocumentFormatBody Ajde_Document_Format_Body]
      * [APIDocumentProcessor Ajde_Document_Processor]
